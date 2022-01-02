@@ -1,0 +1,24 @@
+{
+  "properties": [
+    {
+      "name": "mail.validity",
+      "type": "java.lang.Integer",
+      "description": "Description for mail.validity."
+    },
+    {
+      "name": "mail.code.length",
+      "type": "java.lang.Integer",
+      "description": "Description for mail.code.length."
+    },
+    {
+      "name": "domainUrl",
+      "type": "java.lang.String",
+      "description": "Description for domainUrl."
+    },
+    {
+      "name": "databaseName",
+      "type": "java.lang.String",
+      "description": "Description for databaseName."
+    }
+  ]
+}
