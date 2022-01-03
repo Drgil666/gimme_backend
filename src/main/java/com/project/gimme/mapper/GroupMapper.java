@@ -18,8 +18,8 @@ public interface GroupMapper {
      * @return 是否成功
      */
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
-    @Insert("insert into group (create_time, nick) values " +
-            "(#{group.create_time},#{group.nick})")
+    @Insert("insert into `group` (create_time, nick) values " +
+            "(#{group.createTime},#{group.nick})")
     Boolean createGroup(@Param("group") Group group);
 
     /**
@@ -28,7 +28,7 @@ public interface GroupMapper {
      * @param group 要更新的group
      * @return 影响行数
      */
-    @Update("update user set nick=#{group.nick} where id=#{group.id}")
+    @Update("update `group` set nick=#{group.nick} where id=#{group.id}")
     Long updateGroup(@Param("group") Group group);
 
     /**
@@ -37,7 +37,7 @@ public interface GroupMapper {
      * @param id 用户id
      * @return 用户
      */
-    @Select("select * from group where id=#{id}")
+    @Select("select * from `group` where id=#{id}")
     Group getGroup(@Param("id") Integer id);
 
     /**
@@ -46,6 +46,6 @@ public interface GroupMapper {
      * @param keyword 关键词
      * @return 查询的用户列表
      */
-    @Select("select * from group where id=#{keyword} or nick like CONCAT('%',#{keyword},'%')")
+    @Select("select * from `group` where id=#{keyword} or nick like CONCAT('%',#{keyword},'%')")
     List<Group> getGroupByIdAndNick(@Param("keyword") String keyword);
 }

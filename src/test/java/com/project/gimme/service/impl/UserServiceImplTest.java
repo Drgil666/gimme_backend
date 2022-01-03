@@ -1,7 +1,8 @@
-package com.project.gimme.service;
+package com.project.gimme.service.impl;
 
 import com.project.gimme.GimmeApplication;
 import com.project.gimme.pojo.User;
+import com.project.gimme.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -60,6 +60,6 @@ public class GroupServiceImpl implements GroupService {
      */
     @Override
     public List<Group> getGroupByIdAndNick(String keyword) {
-        return getGroupByIdAndNick(keyword);
+        return groupMapper.getGroupByIdAndNick(keyword);
     }
 }
