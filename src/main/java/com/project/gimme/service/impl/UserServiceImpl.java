@@ -1,7 +1,8 @@
-package com.project.gimme.service;
+package com.project.gimme.service.impl;
 
 import com.project.gimme.mapper.UserMapper;
 import com.project.gimme.pojo.User;
+import com.project.gimme.service.UserService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

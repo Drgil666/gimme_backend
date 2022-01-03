@@ -29,7 +29,7 @@ public interface UserMapper {
      * 更新用户
      *
      * @param user 要更新的User
-     * @return 更新好的User
+     * @return 影响行数
      */
     @Update("update user set nick=#{user.nick},avatar=#{user.avatar},city=#{user.city}," +
             "country=#{user.country},occupation=#{user.occupation},company=#{user.company}," +
