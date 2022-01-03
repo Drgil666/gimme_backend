@@ -9,6 +9,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author DrGilbert
@@ -34,5 +35,36 @@ public class UserServiceImplTest {
         user.setOccupation(1);
         user.setProvince(1);
         System.out.println(userService.createUser(user));
+    }
+
+    @Test
+    public void updateUser() {
+        User user = new User();
+        user.setBirthday(new Date());
+        user.setAvatar("222");
+        user.setCity(2);
+        user.setCompany(2);
+        user.setCountry(2);
+        user.setMail("222");
+        user.setMotto("222");
+        user.setNick("test2");
+        user.setOccupation(1);
+        user.setProvince(1);
+        user.setId(2);
+        System.out.println(userService.updateUser(user));
+    }
+
+    @Test
+    public void getUser() {
+        User user = userService.getUser(2);
+        System.out.println(user.getNick());
+    }
+
+    @Test
+    public void getUserByIdAndNick() {
+        List<User> userList = userService.getUserByIdAndNick("2");
+        for (User user : userList) {
+            System.out.println(user.getId());
+        }
     }
 }

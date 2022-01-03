@@ -1,10 +1,9 @@
 package com.project.gimme.mapper;
 
 import com.project.gimme.pojo.User;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.*;
+
+import java.util.List;
 
 /**
  * @author DrGilbert
@@ -25,4 +24,34 @@ public interface UserMapper {
             "#{user.occupation},#{user.company},#{user.motto}," +
             "#{user.birthday},#{user.mail},#{user.province})")
     Boolean createUser(@Param("user") User user);
+
+    /**
+     * 更新用户
+     *
+     * @param user 要更新的User
+     * @return 更新好的User
+     */
+    @Update("update user set nick=#{user.nick},avatar=#{user.avatar},city=#{user.city}," +
+            "country=#{user.country},occupation=#{user.occupation},company=#{user.company}," +
+            "motto=#{user.motto},birthday=#{user.birthday},mail=#{user.mail}," +
+            "province=#{user.province} where id=#{user.id}")
+    Long updateUser(@Param("user") User user);
+
+    /**
+     * 通过id获取用户信息
+     *
+     * @param id 用户id
+     * @return 用户
+     */
+    @Select("select * from user where id=#{id}")
+    User getUser(@Param("id") Integer id);
+
+    /**
+     * 根据id或昵称查询用户列表
+     *
+     * @param keyword 关键词
+     * @return 查询的用户列表
+     */
+    @Select("select * from user where id=#{keyword} or nick like CONCAT('%',#{keyword},'%')")
+    List<User> getUserByIdAndNick(@Param("keyword") String keyword);
 }
