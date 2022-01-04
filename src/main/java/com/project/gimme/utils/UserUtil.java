@@ -9,7 +9,7 @@ import java.util.HashMap;
  * @author DrGilbert
  * @date 2021/3/23 20:29
  */
-public class AuthorizeUtil {
+public class UserUtil {
     public static final String ROOT_ATTRIBUTE = "root";
     public static final String GROUP_OWNER_ATTRIBUTE = "group_owner";
     public static final String GROUP_ADMIN_ATTRIBUTE = "group_admin";

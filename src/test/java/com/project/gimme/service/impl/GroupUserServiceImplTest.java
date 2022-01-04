@@ -3,7 +3,7 @@ package com.project.gimme.service.impl;
 import com.project.gimme.GimmeApplication;
 import com.project.gimme.pojo.GroupUser;
 import com.project.gimme.service.GroupUserService;
-import com.project.gimme.utils.AuthorizeUtil;
+import com.project.gimme.utils.UserUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,7 +30,7 @@ public class GroupUserServiceImplTest {
         groupUser.setGroupId(3);
         groupUser.setUserId(1);
         groupUser.setGroupNick("nick1");
-        groupUser.setType(AuthorizeUtil.Character.TYPE_USER.getCode());
+        groupUser.setType(UserUtil.Character.TYPE_USER.getCode());
         System.out.println(groupUserService.createGroupUser(groupUser));
     }
 
