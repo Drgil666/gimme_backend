@@ -28,8 +28,9 @@ public class GridFsDaoImpl implements GridFsDao {
      * 上传文件
      *
      * @param file     要上传的文件
-     * @param fileName 存储文件名
+     * @param filename 存储文件名
      * @return 文件id
+     * @throws IOException IO异常
      */
     @Override
     public String uploadFile(MultipartFile file, String filename) throws IOException {
@@ -41,7 +42,7 @@ public class GridFsDaoImpl implements GridFsDao {
         }
         ObjectId objectId = gridFsTemplate.store(inputStream, filename, metaData);
         return objectId.toHexString();
-        //TODO:文件相关功能未测试
+        //ToDoList:文件相关功能未测试
     }
 
     /**

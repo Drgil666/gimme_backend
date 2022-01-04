@@ -26,7 +26,7 @@ public class ChannelServiceImpl implements ChannelService {
     @Override
     public Boolean createChannel(Channel channel) {
         return channelMapper.createChannel(channel);
-        //TODO:要创建频道成员进去
+        //ToDoList:要创建频道成员进去
     }
 
     /**

@@ -16,7 +16,7 @@ import java.util.List;
 public class GroupUserServiceImpl implements GroupUserService {
     @Resource
     private GroupUserMapper groupUserMapper;
-    //TODO:外键异常捕获
+    //ToDoList:外键异常捕获
 
     /**
      * 创建群聊成员

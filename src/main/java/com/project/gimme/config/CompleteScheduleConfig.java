@@ -24,6 +24,10 @@ public class CompleteScheduleConfig implements SchedulingConfigurer {
     @Mapper
     public interface CronMapper {
         @Select("select * from msg_bot limit 1")
+        /**
+         * 获取机器人
+         * @return 机器人类
+         */
         MsgBot getMsgBot();
     }
 
@@ -48,7 +52,7 @@ public class CompleteScheduleConfig implements SchedulingConfigurer {
                         //2.2 合法性校验.
                         if (StringUtils.isEmpty(cron)) {
                             // Omitted Code ..
-                            //TODO:待实现
+                            //ToDoList:待实现
                         }
                         //2.3 返回执行周期(Date)
                         return new CronTrigger(cron).nextExecutionTime(triggerContext);
