@@ -17,7 +17,6 @@ public interface ChannelUserMapper {
      * @param channelUser 被创建的频道成员类
      * @return 是否成功
      */
-    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     @Insert("insert into channel_user (channel_id, user_id,channel_nick) values " +
             "(#{channelUser.channelId},#{channelUser.userId}," +
             "#{channelUser.channelNick})")
