@@ -43,14 +43,18 @@ public class CompleteScheduleConfig implements SchedulingConfigurer {
                 triggerContext -> {
                     //2.1 从数据库获取执行周期
                     MsgBot msgBot = cronMapper.getMsgBot();
-                    String cron = msgBot.getCron();
-                    //2.2 合法性校验.
-                    if (StringUtils.isEmpty(cron)) {
-                        // Omitted Code ..
-                        //TODO:待实现
+                    if (msgBot != null) {
+                        String cron = msgBot.getCron();
+                        //2.2 合法性校验.
+                        if (StringUtils.isEmpty(cron)) {
+                            // Omitted Code ..
+                            //TODO:待实现
+                        }
+                        //2.3 返回执行周期(Date)
+                        return new CronTrigger(cron).nextExecutionTime(triggerContext);
+                    } else {
+                        return null;
                     }
-                    //2.3 返回执行周期(Date)
-                    return new CronTrigger(cron).nextExecutionTime(triggerContext);
                 }
         );
     }
