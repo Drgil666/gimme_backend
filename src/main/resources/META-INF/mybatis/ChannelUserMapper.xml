@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.project.gimme.mapper.ChannelUserMapper">
+    <delete id="deleteChannelUser" parameterType="java.util.List">
+        delete from channel_user where channel_id=#{channelId} and user_id in
+        <foreach collection="userId" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

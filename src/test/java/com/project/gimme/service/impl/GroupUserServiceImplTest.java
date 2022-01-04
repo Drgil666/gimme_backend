@@ -27,16 +27,18 @@ public class GroupUserServiceImplTest {
     @Test
     public void createGroupUser() {
         GroupUser groupUser = new GroupUser();
-        groupUser.setGroupId(1);
+        groupUser.setGroupId(3);
         groupUser.setUserId(1);
+        groupUser.setGroupNick("nick1");
         groupUser.setType(AuthorizeUtil.Character.TYPE_USER.getCode());
         System.out.println(groupUserService.createGroupUser(groupUser));
     }
 
     @Test
     public void updateGroupUser() {
-        GroupUser groupUser = groupUserService.getGroupUser(1, 1);
+        GroupUser groupUser = groupUserService.getGroupUser(3, 1);
         groupUser.setType(1);
+        groupUser.setGroupNick("nick2");
         System.out.println(groupUserService.updateGroupUser(groupUser));
     }
 

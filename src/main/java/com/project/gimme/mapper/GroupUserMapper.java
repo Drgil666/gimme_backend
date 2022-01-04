@@ -17,8 +17,9 @@ public interface GroupUserMapper {
      * @param groupUser 被创建的群聊成员关系
      * @return 是否成功
      */
-    @Insert("insert into group_user (group_id, user_id, type) values " +
-            "(#{groupUser.groupId},#{groupUser.userId},#{groupUser.type})")
+    @Insert("insert into group_user (group_id, user_id, type,group_nick) values " +
+            "(#{groupUser.groupId},#{groupUser.userId},#{groupUser.type}," +
+            "#{groupUser.groupNick})")
     Boolean createGroupUser(@Param("groupUser") GroupUser groupUser);
 
     /**
@@ -27,7 +28,7 @@ public interface GroupUserMapper {
      * @param groupUser 要更新的groupUser
      * @return 影响行数
      */
-    @Update("update group_user set type=#{groupUser.type} where user_id=#{groupUser.userId} " +
+    @Update("update group_user set type=#{groupUser.type},group_nick=#{groupUser.groupNick} where user_id=#{groupUser.userId} " +
             "and group_id=#{groupUser.groupId}")
     Long updateGroupUser(@Param("groupUser") GroupUser groupUser);
 
