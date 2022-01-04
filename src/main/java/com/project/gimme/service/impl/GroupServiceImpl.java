@@ -6,7 +6,6 @@ import com.project.gimme.service.GroupService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,8 +25,8 @@ public class GroupServiceImpl implements GroupService {
      */
     @Override
     public Boolean createGroup(Group group) {
-        group.setCreateTime(new Date());
         return groupMapper.createGroup(group);
+        //TODO:要创建群聊成员进去
     }
 
     /**
