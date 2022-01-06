@@ -10,6 +10,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,6 +28,7 @@ public class ChannelNoticeServiceImplTest {
         ChannelNotice channelNotice = new ChannelNotice();
         channelNotice.setChannelId(3);
         channelNotice.setType(1);
+        channelNotice.setCreateTime(new Date());
         System.out.println(channelNoticeService.createChannelNotice(channelNotice));
     }
 

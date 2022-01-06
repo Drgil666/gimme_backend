@@ -18,9 +18,9 @@ public interface ChannelNoticeMapper {
      * @return 是否成功
      */
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
-    @Insert("insert into channel_notice (type, channel_id,text) values " +
+    @Insert("insert into channel_notice (type, channel_id,text,create_time) values " +
             "(#{channelNotice.type},#{channelNotice.channelId}," +
-            "#{channelNotice.text})")
+            "#{channelNotice.text},#{channelNotice.createTime})")
     Boolean createChannelNotice(@Param("channelNotice") ChannelNotice channelNotice);
 
     /**
@@ -30,7 +30,9 @@ public interface ChannelNoticeMapper {
      * @return 影响行数
      */
     @Update("update channel_notice set type=#{channelNotice.type}," +
-            "channel_id=#{channelNotice.channelId},text=#{channelNotice.text} " +
+            "channel_id=#{channelNotice.channelId}," +
+            "channel_id=#{channelNotice.createTime}," +
+            "text=#{channelNotice.text} " +
             "where id=#{channelNotice.id}")
     Long updateChannelNotice(@Param("channelNotice") ChannelNotice channelNotice);
 
