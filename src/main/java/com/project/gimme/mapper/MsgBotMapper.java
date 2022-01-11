@@ -19,8 +19,8 @@ public interface MsgBotMapper {
      * @return 是否成功
      */
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
-    @Insert("insert into msg_bot (text, date, group_id, cron) values " +
-            "(#{msgBot.text},#{msgBot.date},#{msgBot.groupId},#{msgBot.cron})")
+    @Insert("insert into msg_bot (text,group_id, cron) values " +
+            "(#{msgBot.text},#{msgBot.groupId},#{msgBot.cron})")
     Boolean createMsgBot(@Param("msgBot") MsgBot msgBot);
 
     /**
@@ -30,7 +30,7 @@ public interface MsgBotMapper {
      * @return 影响行数
      */
     @Update("update msg_bot set text=#{msgBot.text}," +
-            "date=#{msgBot.date},group_id=#{msgBot.groupId},cron=#{msgBot.cron} " +
+            "group_id=#{msgBot.groupId},cron=#{msgBot.cron} " +
             "where id=#{msgBot.id}")
     Long updateMsgBot(@Param("msgBot") MsgBot msgBot);
 

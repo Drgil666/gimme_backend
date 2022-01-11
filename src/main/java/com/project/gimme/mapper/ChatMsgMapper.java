@@ -1,6 +1,7 @@
 package com.project.gimme.mapper;
 
 import com.project.gimme.pojo.ChatMsg;
+import com.project.gimme.pojo.vo.MessageVO;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -62,4 +63,13 @@ public interface ChatMsgMapper {
      * @return 影响行数
      */
     Long deleteChatMsg(@Param("id") List<Integer> idList);
+
+    /**
+     * 获取用户消息中间类
+     *
+     * @param userId 用户id
+     * @return 消息中间类列表
+     */
+    //TODO:sql语句要处理
+    List<MessageVO> getFriendMessageVO(@Param("userid") Integer userId);
 }
