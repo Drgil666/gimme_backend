@@ -62,7 +62,7 @@ public class User {
      * 用户公司
      */
     @ApiModelProperty(value = "用户公司", name = "company")
-    private Integer company;
+    private String company;
     /**
      * 用户个性签名
      */

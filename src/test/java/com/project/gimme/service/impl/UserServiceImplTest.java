@@ -28,7 +28,7 @@ public class UserServiceImplTest {
         user.setBirthday(new Date());
         user.setAvatar("111");
         user.setCity(1);
-        user.setCompany(1);
+        user.setCompany("1");
         user.setCountry(1);
         user.setMail("111");
         user.setMotto("111");
@@ -44,7 +44,7 @@ public class UserServiceImplTest {
         user.setBirthday(new Date());
         user.setAvatar("222");
         user.setCity(2);
-        user.setCompany(2);
+        user.setCompany("2");
         user.setCountry(2);
         user.setMail("222");
         user.setMotto("222");
