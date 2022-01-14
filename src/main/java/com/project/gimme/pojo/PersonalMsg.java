@@ -37,4 +37,9 @@ public class PersonalMsg {
      */
     @ApiModelProperty(value = "群聊/个人/频道id", name = "objectId")
     private Integer objectId;
+    /**
+     * 备注
+     */
+    @ApiModelProperty(value = "备注", name = "note")
+    private String note;
 }
