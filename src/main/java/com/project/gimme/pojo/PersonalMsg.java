@@ -42,4 +42,9 @@ public class PersonalMsg {
      */
     @ApiModelProperty(value = "备注", name = "note")
     private String note;
+    /**
+     * 处理状态
+     */
+    @ApiModelProperty(value = "处理状态", name = "status")
+    private Integer status;
 }

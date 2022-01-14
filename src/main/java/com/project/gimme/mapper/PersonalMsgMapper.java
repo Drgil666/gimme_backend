@@ -16,9 +16,10 @@ public interface PersonalMsgMapper {
      * @return 是否成功
      */
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
-    @Insert("insert into personal_msg (type, owner_id, operator_id, object_id,note) " +
+    @Insert("insert into personal_msg (type, owner_id, operator_id, object_id,note,status) " +
             "values (#{personalMsg.type},#{personalMsg.ownerId}," +
-            "#{personalMsg.operatorId},#{personalMsg.objectId},#{personalMsg.note})")
+            "#{personalMsg.operatorId},#{personalMsg.objectId}," +
+            "#{personalMsg.note},#{personalMsg.status})")
     Boolean createPersonalMsg(@Param("personalMsg") PersonalMsg personalMsg);
 
     /**
@@ -29,7 +30,7 @@ public interface PersonalMsgMapper {
      */
     @Update("update personal_msg set type=#{personalMsg.type}," +
             "owner_id=#{personalMsg.ownerId},operator_id=#{personalMsg.operatorId}," +
-            "object_id=#{personalMsg.objectId},note=#{personalMsg.note} " +
+            "object_id=#{personalMsg.objectId},note=#{personalMsg.note},status=#{personalMsg.status} " +
             "where id=#{personalMsg.id}")
     Long updatePersonalMsg(@Param("personalMsg") PersonalMsg personalMsg);
 
