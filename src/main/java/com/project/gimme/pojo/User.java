@@ -44,6 +44,11 @@ public class User {
     @ApiModelProperty(value = "用户省份id", name = "province")
     private Integer province;
     /**
+     * 性别
+     */
+    @ApiModelProperty(value = "性别", name = "gender")
+    private Integer gender;
+    /**
      * 用户生日
      */
     @ApiModelProperty(value = "用户生日", name = "birthday")

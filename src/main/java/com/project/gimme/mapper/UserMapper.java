@@ -19,10 +19,10 @@ public interface UserMapper {
      */
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     @Insert("insert into user (nick, avatar, city, country, occupation, company, " +
-            "motto, birthday, mail, province) values " +
+            "motto, birthday, mail, province,gender) values " +
             "(#{user.nick},#{user.avatar},#{user.city},#{user.country}," +
             "#{user.occupation},#{user.company},#{user.motto}," +
-            "#{user.birthday},#{user.mail},#{user.province})")
+            "#{user.birthday},#{user.mail},#{user.province},#{user.gender})")
     Boolean createUser(@Param("user") User user);
 
     /**
@@ -34,7 +34,7 @@ public interface UserMapper {
     @Update("update user set nick=#{user.nick},avatar=#{user.avatar},city=#{user.city}," +
             "country=#{user.country},occupation=#{user.occupation},company=#{user.company}," +
             "motto=#{user.motto},birthday=#{user.birthday},mail=#{user.mail}," +
-            "province=#{user.province} where id=#{user.id}")
+            "province=#{user.province},gender=#{user.gender} where id=#{user.id}")
     Long updateUser(@Param("user") User user);
 
     /**
