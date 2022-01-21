@@ -33,4 +33,9 @@ public class Channel {
      */
     @ApiModelProperty(value = "创建时间", name = "createTime")
     private Date createTime;
+    /**
+     * 群介绍
+     */
+    @ApiModelProperty(value = "群介绍", name = "description")
+    private String description;
 }

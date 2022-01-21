@@ -18,8 +18,8 @@ public interface ChannelMapper {
      * @return 是否成功
      */
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
-    @Insert("insert into channel (owner_id, nick, create_time) values " +
-            "(#{channel.ownerId},#{channel.nick},#{channel.createTime})")
+    @Insert("insert into channel (owner_id, nick, create_time,description) values " +
+            "(#{channel.ownerId},#{channel.nick},#{channel.createTime},#{channel.description})")
     Boolean createChannel(@Param("channel") Channel channel);
 
     /**
@@ -29,7 +29,8 @@ public interface ChannelMapper {
      * @return 影响行数
      */
     @Update("update channel set owner_id=#{channel.ownerId}," +
-            "nick=#{channel.nick},create_time=#{channel.createTime} " +
+            "nick=#{channel.nick},create_time=#{channel.createTime}," +
+            "description=#{channel.description} " +
             "where id=#{channel.id}")
     Long updateChannel(@Param("channel") Channel channel);
 
