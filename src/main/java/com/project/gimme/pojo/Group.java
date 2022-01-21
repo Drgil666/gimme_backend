@@ -28,4 +28,9 @@ public class Group {
      */
     @ApiModelProperty(value = "用户id", name = "id", required = true)
     private String nick;
+    /**
+     * 群描述
+     */
+    @ApiModelProperty(value = "群描述", name = "description")
+    private String description;
 }

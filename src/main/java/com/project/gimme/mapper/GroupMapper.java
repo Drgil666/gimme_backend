@@ -18,8 +18,8 @@ public interface GroupMapper {
      * @return 是否成功
      */
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
-    @Insert("insert into `group` (create_time, nick) values " +
-            "(#{group.createTime},#{group.nick})")
+    @Insert("insert into `group` (create_time, nick,description) values " +
+            "(#{group.createTime},#{group.nick},#{group.description})")
     Boolean createGroup(@Param("group") Group group);
 
     /**
@@ -28,7 +28,8 @@ public interface GroupMapper {
      * @param group 要更新的group
      * @return 影响行数
      */
-    @Update("update `group` set nick=#{group.nick} where id=#{group.id}")
+    @Update("update `group` set nick=#{group.nick},description=#{group.description}" +
+            " where id=#{group.id}")
     Long updateGroup(@Param("group") Group group);
 
     /**
