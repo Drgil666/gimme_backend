@@ -10,7 +10,7 @@ import lombok.Data;
  */
 @Data
 @ApiModel(description = "群文件")
-public class GroupFile {
+public class ChatFile {
     /**
      * 群文件id
      */
