@@ -44,9 +44,9 @@ public class ChatFile {
     @ApiModelProperty(value = "好友/群聊/频道id", name = "type")
     private Integer type;
     /**
-     * 文件大小(B为单位)
+     * 文件大小(bit为单位)
      */
-    @ApiModelProperty(value = "文件大小(B为单位)", name = "size")
+    @ApiModelProperty(value = "文件大小(bit为单位)", name = "size")
     private Long size;
     /**
      * 文件上传日期
