@@ -25,7 +25,7 @@ public class ChatFileServiceImplTest {
     @Test
     public void createGroupFile() {
         ChatFile chatFile = new ChatFile();
-        chatFile.setGroupId(1);
+        chatFile.setObjectId(1);
         chatFile.setFilename("111.txt");
         chatFile.setMongoId("1111");
         chatFile.setOwnerId(1);
@@ -47,7 +47,7 @@ public class ChatFileServiceImplTest {
 
     @Test
     public void getGroupByGroupId() {
-        List<ChatFile> chatFileList = chatFileService.getChatFileByGroupId(1, "");
+        List<ChatFile> chatFileList = chatFileService.getChatFileByGroupId(1, 1, "");
         for (ChatFile chatFile : chatFileList) {
             System.out.println(chatFile.getId());
         }

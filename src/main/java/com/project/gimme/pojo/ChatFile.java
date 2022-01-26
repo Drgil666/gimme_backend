@@ -9,7 +9,7 @@ import lombok.Data;
  * @date 2022/1/4 16:56
  */
 @Data
-@ApiModel(description = "群文件")
+@ApiModel(description = "聊天文件实体类")
 public class ChatFile {
     /**
      * 群文件id
@@ -22,10 +22,10 @@ public class ChatFile {
     @ApiModelProperty(value = "上传者id", name = "ownerId")
     private Integer ownerId;
     /**
-     * 群聊id
+     * 所在的好友/群聊/频道id
      */
     @ApiModelProperty(value = "群聊id", name = "groupId")
-    private Integer groupId;
+    private Integer objectId;
     /**
      * 文件对应的mongoId
      */
@@ -36,4 +36,9 @@ public class ChatFile {
      */
     @ApiModelProperty(value = "文件名", name = "filename")
     private String filename;
+    /**
+     * 好友/群聊/频道id
+     */
+    @ApiModelProperty(value = "好友/群聊/频道id", name = "type")
+    private Integer type;
 }

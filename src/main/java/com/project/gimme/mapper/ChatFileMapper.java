@@ -18,9 +18,9 @@ public interface ChatFileMapper {
      * @return 是否成功
      */
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
-    @Insert("insert into chat_file (owner_id, group_id, file_name, mongo_id)" +
-            " values (#{groupFile.ownerId},#{groupFile.groupId}," +
-            "#{groupFile.filename},#{groupFile.mongoId})")
+    @Insert("insert into chat_file (owner_id, object_id, file_name, mongo_id,type,size,timestamp)" +
+            " values (#{chatFile.ownerId},#{chatFile.objectId}," +
+            "#{chatFile.filename},#{chatFile.mongoId},#{chatFile.type},#{chatFile.size},#{chatFile.timestamp})")
     Boolean createGroupFile(@Param("chatFile") ChatFile chatFile);
 
     /**
@@ -29,9 +29,11 @@ public interface ChatFileMapper {
      * @param chatFile 要更新的群文件
      * @return 影响行数
      */
-    @Update("update chat_file set owner_id=#{groupFile.ownerId}," +
-            "group_id=#{groupFile.groupId},file_name=#{groupFile.filename}," +
-            "mongo_id=#{groupFile.mongoId} where id=#{groupFile.id}")
+    @Update("update chat_file set owner_id=#{chatFile.ownerId}," +
+            "object_id=#{chatFile.objectId},file_name=#{chatFile.filename}," +
+            "mongo_id=#{chatFile.mongoId},type=#{chatFile.type},size=#{chatFile.size}," +
+            "timestamp=#{chatFile.timestamp}" +
+            " where id=#{chatFile.id}")
     Long updateGroupFile(@Param("chatFile") ChatFile chatFile);
 
     /**
@@ -46,10 +48,11 @@ public interface ChatFileMapper {
     /**
      * 根据群聊id和文件名查询群文件列表
      *
-     * @param groupId 群聊id
-     * @param keyword 文件名
+     * @param objectId 朋友/群聊/频道id
+     * @param keyword  文件名
+     * @param type     朋友/群聊/频道id类型
      * @return 查询的用户列表
      */
-    @Select("select * from chat_file where group_id=#{groupId} and file_name like CONCAT('%',#{keyword},'%')")
-    List<ChatFile> getGroupByGroupId(@Param("groupId") Integer groupId, @Param("keyword") String keyword);
+    @Select("select * from chat_file where type=#{type} and object_id=#{objectId} and file_name like CONCAT('%',#{keyword},'%')")
+    List<ChatFile> getGroupByGroupId(@Param("type") Integer type, @Param("objectId") Integer objectId, @Param("keyword") String keyword);
 }

@@ -36,10 +36,11 @@ public interface ChatFileService {
     /**
      * 根据群聊id和文件名查询群文件列表
      *
-     * @param groupId 群聊id
-     * @param keyword 文件名
+     * @param objectId 朋友/群聊/频道id
+     * @param keyword  文件名
+     * @param type     朋友/群聊/频道id类型
      * @return 查询的用户列表
      */
-    List<ChatFile> getChatFileByGroupId(Integer groupId, String keyword);
+    List<ChatFile> getChatFileByGroupId(Integer type, Integer objectId, String keyword);
 
 }
