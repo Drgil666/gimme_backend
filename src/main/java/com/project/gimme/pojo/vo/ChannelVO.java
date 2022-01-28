@@ -19,4 +19,9 @@ public class ChannelVO extends Channel {
      */
     @ApiModelProperty(value = "总群人数", name = "totalCount")
     private Integer totalCount;
+    /**
+     * 频道昵称
+     */
+    @ApiModelProperty(value = "频道昵称", name = "myNote")
+    private String myNote;
 }

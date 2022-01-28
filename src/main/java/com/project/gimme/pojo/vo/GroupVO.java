@@ -19,4 +19,9 @@ public class GroupVO extends Group {
      */
     @ApiModelProperty(value = "总群人数", name = "totalCount")
     private Integer totalCount;
+    /**
+     * 群昵称
+     */
+    @ApiModelProperty(value = "群昵称", name = "myNote")
+    private String myNote;
 }
