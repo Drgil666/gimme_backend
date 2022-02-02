@@ -2,6 +2,7 @@ package com.project.gimme.service.impl;
 
 import com.project.gimme.mapper.ChannelMapper;
 import com.project.gimme.pojo.Channel;
+import com.project.gimme.pojo.vo.ChannelVO;
 import com.project.gimme.service.ChannelService;
 import org.springframework.stereotype.Service;
 
@@ -60,5 +61,40 @@ public class ChannelServiceImpl implements ChannelService {
     @Override
     public Long deleteChannel(List<Integer> idList) {
         return channelMapper.deleteChannel(idList);
+    }
+
+    /**
+     * 根据关键词查找频道列表
+     *
+     * @param keyword 关键词
+     * @param userId  用户id
+     * @return 频道列表
+     */
+    @Override
+    public List<Channel> getChannelList(String keyword, Integer userId) {
+        return channelMapper.getChannelList(keyword, userId);
+    }
+
+    /**
+     * 如果已加入频道，获取频道信息
+     *
+     * @param userId    用户id
+     * @param channelId 频道id
+     * @return 频道信息
+     */
+    @Override
+    public ChannelVO getChannelVoIfJoin(Integer userId, Integer channelId) {
+        return channelMapper.getChannelVoIfJoin(userId, channelId);
+    }
+
+    /**
+     * 如果已加入频道，获取频道信息
+     *
+     * @param channelId 频道id
+     * @return 频道信息
+     */
+    @Override
+    public ChannelVO getChannelVoIfNotJoin(Integer channelId) {
+        return channelMapper.getChannelVoIfNotJoin(channelId);
     }
 }

@@ -1,6 +1,7 @@
 package com.project.gimme.mapper;
 
 import com.project.gimme.pojo.Channel;
+import com.project.gimme.pojo.vo.ChannelVO;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -42,6 +43,40 @@ public interface ChannelMapper {
      */
     @Select("select * from channel where id=#{id}")
     Channel getChannel(@Param("id") Integer id);
+
+    /**
+     * 根据关键词查找频道列表
+     *
+     * @param keyword 关键词
+     * @param userId  用户id
+     * @return 频道列表
+     */
+    @Select("select channel.* from channel,channel_user where " +
+            "channel.nick like CONCAT('%',#{keyword},'%') " +
+            "and channel_user.channel_id=channel.id and channel_user.user_id=#{userId}")
+    List<Channel> getChannelList(@Param("keyword") String keyword, @Param("userId") Integer userId);
+
+    /**
+     * 如果已加入频道，获取频道信息
+     *
+     * @param userId    用户id
+     * @param channelId 频道id
+     * @return 频道信息
+     */
+    @Select("select channel.*,(select count(*) from channel_user where channel_id=#{channelId})" +
+            "as totalCount,(select channel_user.channel_nick from channel_user where " +
+            "channel_user.user_id=#{userId} and channel_id=#{channelId}) as myNote from channel where channel.id=#{channelId}")
+    ChannelVO getChannelVoIfJoin(@Param("userId") Integer userId, @Param("channelId") Integer channelId);
+
+    /**
+     * 如果已加入频道，获取频道信息
+     *
+     * @param channelId 频道id
+     * @return 频道信息
+     */
+    @Select("select channel.*,(select count(*) from channel_user where channel_id=#{channelId})" +
+            "as totalCount from channel where channel.id=#{channelId}")
+    ChannelVO getChannelVoIfNotJoin(@Param("channelId") Integer channelId);
 
     /**
      * 批量删除频道

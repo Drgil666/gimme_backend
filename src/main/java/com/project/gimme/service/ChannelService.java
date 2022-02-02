@@ -1,6 +1,7 @@
 package com.project.gimme.service;
 
 import com.project.gimme.pojo.Channel;
+import com.project.gimme.pojo.vo.ChannelVO;
 
 import java.util.List;
 
@@ -40,4 +41,30 @@ public interface ChannelService {
      * @return 影响行数
      */
     Long deleteChannel(List<Integer> idList);
+
+    /**
+     * 根据关键词查找频道列表
+     *
+     * @param keyword 关键词
+     * @param userId  用户id
+     * @return 频道列表
+     */
+    List<Channel> getChannelList(String keyword, Integer userId);
+
+    /**
+     * 如果已加入频道，获取频道信息
+     *
+     * @param userId    用户id
+     * @param channelId 频道id
+     * @return 频道信息
+     */
+    ChannelVO getChannelVoIfJoin(Integer userId, Integer channelId);
+
+    /**
+     * 如果已加入频道，获取频道信息
+     *
+     * @param channelId 频道id
+     * @return 频道信息
+     */
+    ChannelVO getChannelVoIfNotJoin(Integer channelId);
 }
