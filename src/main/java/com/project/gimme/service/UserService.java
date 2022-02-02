@@ -1,6 +1,7 @@
 package com.project.gimme.service;
 
 import com.project.gimme.pojo.User;
+import com.project.gimme.pojo.vo.UserVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -41,4 +42,54 @@ public interface UserService {
      * @return 查询的用户列表
      */
     List<User> getUserByIdAndNick(@Param("keyword") String keyword);
+
+    /**
+     * 根据好友关系查找用户信息
+     *
+     * @param friendId 好友id
+     * @param userId   用户id
+     * @return 对应的用户信息
+     */
+    UserVO getUserVoByFriendIfFriend(Integer friendId, Integer userId);
+
+    /**
+     * 如果不是好友关系，查找用户信息
+     *
+     * @param userId 用户id
+     * @return 对应的用户信息
+     */
+    UserVO getUserVoByFriendIfNotFriend(Integer userId);
+
+    /**
+     * 根据群聊关系查找群成员信息
+     *
+     * @param memberId 成员id
+     * @param groupId  群聊id
+     * @param userId   用户id
+     * @return 对应的用户信息
+     */
+    UserVO getUserVoByGroupIfFriend(Integer groupId, Integer memberId, Integer userId);
+
+    /**
+     * 若已是好友关系，根据频道关系查找群成员信息
+     *
+     * @param memberId  成员id
+     * @param channelId 频道id
+     * @param userId    用户id
+     * @return 对应的用户信息
+     */
+    UserVO getUserVoByChannelIfFriend(Integer channelId,
+                                      Integer memberId,
+                                      Integer userId);
+
+    /**
+     * 若不是好友关系，根据频道关系查找群成员信息
+     *
+     * @param memberId  成员id
+     * @param channelId 频道id
+     * @return 对应的用户信息
+     */
+    UserVO getUserVoByChannelIfNotFriend(Integer channelId,
+                                         Integer memberId);
+
 }

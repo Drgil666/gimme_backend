@@ -14,7 +14,7 @@ public class BcryptUtil {
      * @return 加密好的密码
      */
     public String encode(String password) {
-        return BCrypt.hashpw(password, BCrypt.gensalt(11));
+        return BCrypt.hashpw(password, BCrypt.gensalt(random(11, 17)));
     }
 
     /**
@@ -28,4 +28,7 @@ public class BcryptUtil {
         return BCrypt.checkpw(password, hash);
     }
 
+    private Integer random(Integer min, Integer max) {
+        return (Integer) (int) (Math.random() * (max - min) + min);
+    }
 }

@@ -2,6 +2,7 @@ package com.project.gimme.service.impl;
 
 import com.project.gimme.mapper.UserMapper;
 import com.project.gimme.pojo.User;
+import com.project.gimme.pojo.vo.UserVO;
 import com.project.gimme.service.UserService;
 import org.springframework.stereotype.Service;
 
@@ -59,5 +60,66 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getUserByIdAndNick(String keyword) {
         return userMapper.getUserByIdAndNick(keyword);
+    }
+
+    /**
+     * 根据好友关系查找用户信息
+     *
+     * @param friendId 好友id
+     * @param userId   用户id
+     * @return 对应的用户信息
+     */
+    @Override
+    public UserVO getUserVoByFriendIfFriend(Integer friendId, Integer userId) {
+        return userMapper.getUserVoByFriendIfFriend(friendId, userId);
+    }
+
+    /**
+     * 如果不是好友关系，查找用户信息
+     *
+     * @param userId 用户id
+     * @return 对应的用户信息
+     */
+    @Override
+    public UserVO getUserVoByFriendIfNotFriend(Integer userId) {
+        return userMapper.getUserVoByFriendIfNotFriend(userId);
+    }
+
+    /**
+     * 根据群聊关系查找群成员信息
+     *
+     * @param groupId  群聊id
+     * @param memberId 成员id
+     * @param userId   用户id
+     * @return 对应的用户信息
+     */
+    @Override
+    public UserVO getUserVoByGroupIfFriend(Integer groupId, Integer memberId, Integer userId) {
+        return userMapper.getUserVoByGroupIfFriend(groupId, memberId, userId);
+    }
+
+    /**
+     * 若已是好友关系，根据频道关系查找群成员信息
+     *
+     * @param channelId 频道id
+     * @param memberId  成员id
+     * @param userId    用户id
+     * @return 对应的用户信息
+     */
+    @Override
+    public UserVO getUserVoByChannelIfFriend(Integer channelId, Integer memberId, Integer userId) {
+        return userMapper.getUserVoByChannelIfFriend(channelId, memberId, userId);
+    }
+
+    /**
+     * 若不是好友关系，根据频道关系查找群成员信息
+     *
+     * @param channelId 频道id
+     * @param memberId  成员id
+     * @return 对应的用户信息
+     */
+    @Override
+    public UserVO getUserVoByChannelIfNotFriend(Integer channelId, Integer memberId) {
+        return userMapper.getUserVoByChannelIfNotFriend(channelId, memberId);
     }
 }
