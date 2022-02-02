@@ -34,8 +34,13 @@ public class Channel {
     @ApiModelProperty(value = "创建时间", name = "createTime")
     private Date createTime;
     /**
-     * 群介绍
+     * 频道介绍
      */
     @ApiModelProperty(value = "群介绍", name = "description")
     private String description;
+    /**
+     * 频道头像
+     */
+    @ApiModelProperty(value = "频道头像", name = "avatar")
+    private String avatar;
 }

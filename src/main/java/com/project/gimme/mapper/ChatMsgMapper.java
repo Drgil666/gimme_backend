@@ -1,6 +1,7 @@
 package com.project.gimme.mapper;
 
 import com.project.gimme.pojo.ChatMsg;
+import com.project.gimme.pojo.vo.MessageVO;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -42,7 +43,7 @@ public interface ChatMsgMapper {
      * @return 聊天信息
      */
     @Select("select * from chat_msg where id=#{id}")
-    ChatMsg getChannelUser(@Param("id") Integer id);
+    ChatMsg getChannelMsg(@Param("id") Integer id);
 
     /**
      * 获取好友聊天/群聊/频道公告聊天记录
@@ -52,8 +53,20 @@ public interface ChatMsgMapper {
      * @return 聊天信息列表
      */
     @Select("select * from chat_msg where type=#{type} and object_id=#{objectId}")
-    List<ChatMsg> getChannelUserListByObjectId(@Param("type") Integer type,
-                                               @Param("objectId") Integer objectId);
+    List<ChatMsg> getChannelMsgListByObjectId(@Param("type") Integer type,
+                                              @Param("objectId") Integer objectId);
+
+    /**
+     * 获取用户好友/群聊/频道信息
+     *
+     * @param userId   用户id
+     * @param type     类型
+     * @param objectId 好友/群聊/频道id
+     * @return 聊天消息
+     */
+    MessageVO getMessageVoByObjectId(@Param("userId") Integer userId,
+                                     @Param("type") Integer type,
+                                     @Param("objectId") Integer objectId);
 
     /**
      * 批量删除聊天信息

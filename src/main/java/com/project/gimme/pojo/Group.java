@@ -33,4 +33,9 @@ public class Group {
      */
     @ApiModelProperty(value = "群描述", name = "description")
     private String description;
+    /**
+     * 群头像
+     */
+    @ApiModelProperty(value = "群头像", name = "avatar")
+    private String avatar;
 }

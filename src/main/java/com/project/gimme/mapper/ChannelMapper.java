@@ -19,8 +19,8 @@ public interface ChannelMapper {
      * @return 是否成功
      */
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
-    @Insert("insert into channel (owner_id, nick, create_time,description) values " +
-            "(#{channel.ownerId},#{channel.nick},#{channel.createTime},#{channel.description})")
+    @Insert("insert into channel (owner_id, nick, create_time,description,avatar) values " +
+            "(#{channel.ownerId},#{channel.nick},#{channel.createTime},#{channel.description},#{channel.avatar})")
     Boolean createChannel(@Param("channel") Channel channel);
 
     /**
@@ -31,7 +31,7 @@ public interface ChannelMapper {
      */
     @Update("update channel set owner_id=#{channel.ownerId}," +
             "nick=#{channel.nick},create_time=#{channel.createTime}," +
-            "description=#{channel.description} " +
+            "description=#{channel.description},avatar=#{channel.avatar} " +
             "where id=#{channel.id}")
     Long updateChannel(@Param("channel") Channel channel);
 
@@ -69,7 +69,7 @@ public interface ChannelMapper {
     ChannelVO getChannelVoIfJoin(@Param("userId") Integer userId, @Param("channelId") Integer channelId);
 
     /**
-     * 如果已加入频道，获取频道信息
+     * 如果未加入频道，获取频道信息
      *
      * @param channelId 频道id
      * @return 频道信息

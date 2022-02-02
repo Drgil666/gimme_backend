@@ -47,7 +47,7 @@ public class ChatMsgServiceImpl implements ChatMsgService {
      */
     @Override
     public ChatMsg getChannelUser(Integer id) {
-        return chatMsgMapper.getChannelUser(id);
+        return chatMsgMapper.getChannelMsg(id);
     }
 
     /**
@@ -59,7 +59,7 @@ public class ChatMsgServiceImpl implements ChatMsgService {
      */
     @Override
     public List<ChatMsg> getChannelUserListByObjectId(Integer type, Integer objectId) {
-        return chatMsgMapper.getChannelUserListByObjectId(type, objectId);
+        return chatMsgMapper.getChannelMsgListByObjectId(type, objectId);
     }
 
     /**

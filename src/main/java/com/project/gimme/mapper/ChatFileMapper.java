@@ -1,6 +1,7 @@
 package com.project.gimme.mapper;
 
 import com.project.gimme.pojo.ChatFile;
+import com.project.gimme.pojo.vo.ChatFileVO;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -54,5 +55,20 @@ public interface ChatFileMapper {
      * @return 查询的用户列表
      */
     @Select("select * from chat_file where type=#{type} and object_id=#{objectId} and file_name like CONCAT('%',#{keyword},'%')")
-    List<ChatFile> getGroupByGroupId(@Param("type") Integer type, @Param("objectId") Integer objectId, @Param("keyword") String keyword);
+    List<ChatFile> getGroupFileByObjectId(@Param("type") Integer type, @Param("objectId") Integer objectId, @Param("keyword") String keyword);
+
+    /**
+     * 根据群聊id和文件名查询群文件列表
+     *
+     * @param objectId 朋友/群聊/频道id
+     * @param userId   用户id
+     * @param keyword  文件名
+     * @param type     朋友/群聊/频道id类型
+     * @return 查询的用户列表
+     */
+    List<ChatFileVO> getGroupFileVoByObjectId(@Param("type") Integer type,
+                                              @Param("Integer") Integer userId,
+                                              @Param("objectId") Integer objectId,
+                                              @Param("keyword") String keyword);
+
 }

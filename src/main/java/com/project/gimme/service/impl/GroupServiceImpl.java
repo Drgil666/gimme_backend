@@ -2,6 +2,7 @@ package com.project.gimme.service.impl;
 
 import com.project.gimme.mapper.GroupMapper;
 import com.project.gimme.pojo.Group;
+import com.project.gimme.pojo.vo.GroupVO;
 import com.project.gimme.service.GroupService;
 import org.springframework.stereotype.Service;
 
@@ -58,7 +59,30 @@ public class GroupServiceImpl implements GroupService {
      * @return 查询的用户列表
      */
     @Override
-    public List<Group> getGroupByIdAndNick(String keyword) {
-        return groupMapper.getGroupByIdAndNick(keyword);
+    public List<Group> getGroupByIdAndKeyword(String keyword) {
+        return groupMapper.getGroupByIdAndKeyword(keyword);
+    }
+
+    /**
+     * 如果已加入频道，获取频道信息
+     *
+     * @param userId  用户id
+     * @param groupId 群聊id
+     * @return 频道信息
+     */
+    @Override
+    public GroupVO getGroupVoIfJoin(Integer userId, Integer groupId) {
+        return groupMapper.getGroupVoIfJoin(userId, groupId);
+    }
+
+    /**
+     * 如果未加入频道，获取频道信息
+     *
+     * @param groupId 群聊id
+     * @return 频道信息
+     */
+    @Override
+    public GroupVO getGroupVoIfNotJoin(Integer groupId) {
+        return groupMapper.getGroupVoIfNotJoin(groupId);
     }
 }

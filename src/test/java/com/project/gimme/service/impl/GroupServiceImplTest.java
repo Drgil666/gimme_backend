@@ -45,7 +45,7 @@ public class GroupServiceImplTest {
 
     @Test
     public void getGroupByIdAndNick() {
-        List<Group> groupList = groupService.getGroupByIdAndNick("2");
+        List<Group> groupList = groupService.getGroupByIdAndKeyword("2");
         for (Group group : groupList) {
             System.out.println(group.getId());
         }

@@ -7,4 +7,28 @@
             #{id}
         </foreach>
     </delete>
+    <select id="getMessageVoByObjectId" resultType="com.project.gimme.pojo.vo.MessageVO">
+        <if test="type=0">
+            select chat_msg.text as text,chat_msg.timestamp as timestamp,
+            chat_msg.type as type,friend.friend_id as object_id,user.avatar as avatar,
+            friend.friend_note as nick from chat_msg,user,friend
+            where chat_msg.type=0 and chat_msg.object_id=#{objectId} and friend.user_id=#{userId} and
+            friend.friend_id=#{objectId}
+            and friend.friend_id=user.id order by chat_msg.timestamp DESC limit 1
+        </if>
+        <if test="type=1">
+            select chat_msg.text as text,chat_msg.timestamp as timestamp,
+            chat_msg.type as type,'group'.id as object_id,'group'.avatar as avatar,
+            'group'.nick as nick from chat_msg,user,'group',group_user
+            where chat_msg.type=1 and chat_msg.object_id=#{objectId} and group_user.user_id=#{userId}
+            and group_user.group_id=#{objectId} order by chat_msg.timestamp DESC limit 1
+        </if>
+        <if test="type=2">
+            select chat_msg.text as text,chat_msg.timestamp as timestamp,
+            chat_msg.type as type,channel.id as object_id,channel.avatar as avatar,
+            channel.nick as nick from chat_msg,user,channel,channel_user
+            where chat_msg.type=1 and chat_msg.object_id=#{objectId} and channel_user.user_id=#{userId}
+            and channel_user.channel_id=#{objectId} order by chat_msg.timestamp DESC limit 1
+        </if>
+    </select>
 </mapper>

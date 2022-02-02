@@ -1,6 +1,8 @@
 package com.project.gimme.service;
 
 import com.project.gimme.pojo.ChatMsg;
+import com.project.gimme.pojo.vo.MessageVO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -50,4 +52,13 @@ public interface ChatMsgService {
      * @return 影响行数
      */
     Long deleteChatMsg(List<Integer> idList);
+
+    /**
+     * 获取用户好友/群聊/频道信息
+     *
+     * @param userId 用户id
+     * @return 好友消息
+     */
+    //TODO:需要手动整合
+    List<MessageVO> getMessageVoByObjectId(@Param("userId") Integer userId);
 }
