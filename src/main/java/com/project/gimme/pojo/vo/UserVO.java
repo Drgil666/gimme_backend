@@ -22,8 +22,8 @@ public class UserVO extends User {
     /**
      * 群/频道昵称
      */
-    @ApiModelProperty(value = "群/频道昵称", name = "otherNote")
-    private String otherNote;
+    @ApiModelProperty(value = "群/频道昵称", name = "otherNick")
+    private String otherNick;
     /**
      * 国家名
      */

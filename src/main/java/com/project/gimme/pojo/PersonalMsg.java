@@ -10,7 +10,7 @@ import lombok.Data;
  */
 
 @Data
-@ApiModel(description = "信息通知")
+@ApiModel(description = "信息通知实体类")
 public class PersonalMsg {
     /**
      * 信息通知id
