@@ -52,6 +52,16 @@ public interface GroupMapper {
     List<Group> getGroupByIdAndKeyword(@Param("keyword") String keyword);
 
     /**
+     * 根据userId获取群列表
+     *
+     * @param userId 用户id
+     * @return 群列表
+     */
+    @Select("select group.* from `group`,group_user where " +
+            "group_user.user_id=#{userId} and group_user.group_id=`group`.id")
+    List<Group> getGroupList(@Param("userId") Integer userId);
+
+    /**
      * 如果已加入频道，获取频道信息
      *
      * @param userId  用户id

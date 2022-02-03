@@ -35,7 +35,7 @@ public interface FriendMapper {
     Long updateFriend(@Param("friend") Friend friend);
 
     /**
-     * 获取朋友关系
+     * 通过好友id与用户id获取朋友关系
      *
      * @param userId   用户id
      * @param friendId 朋友id
@@ -45,6 +45,15 @@ public interface FriendMapper {
             "and friend_id=#{friendId}")
     Friend getFriend(@Param("userId") Integer userId,
                      @Param("friendId") Integer friendId);
+
+    /**
+     * 通过用户id获取朋友列表
+     *
+     * @param userId 用户id
+     * @return 朋友列表
+     */
+    @Select("select * from friend where user_id=#{userId}")
+    List<Friend> getFriendList(@Param("userId") Integer userId);
 
     /**
      * 批量删除好友关系

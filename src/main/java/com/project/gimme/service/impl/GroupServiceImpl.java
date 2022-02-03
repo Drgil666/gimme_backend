@@ -85,4 +85,15 @@ public class GroupServiceImpl implements GroupService {
     public GroupVO getGroupVoIfNotJoin(Integer groupId) {
         return groupMapper.getGroupVoIfNotJoin(groupId);
     }
+
+    /**
+     * 根据userId获取群列表
+     *
+     * @param userId 用户id
+     * @return 群列表
+     */
+    @Override
+    public List<Group> getGroupList(Integer userId) {
+        return groupMapper.getGroupList(userId);
+    }
 }

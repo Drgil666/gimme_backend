@@ -42,6 +42,15 @@ public interface GroupNoticeMapper {
     GroupNotice getGroupNotice(@Param("id") Integer id);
 
     /**
+     * 根据群id获取群公告列表
+     *
+     * @param groupId 群id
+     * @return 群公告列表
+     */
+    @Select("select * from group_notice where group_id=#{groupId}")
+    List<GroupNotice> getGroupNoticeList(@Param("groupId") Integer groupId);
+
+    /**
      * 批量删除群公告
      *
      * @param idList id列表

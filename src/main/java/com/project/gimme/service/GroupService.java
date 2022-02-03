@@ -58,4 +58,12 @@ public interface GroupService {
      * @return 频道信息
      */
     GroupVO getGroupVoIfNotJoin(Integer groupId);
+
+    /**
+     * 根据userId获取群列表
+     *
+     * @param userId 用户id
+     * @return 群列表
+     */
+    List<Group> getGroupList(Integer userId);
 }
