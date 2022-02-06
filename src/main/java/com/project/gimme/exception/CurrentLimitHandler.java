@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * @author DrGilbert
  * @date 2021/4/2 21:17
+ * 限流qps用
  */
 @Component
 public class CurrentLimitHandler implements CurrentInterceptorHandler {

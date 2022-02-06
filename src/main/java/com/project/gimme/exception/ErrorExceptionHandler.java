@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 /**
  * @author DrGilbert
  * @date 2021/4/1 14:40
+ * 异常抛出转移为response类
  */
 @ControllerAdvice
 public class ErrorExceptionHandler {

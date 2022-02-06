@@ -1,5 +1,6 @@
 package com.project.gimme.pojo.vo;
 
+import com.project.gimme.exception.ErrorCode;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -21,7 +22,7 @@ public class Response<T> {
     private T data;
 
     public static <T> Response<T> createSuc(T o) {
-        return new Response<T>(200, null, o);
+        return new Response<T>(0, null, o);
     }
 
     public static <T> Response<T> createErr(String msg) {
@@ -33,6 +34,10 @@ public class Response<T> {
     }
 
     public static <T> Response<T> createTokenAuthorizedErr() {
-        return new Response<>(5, "Token失效或不存在!", null);
+        return new Response<>(ErrorCode.TOKEN_AUTHORIZE_ILLEGAL.getCode(), ErrorCode.TOKEN_AUTHORIZE_ILLEGAL.getMsg(), null);
+    }
+
+    public static <T> Response<T> createUnknownMethodErr() {
+        return new Response<>(ErrorCode.BIZ_PARAM_ILLEGAL.getCode(), "method方法错误", null);
     }
 }
