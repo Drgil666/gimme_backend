@@ -5,6 +5,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 
 /**
  * @author Gilbert
@@ -22,7 +23,7 @@ public class RedisDaoImpl implements RedisDao {
      * @param value 值
      */
     @Override
-    public void setValue(String key, String value) {
+    public void createStringValue(String key, String value) {
         stringRedisTemplate.opsForValue().set(key, value);
     }
 
@@ -33,18 +34,52 @@ public class RedisDaoImpl implements RedisDao {
      * @return 对应值
      */
     @Override
-    public String getValue(String key) {
+    public String getStringValue(String key) {
         return stringRedisTemplate.opsForValue().get(key);
     }
 
     /**
-     * 删除键对应的值
+     * 删除键对应的字符串值
      *
      * @param key 键
      */
     @Override
-    public void deleteValue(String key) {
+    public void deleteStringValue(String key) {
         stringRedisTemplate.delete(key);
+    }
+
+    /**
+     * 为redis设置hash键值对
+     *
+     * @param name 名称
+     * @param map  键值对集合
+     */
+    @Override
+    public void createHashValue(String name, HashMap<String, String> map) {
+        stringRedisTemplate.boundHashOps(name).putAll(map);
+    }
+
+    /**
+     * 获取键对应的hash值
+     *
+     * @param name 名称
+     * @param key  键
+     * @return 对应值
+     */
+    @Override
+    public String getHashValue(String name, String key) {
+        return (String) stringRedisTemplate.boundHashOps(name).get(key);
+    }
+
+    /**
+     * 删除键对应的hash值
+     *
+     * @param key  键
+     * @param name 名称
+     */
+    @Override
+    public void deleteHashValue(String name, String key) {
+        stringRedisTemplate.boundHashOps(name).delete(key);
     }
 
 }

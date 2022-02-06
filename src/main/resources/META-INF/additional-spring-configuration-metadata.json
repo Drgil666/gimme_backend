@@ -19,6 +19,11 @@
       "name": "databaseName",
       "type": "java.lang.String",
       "description": "Description for databaseName."
+    },
+    {
+      "name": "token.validity",
+      "type": "java.lang.Long",
+      "description": "Description for token.validity."
     }
   ]
 }

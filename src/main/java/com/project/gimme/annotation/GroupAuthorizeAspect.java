@@ -19,7 +19,7 @@ import java.lang.reflect.Method;
 @Aspect
 @Component
 @Slf4j
-public class AuthorizeAspect {
+public class GroupAuthorizeAspect {
 
     public static final String TYPE_ADMIN = "admin";
     public static final String TYPE_USER = "user";
@@ -28,7 +28,7 @@ public class AuthorizeAspect {
     /**
      * 目标方法
      */
-    @Pointcut("@annotation(com.project.gimme.annotation.Authorize)")
+    @Pointcut("@annotation(com.project.gimme.annotation.GroupAuthorize)")
     private void permission() {
 
     }
@@ -56,7 +56,7 @@ public class AuthorizeAspect {
          * 获取注解的值，并进行权限验证
          * */
         Method method = ((MethodSignature) proceedingJoinPoint.getSignature()).getMethod();
-        Authorize authorize = method.getAnnotation(Authorize.class);
+        GroupAuthorize authorize = method.getAnnotation(GroupAuthorize.class);
         Integer value = authorize.value().getCode();
         // 将注解的值和token解析后的值进行对比，查看是否有该权限，如果权限通过，允许访问方法；否则不允许，并抛出异常
         // 执行具体方法

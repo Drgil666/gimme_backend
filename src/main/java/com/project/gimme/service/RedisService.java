@@ -22,6 +22,14 @@ public interface RedisService {
     Boolean checkUserLoginToken(String token);
 
     /**
+     * 根据token获取用户id
+     *
+     * @param token 用户token
+     * @return 用户id
+     */
+    Integer getUserId(String token);
+
+    /**
      * 根据二人id创建好友关系token
      *
      * @param userId   用户id

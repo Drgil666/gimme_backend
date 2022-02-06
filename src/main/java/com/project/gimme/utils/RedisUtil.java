@@ -1,10 +1,8 @@
 package com.project.gimme.utils;
 
-import com.alibaba.fastjson.JSONObject;
-import com.project.gimme.pojo.vo.TokenVO;
+import com.alibaba.fastjson.JSON;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.apache.poi.ss.formula.functions.T;
 
 import java.util.HashMap;
 
@@ -17,7 +15,8 @@ public class RedisUtil {
     public static final String TOKEN_FRIEND = "token_friend";
     public static final String TOKEN_GROUP = "token_group";
     public static final String TOKEN_PARAM_UUID = "uuid";
-    public static final String TOKEN_PARAM_TIMESTAMP = "timestamp";
+    public static final String TOKEN_TIMESTAMP = "timestamp";
+    public static final String TOKEN_TYPE = "token_type";
 
     @AllArgsConstructor
     @Getter
@@ -33,7 +32,11 @@ public class RedisUtil {
         /**
          * 群聊人员权限token
          */
-        TYPE_GROUP(2, TOKEN_GROUP);
+        TYPE_GROUP(2, TOKEN_GROUP),
+        /**
+         * 时间戳token
+         */
+        TYPE_TIMESTAMP(3, TOKEN_TIMESTAMP);
         private final Integer code;
         private final String name;
     }
@@ -56,12 +59,11 @@ public class RedisUtil {
         return null;
     }
 
-    public static String objectToJson(TokenVO tokenVO) {
-        return JSONObject.toJSONString(tokenVO);
+    public static String objectToJsonString(Object object) {
+        return JSON.toJSONString(object);
     }
 
-    public static T jsonToObject(String json, T object) {
-        return JSONObject.parseObject(json, T.class);
+    public static Object jsonStringToObject(String json, Class cls) {
+        return JSON.parseObject(json, cls);
     }
-    //TODO:待测试
 }
