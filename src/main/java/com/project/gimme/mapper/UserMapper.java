@@ -54,7 +54,7 @@ public interface UserMapper {
      * @param keyword 关键词
      * @return 查询的用户列表
      */
-    @Select("select * from user where id=#{keyword} or nick like CONCAT('%',#{keyword},'%')")
+    @Select("select * from user where id like CONCAT('%',#{keyword},'%') or nick like CONCAT('%',#{keyword},'%')")
     List<User> getUserByIdAndNick(@Param("keyword") String keyword);
 
     /**
@@ -158,4 +158,17 @@ public interface UserMapper {
             "channel_user.channel_id=#{channelId} and channel_user.user_id=user.id")
     UserVO getUserVoByChannelIfNotFriend(@Param("channelId") Integer channelId,
                                          @Param("memberId") Integer memberId);
+
+    /**
+     * 通过userId和关键词获取好友列表
+     *
+     * @param userId  userId
+     * @param keyword 关键词
+     * @return 好友列表
+     */
+    @Select("select user.* from user,friend where friend.user_id=#{userId} " +
+            "and friend.friend_id=user.id and (user.id like CONCAT('%',#{keyword},'%') " +
+            "or user.nick like CONCAT('%',#{keyword},'%'))")
+    List<User> getFriendUserList(@Param("userId") Integer userId,
+                                 @Param("keyword") String keyword);
 }

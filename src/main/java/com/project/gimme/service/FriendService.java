@@ -42,4 +42,12 @@ public interface FriendService {
      * @return 影响行数
      */
     Long deleteFriend(Integer userId, List<Integer> idList);
+
+    /**
+     * 通过用户id获取朋友列表
+     *
+     * @param userId 用户id
+     * @return 朋友列表
+     */
+    List<Friend> getFriendList(Integer userId);
 }

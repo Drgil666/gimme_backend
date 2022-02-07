@@ -62,4 +62,15 @@ public class FriendServiceImpl implements FriendService {
     public Long deleteFriend(Integer userId, List<Integer> idList) {
         return friendMapper.deleteFriend(userId, idList);
     }
+
+    /**
+     * 通过用户id获取朋友列表
+     *
+     * @param userId 用户id
+     * @return 朋友列表
+     */
+    @Override
+    public List<Friend> getFriendList(Integer userId) {
+        return friendMapper.getFriendList(userId);
+    }
 }

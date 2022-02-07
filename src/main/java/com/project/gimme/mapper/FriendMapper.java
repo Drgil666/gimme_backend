@@ -1,10 +1,7 @@
 package com.project.gimme.mapper;
 
 import com.project.gimme.pojo.Friend;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -20,7 +17,7 @@ public interface FriendMapper {
      * @param friend 要创建的朋友
      * @return 是否成功
      */
-    @Select("insert into friend (user_id, friend_id, friend_note) VALUES " +
+    @Insert("insert into friend (user_id, friend_id, friend_note) VALUES " +
             "(#{friend.userId},#{friend.friendId},#{friend.friendNote})")
     Boolean createFriend(@Param("friend") Friend friend);
 
