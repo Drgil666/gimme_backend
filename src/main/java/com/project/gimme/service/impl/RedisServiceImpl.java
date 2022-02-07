@@ -1,6 +1,5 @@
 package com.project.gimme.service.impl;
 
-import com.mysql.cj.util.StringUtils;
 import com.project.gimme.dao.RedisDao;
 import com.project.gimme.pojo.vo.TokenFriendVO;
 import com.project.gimme.pojo.vo.TokenUserTimestampVO;
@@ -9,6 +8,7 @@ import com.project.gimme.service.RedisService;
 import com.project.gimme.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -44,10 +44,10 @@ public class RedisServiceImpl implements RedisService {
         tokenUserTimestampVO.setType(TOKEN_TIMESTAMP);
         String json = RedisUtil.objectToJsonString(tokenUserVO);
         String object = redisDao.getStringValue(json);
-        if (!StringUtils.isNullOrEmpty(json)) {
+        if (!StringUtils.isEmpty(json)) {
             redisDao.deleteStringValue(json);
         }
-        if (!StringUtils.isNullOrEmpty(object)) {
+        if (!StringUtils.isEmpty(object)) {
             redisDao.deleteStringValue(object);
         }
         redisDao.createStringValue(uuid, json);
@@ -55,7 +55,7 @@ public class RedisServiceImpl implements RedisService {
         redisDao.createStringValue(json, uuid);
         //创建token->uuid映射
         String timestampKey = getTimeStampKey(userId);
-        if (!StringUtils.isNullOrEmpty(timestampKey)) {
+        if (!StringUtils.isEmpty(timestampKey)) {
             redisDao.deleteStringValue(timestampKey);
         }
         redisDao.createStringValue(timestampKey,
@@ -121,9 +121,11 @@ public class RedisServiceImpl implements RedisService {
         TokenFriendVO tokenFriendVO = new TokenFriendVO();
         tokenFriendVO.setType(TOKEN_FRIEND);
         tokenFriendVO.setTimestamp(new Date());
-        String key = getFriendKey(userId, friendId);
-        String json = RedisUtil.objectToJsonString(tokenFriendVO);
-        redisDao.createStringValue(key, json);
+        String key1 = getFriendKey(userId, friendId);
+        String json1 = RedisUtil.objectToJsonString(tokenFriendVO);
+        redisDao.createStringValue(key1, json1);
+        String key2 = getFriendKey(friendId, userId);
+        redisDao.createStringValue(key2, json1);
     }
 
     /**
@@ -137,8 +139,8 @@ public class RedisServiceImpl implements RedisService {
     public Boolean checkFriendToken(Integer userId, Integer friendId) {
         String key1 = getFriendKey(userId, friendId);
         String key2 = getFriendKey(friendId, userId);
-        if (!StringUtils.isNullOrEmpty(redisDao.getStringValue(key1))
-                && !StringUtils.isNullOrEmpty(redisDao.getStringValue(key2))) {
+        if (!StringUtils.isEmpty(redisDao.getStringValue(key1))
+                && !StringUtils.isEmpty(redisDao.getStringValue(key2))) {
             //双向验证
             return true;
         } else {

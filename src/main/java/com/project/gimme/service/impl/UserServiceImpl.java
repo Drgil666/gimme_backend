@@ -81,7 +81,12 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public UserVO getUserVoByFriendIfFriend(Integer friendId, Integer userId) {
-        return userMapper.getUserVoByFriendIfFriend(friendId, userId);
+        AssertionUtil.notNull(friendId, ErrorCode.BIZ_PARAM_ILLEGAL, "friendId不可为空!");
+        AssertionUtil.notNull(userId, ErrorCode.BIZ_PARAM_ILLEGAL, "userId不可为空!");
+        UserVO userVO = userMapper.getUserVoByFriendIfFriend(friendId, userId);
+        AssertionUtil.notNull(userVO, ErrorCode.INNER_PARAM_ILLEGAL, "该频道或该成员不存在!");
+        userVO.setPassword(null);
+        return userVO;
     }
 
     /**
@@ -92,7 +97,11 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public UserVO getUserVoByFriendIfNotFriend(Integer userId) {
-        return userMapper.getUserVoByFriendIfNotFriend(userId);
+        AssertionUtil.notNull(userId, ErrorCode.BIZ_PARAM_ILLEGAL, "userId不可为空!");
+        UserVO userVO = userMapper.getUserVoByFriendIfNotFriend(userId);
+        AssertionUtil.notNull(userVO, ErrorCode.INNER_PARAM_ILLEGAL, "该频道或该成员不存在!");
+        userVO.setPassword(null);
+        return userVO;
     }
 
     /**
@@ -105,7 +114,30 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public UserVO getUserVoByGroupIfFriend(Integer groupId, Integer memberId, Integer userId) {
-        return userMapper.getUserVoByGroupIfFriend(groupId, memberId, userId);
+        AssertionUtil.notNull(memberId, ErrorCode.BIZ_PARAM_ILLEGAL, "memberId不可为空!");
+        AssertionUtil.notNull(userId, ErrorCode.BIZ_PARAM_ILLEGAL, "userId不可为空!");
+        AssertionUtil.notNull(groupId, ErrorCode.BIZ_PARAM_ILLEGAL, "groupId不可为空!");
+        UserVO userVO = userMapper.getUserVoByGroupIfFriend(groupId, memberId, userId);
+        AssertionUtil.notNull(userVO, ErrorCode.INNER_PARAM_ILLEGAL, "该频道或该成员不存在!");
+        userVO.setPassword(null);
+        return userVO;
+    }
+
+    /**
+     * 若不是好友关系，根据群聊关系查找群成员信息
+     *
+     * @param groupId  群聊id
+     * @param memberId 成员id
+     * @return 对应的用户信息
+     */
+    @Override
+    public UserVO getUserVoByGroupIfNotFriend(Integer groupId, Integer memberId) {
+        AssertionUtil.notNull(memberId, ErrorCode.BIZ_PARAM_ILLEGAL, "memberId不可为空!");
+        AssertionUtil.notNull(groupId, ErrorCode.BIZ_PARAM_ILLEGAL, "groupId不可为空!");
+        UserVO userVO = userMapper.getUserVoByGroupIfNotFriend(groupId, memberId);
+        AssertionUtil.notNull(userVO, ErrorCode.INNER_PARAM_ILLEGAL, "该频道或该成员不存在!");
+        userVO.setPassword(null);
+        return userVO;
     }
 
     /**
@@ -118,7 +150,13 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public UserVO getUserVoByChannelIfFriend(Integer channelId, Integer memberId, Integer userId) {
-        return userMapper.getUserVoByChannelIfFriend(channelId, memberId, userId);
+        AssertionUtil.notNull(memberId, ErrorCode.BIZ_PARAM_ILLEGAL, "memberId不可为空!");
+        AssertionUtil.notNull(channelId, ErrorCode.BIZ_PARAM_ILLEGAL, "channelId不可为空!");
+        AssertionUtil.notNull(userId, ErrorCode.BIZ_PARAM_ILLEGAL, "userId不可为空!");
+        UserVO userVO = userMapper.getUserVoByChannelIfFriend(channelId, memberId, userId);
+        AssertionUtil.notNull(userVO, ErrorCode.INNER_PARAM_ILLEGAL, "该频道或该成员不存在!");
+        userVO.setPassword(null);
+        return userVO;
     }
 
     /**
@@ -130,7 +168,12 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public UserVO getUserVoByChannelIfNotFriend(Integer channelId, Integer memberId) {
-        return userMapper.getUserVoByChannelIfNotFriend(channelId, memberId);
+        AssertionUtil.notNull(memberId, ErrorCode.BIZ_PARAM_ILLEGAL, "memberId不可为空!");
+        AssertionUtil.notNull(channelId, ErrorCode.BIZ_PARAM_ILLEGAL, "channelId不可为空!");
+        UserVO userVO = userMapper.getUserVoByChannelIfNotFriend(channelId, memberId);
+        AssertionUtil.notNull(userVO, ErrorCode.INNER_PARAM_ILLEGAL, "该频道或该成员不存在!");
+        userVO.setPassword(null);
+        return userVO;
     }
 
     /**

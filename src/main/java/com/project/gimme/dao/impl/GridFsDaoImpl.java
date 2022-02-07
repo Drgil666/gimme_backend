@@ -3,12 +3,12 @@ package com.project.gimme.dao.impl;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.client.gridfs.model.GridFSFile;
-import com.mysql.cj.util.StringUtils;
 import com.project.gimme.dao.GridFsDao;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -37,7 +37,7 @@ public class GridFsDaoImpl implements GridFsDao {
         DBObject metaData = new BasicDBObject();
         metaData.put("createTime", new Date());
         InputStream inputStream = file.getInputStream();
-        if (StringUtils.isNullOrEmpty(filename)) {
+        if (StringUtils.isEmpty(filename)) {
             filename = file.getOriginalFilename();
         }
         ObjectId objectId = gridFsTemplate.store(inputStream, filename, metaData);

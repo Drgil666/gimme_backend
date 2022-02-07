@@ -2,7 +2,6 @@ package com.project.gimme.service;
 
 import com.project.gimme.pojo.User;
 import com.project.gimme.pojo.vo.UserVO;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -41,7 +40,7 @@ public interface UserService {
      * @param keyword 关键词
      * @return 查询的用户列表
      */
-    List<User> getUserByIdAndNick(@Param("keyword") String keyword);
+    List<User> getUserByIdAndNick(String keyword);
 
     /**
      * 根据好友关系查找用户信息
@@ -69,6 +68,15 @@ public interface UserService {
      * @return 对应的用户信息
      */
     UserVO getUserVoByGroupIfFriend(Integer groupId, Integer memberId, Integer userId);
+
+    /**
+     * 若不是好友关系，根据群聊关系查找群成员信息
+     *
+     * @param memberId 成员id
+     * @param groupId  群聊id
+     * @return 对应的用户信息
+     */
+    UserVO getUserVoByGroupIfNotFriend(Integer groupId, Integer memberId);
 
     /**
      * 若已是好友关系，根据频道关系查找群成员信息

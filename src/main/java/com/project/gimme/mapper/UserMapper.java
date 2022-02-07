@@ -95,12 +95,13 @@ public interface UserMapper {
      * @param userId   用户id
      * @return 对应的用户信息
      */
-    @Select("select user.*,group_user.group_nick as otherNote,friend.friend_note as note," +
+    @Select("select user.*,group_user.group_nick as otherNick,friend.friend_note as note," +
             "country.nick as countryNick,province.nick as provinceNick,city.nick as cityNick," +
             "occupation.nick as occupationNick from user,group_user,friend,country,province,city,occupation " +
             "where user.id=#{memberId} and user.id=friend.friend_id and friend.user_id=#{userId} " +
             "and user.province=province.id and user.country=country.id and user.city=city.id " +
-            "and user.occupation=occupation.id and group_user.group_id=#{groupId}")
+            "and user.occupation=occupation.id and group_user.group_id=#{groupId} " +
+            "and group_user.user_id=user.id")
     UserVO getUserVoByGroupIfFriend(@Param("groupId") Integer groupId,
                                     @Param("memberId") Integer memberId,
                                     @Param("userId") Integer userId);
@@ -112,13 +113,13 @@ public interface UserMapper {
      * @param groupId  群聊id
      * @return 对应的用户信息
      */
-    @Select("select user.*,group_user.group_nick as otherNote," +
+    @Select("select user.*,group_user.group_nick as otherNick," +
             "country.nick as countryNick,province.nick as provinceNick,city.nick as cityNick," +
             "occupation.nick as occupationNick from " +
-            "user,group_user,friend,country,province,city,occupation " +
+            "user,group_user,country,province,city,occupation " +
             "where user.id=#{memberId} and user.province=province.id and user.country=country.id" +
             " and user.city=city.id and user.occupation=occupation.id and " +
-            "group_user.group_id=#{groupId}")
+            "group_user.group_id=#{groupId} and group_user.user_id=user.id")
     UserVO getUserVoByGroupIfNotFriend(@Param("groupId") Integer groupId,
                                        @Param("memberId") Integer memberId);
 
@@ -130,12 +131,13 @@ public interface UserMapper {
      * @param userId    用户id
      * @return 对应的用户信息
      */
-    @Select("select user.*,channel_user.channel_nick as otherNote,friend.friend_note as note," +
+    @Select("select user.*,channel_user.channel_nick as otherNick,friend.friend_note as note," +
             "country.nick as countryNick,province.nick as provinceNick,city.nick as cityNick," +
             "occupation.nick as occupationNick from user,channel_user,friend,country,province,city,occupation " +
             "where user.id=#{memberId} and user.id=friend.friend_id and friend.user_id=#{userId} " +
             "and user.province=province.id and user.country=country.id and user.city=city.id " +
-            "and user.occupation=occupation.id and channel_user.channel_id=#{channelId}")
+            "and user.occupation=occupation.id and channel_user.channel_id=#{channelId} " +
+            "and channel_user.user_id=user.id")
     UserVO getUserVoByChannelIfFriend(@Param("channelId") Integer channelId,
                                       @Param("memberId") Integer memberId,
                                       @Param("userId") Integer userId);
@@ -147,13 +149,13 @@ public interface UserMapper {
      * @param channelId 频道id
      * @return 对应的用户信息
      */
-    @Select("select user.*,channel_user.channel_nick as otherNote," +
+    @Select("select user.*,channel_user.channel_nick as otherNick," +
             "country.nick as countryNick,province.nick as provinceNick,city.nick as cityNick," +
             "occupation.nick as occupationNick from " +
-            "user,channel_user,friend,country,province,city,occupation " +
+            "user,channel_user,country,province,city,occupation " +
             "where user.id=#{memberId} and user.province=province.id and user.country=country.id " +
             "and user.city=city.id and user.occupation=occupation.id and " +
-            "channel_user.channel_id=#{channelId}")
+            "channel_user.channel_id=#{channelId} and channel_user.user_id=user.id")
     UserVO getUserVoByChannelIfNotFriend(@Param("channelId") Integer channelId,
                                          @Param("memberId") Integer memberId);
 }

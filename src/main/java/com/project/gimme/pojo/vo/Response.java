@@ -42,6 +42,11 @@ public class Response<T> {
     }
 
     public static <T> Response<T> createUnknownMethodErr() {
-        return new Response<>(ErrorCode.BIZ_PARAM_ILLEGAL.getCode(), "method方法错误", null);
+        return new Response<>(ErrorCode.BIZ_PARAM_ILLEGAL.getCode(), "method方法错误!", null);
+    }
+
+    public static <T> Response<T> createUnknownTypeErr() {
+        return new Response<>(ErrorCode.BIZ_PARAM_ILLEGAL.getCode(), "type方法错误!", null);
+
     }
 }
