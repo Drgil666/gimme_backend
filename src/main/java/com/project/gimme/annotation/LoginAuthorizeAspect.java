@@ -36,7 +36,7 @@ public class LoginAuthorizeAspect {
         assert attributes != null;
         HttpServletRequest request = attributes.getRequest();
         String token = request.getHeader(TOKEN);
-        if (redisService.checkUserLoginToken(token) != null) {
+        if (redisService.checkUserLoginToken(token)) {
             return proceedingJoinPoint.proceed();
         } else {
             throw new ErrorException(ErrorCode.TOKEN_AUTHORIZE_ILLEGAL);

@@ -92,4 +92,13 @@ public interface UserService {
     UserVO getUserVoByChannelIfNotFriend(Integer channelId,
                                          Integer memberId);
 
+    /**
+     * 登录
+     *
+     * @param userId   用户id
+     * @param password 密码
+     * @return 登录成功的token
+     */
+    String login(Integer userId, String password);
+
 }

@@ -73,5 +73,10 @@ public class User {
      */
     @ApiModelProperty(value = "用户个性签名", name = "motto")
     private String motto;
+    /**
+     * 密码
+     */
+    @ApiModelProperty(value = "密码", name = "password")
+    private String password;
 
 }

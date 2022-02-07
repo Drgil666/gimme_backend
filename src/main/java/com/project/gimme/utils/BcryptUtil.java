@@ -13,7 +13,7 @@ public class BcryptUtil {
      * @param password 要加密的密码
      * @return 加密好的密码
      */
-    public String encode(String password) {
+    public static String encode(String password) {
         return BCrypt.hashpw(password, BCrypt.gensalt(random(11, 17)));
     }
 
@@ -24,11 +24,11 @@ public class BcryptUtil {
      * @param hash     密文
      * @return 是否匹配
      */
-    public Boolean checkPassword(String password, String hash) {
+    public static Boolean checkPassword(String password, String hash) {
         return BCrypt.checkpw(password, hash);
     }
 
-    private Integer random(Integer min, Integer max) {
+    private static Integer random(Integer min, Integer max) {
         return (Integer) (int) (Math.random() * (max - min) + min);
     }
 }

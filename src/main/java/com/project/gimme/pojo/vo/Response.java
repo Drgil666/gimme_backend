@@ -29,6 +29,10 @@ public class Response<T> {
         return new Response<T>(-1, msg, null);
     }
 
+    public static <T> Response<T> createErr(ErrorCode errorCode) {
+        return new Response<T>(errorCode.getCode(), errorCode.getMsg(), null);
+    }
+
     public static <T> Response<T> createErr(int code, String msg) {
         return new Response<T>(code, msg, null);
     }
