@@ -4,12 +4,15 @@ package com.project.gimme.controller;
 import com.project.gimme.annotation.LoginAuthorize;
 import com.project.gimme.exception.ErrorCode;
 import com.project.gimme.pojo.Group;
+import com.project.gimme.pojo.GroupUser;
 import com.project.gimme.pojo.vo.CudRequestVO;
 import com.project.gimme.pojo.vo.GroupVO;
 import com.project.gimme.pojo.vo.Response;
 import com.project.gimme.service.GroupService;
+import com.project.gimme.service.GroupUserService;
 import com.project.gimme.service.RedisService;
 import com.project.gimme.utils.AssertionUtil;
+import com.project.gimme.utils.UserUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -18,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @author Gilbert
@@ -33,6 +37,8 @@ public class GroupController {
     private RedisService redisService;
     @Resource
     private GroupService groupService;
+    @Resource
+    private GroupUserService groupUserService;
 
     @ResponseBody
     @PostMapping()
@@ -46,6 +52,12 @@ public class GroupController {
         switch (request.getMethod()) {
             case CudRequestVO.CREATE_METHOD: {
                 if (groupService.createGroup(request.getData())) {
+                    GroupUser groupUser = new GroupUser();
+                    groupUser.setGroupId(request.getData().getId());
+                    groupUser.setUserId(userId);
+                    groupUser.setType(UserUtil.GroupCharacter.TYPE_GROUP_OWNER.getCode());
+                    groupUserService.createGroupUser(groupUser);
+                    //自己成为群主
                     return Response.createSuc(request.getData());
                 } else {
                     return Response.createErr(ErrorCode.UNKNOWN_ERROR.getCode(), "创建群聊失败!");
@@ -86,6 +98,23 @@ public class GroupController {
         Group group = groupService.getGroup(groupId);
         if (group != null) {
             return Response.createSuc(group);
+        } else {
+            return Response.createErr(ErrorCode.INNER_PARAM_ILLEGAL.getCode(), "获取失败!");
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/list")
+    @ApiOperation(value = "获取群聊信息")
+    @LoginAuthorize()
+    public Response<List<Group>> getGroupList(@ApiParam(value = "加密验证参数")
+                                              @RequestHeader("Token") String token,
+                                              @ApiParam(value = "群聊id")
+                                              @RequestParam(value = "groupId") Integer groupId) {
+        AssertionUtil.notNull(groupId, ErrorCode.BIZ_PARAM_ILLEGAL, "groupId不可为空!");
+        List<Group> groupList = groupService.getGroupList(groupId);
+        if (groupList != null) {
+            return Response.createSuc(groupList);
         } else {
             return Response.createErr(ErrorCode.INNER_PARAM_ILLEGAL.getCode(), "获取失败!");
         }
