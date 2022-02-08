@@ -51,5 +51,5 @@ public interface GroupUserService {
      * @param typeName 类型id
      * @return 是否有权限
      */
-    Boolean authorityCheck(Integer userId, Integer groupId, String typeName);
+    void authorityCheck(Integer userId, Integer groupId, String typeName);
 }

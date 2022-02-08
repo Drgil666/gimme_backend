@@ -1,6 +1,7 @@
 package com.project.gimme.service.impl;
 
 import com.project.gimme.exception.ErrorCode;
+import com.project.gimme.exception.ErrorException;
 import com.project.gimme.mapper.GroupUserMapper;
 import com.project.gimme.pojo.GroupUser;
 import com.project.gimme.service.GroupUserService;
@@ -78,13 +79,15 @@ public class GroupUserServiceImpl implements GroupUserService {
      * @return 是否有权限
      */
     @Override
-    public Boolean authorityCheck(Integer userId, Integer groupId, String typeName) {
+    public void authorityCheck(Integer userId, Integer groupId, String typeName) {
         String userTypeName = redisService.getGroupAuthorityToken(userId, groupId);
-        AssertionUtil.notNull(userTypeName, ErrorCode.INNER_PARAM_ILLEGAL, "没有权限!");
+        AssertionUtil.notNull(userTypeName, ErrorCode.AUTHORIZE_ILLEGAL, ErrorCode.AUTHORIZE_ILLEGAL.getMsg());
         Integer userValue = UserUtil.getGroupCharacterByName(userTypeName);
         Integer value = UserUtil.getGroupCharacterByName(typeName);
-        AssertionUtil.notNull(userValue, ErrorCode.INNER_PARAM_ILLEGAL, "未知权限!");
-        AssertionUtil.notNull(value, ErrorCode.INNER_PARAM_ILLEGAL, "未知权限!");
-        return userValue <= value;
+        AssertionUtil.notNull(userValue, ErrorCode.AUTHORIZE_ILLEGAL, ErrorCode.AUTHORIZE_ILLEGAL.getMsg());
+        AssertionUtil.notNull(value, ErrorCode.AUTHORIZE_ILLEGAL, ErrorCode.AUTHORIZE_ILLEGAL.getMsg());
+        if (userValue > value) {
+            throw new ErrorException(ErrorCode.AUTHORIZE_ILLEGAL);
+        }
     }
 }

@@ -64,6 +64,8 @@ public class GroupController {
                 }
             }
             case CudRequestVO.UPDATE_METHOD: {
+                groupUserService.authorityCheck(userId, request.getData().getId(),
+                        UserUtil.GROUP_ADMIN_ATTRIBUTE);
                 if (groupService.updateGroup(request.getData()) == 1) {
                     return Response.createSuc(request.getData());
                 } else {
