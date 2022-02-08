@@ -73,5 +73,13 @@ public interface GroupService {
      * @param idList 群聊id
      * @return 影响行数
      */
-    Long deleteGroup(List<Integer> idList);
+    Long deleteGroupList(List<Integer> idList);
+
+    /**
+     * 删除群聊
+     *
+     * @param groupId 群聊id
+     * @return 影响行数
+     */
+    Long deleteGroup(Integer groupId);
 }

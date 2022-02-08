@@ -104,7 +104,19 @@ public class GroupServiceImpl implements GroupService {
      * @return 影响行数
      */
     @Override
-    public Long deleteGroup(List<Integer> idList) {
-        return groupMapper.deleteGroup(idList);
+    public Long deleteGroupList(List<Integer> idList) {
+        //TODO:大量notnull判断
+        return groupMapper.deleteGroupList(idList);
+    }
+
+    /**
+     * 删除群聊
+     *
+     * @param groupId 群聊id
+     * @return 影响行数
+     */
+    @Override
+    public Long deleteGroup(Integer groupId) {
+        return groupMapper.deleteGroup(groupId);
     }
 }

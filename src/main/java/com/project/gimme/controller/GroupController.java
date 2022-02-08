@@ -73,11 +73,12 @@ public class GroupController {
                 }
             }
             case CudRequestVO.DELETE_METHOD: {
-                if (groupService.deleteGroup(request.getKey()) > 0) {
-                    for (Integer groupId : request.getKey()) {
-                        redisService.deleteGroupToken(groupId);
-                    }
-                    //批量删除Token
+                groupUserService.authorityCheck(userId, request.getData().getId(),
+                        UserUtil.GROUP_OWNER_ATTRIBUTE);
+                //TODO:可能有一点bug,目前只支持单个删除
+                if (groupService.deleteGroup(request.getData().getId()) == 1) {
+                    redisService.deleteGroupToken(request.getData().getId());
+                    //删除Token
                     return Response.createSuc(null);
                 } else {
                     return Response.createErr(ErrorCode.BIZ_PARAM_ILLEGAL.getCode(), "删除失败!");

@@ -90,5 +90,14 @@ public interface GroupMapper {
      * @param idList 群聊id
      * @return 影响行数
      */
-    Long deleteGroup(@Param("idList") List<Integer> idList);
+    Long deleteGroupList(@Param("idList") List<Integer> idList);
+
+    /**
+     * 删除群聊
+     *
+     * @param groupId 群聊id
+     * @return 影响行数
+     */
+    @Delete("delete from 'group' where id=#{groupId}")
+    Long deleteGroup(@Param("groupId") Integer groupId);
 }
