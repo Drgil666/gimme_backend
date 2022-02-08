@@ -173,6 +173,20 @@ public class UserController {
     }
 
     @ResponseBody
+    @GetMapping("/friendList")
+    @ApiOperation(value = "通过关键词查找用户列表")
+    @LoginAuthorize()
+    public Response<List<User>> getFriendList(@ApiParam(value = "加密验证参数")
+                                              @RequestHeader("Token") String token,
+                                              @ApiParam(value = "关键词")
+                                              @RequestParam(value = "keyword", defaultValue = "")
+                                                      String keyword) {
+        Integer userId = redisService.getUserId(token);
+        List<User> userList = userService.getFriendUserList(userId, keyword);
+        return Response.createSuc(userList);
+    }
+
+    @ResponseBody
     @GetMapping("/check")
     public String check() {
         return "ok2";

@@ -47,6 +47,14 @@ public interface RedisService {
     Boolean checkFriendToken(Integer userId, Integer friendId);
 
     /**
+     * 删除好友关系
+     *
+     * @param userId   用户id
+     * @param friendId 好友id
+     */
+    void deleteUserLoginToken(Integer userId, Integer friendId);
+
+    /**
      * 为群聊创建人员权利token
      *
      * @param userId   用户id
@@ -63,4 +71,19 @@ public interface RedisService {
      * @return token权限
      */
     String getGroupAuthorityToken(Integer userId, Integer groupId);
+
+    /**
+     * 用户移出群聊
+     *
+     * @param userId  用户id
+     * @param groupId 群聊id
+     */
+    void deleteGroupAuthorityToken(Integer userId, Integer groupId);
+
+    /**
+     * 解散群
+     *
+     * @param groupId 群聊id
+     */
+    void deleteGroupToken(Integer groupId);
 }

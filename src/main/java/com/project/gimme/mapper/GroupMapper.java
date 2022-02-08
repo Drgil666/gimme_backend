@@ -84,4 +84,11 @@ public interface GroupMapper {
             "as totalCount from 'group' where 'group'.id=#{'group'Id}")
     GroupVO getGroupVoIfNotJoin(@Param("groupId") Integer groupId);
 
+    /**
+     * 批量删除群聊
+     *
+     * @param idList 群聊id
+     * @return 影响行数
+     */
+    Long deleteGroup(@Param("idList") List<Integer> idList);
 }

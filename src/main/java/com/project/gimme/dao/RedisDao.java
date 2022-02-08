@@ -54,4 +54,11 @@ public interface RedisDao {
      * @param name 名称
      */
     void deleteHashValue(String name, String key);
+
+    /**
+     * 批量寻找关键词并删除
+     *
+     * @param key 关键词
+     */
+    void deleteKeys(String key);
 }

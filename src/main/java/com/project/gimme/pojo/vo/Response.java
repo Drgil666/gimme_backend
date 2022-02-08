@@ -26,7 +26,7 @@ public class Response<T> {
     }
 
     public static <T> Response<T> createErr(String msg) {
-        return new Response<T>(-1, msg, null);
+        return new Response<T>(1, msg, null);
     }
 
     public static <T> Response<T> createErr(ErrorCode errorCode) {

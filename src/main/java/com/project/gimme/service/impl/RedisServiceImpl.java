@@ -2,6 +2,7 @@ package com.project.gimme.service.impl;
 
 import com.project.gimme.dao.RedisDao;
 import com.project.gimme.pojo.vo.TokenFriendVO;
+import com.project.gimme.pojo.vo.TokenGroupVO;
 import com.project.gimme.pojo.vo.TokenUserTimestampVO;
 import com.project.gimme.pojo.vo.TokenUserVO;
 import com.project.gimme.service.RedisService;
@@ -152,6 +153,17 @@ public class RedisServiceImpl implements RedisService {
     }
 
     /**
+     * 删除好友关系
+     *
+     * @param userId   用户id
+     * @param friendId 好友id
+     */
+    @Override
+    public void deleteUserLoginToken(Integer userId, Integer friendId) {
+        redisDao.deleteStringValue(getFriendKey(userId, friendId));
+    }
+
+    /**
      * 为群聊创建人员权利token
      *
      * @param userId   用户id
@@ -160,7 +172,15 @@ public class RedisServiceImpl implements RedisService {
      */
     @Override
     public void createGroupAuthorityToken(Integer userId, Integer groupId, String typeName) {
-
+        TokenGroupVO tokenGroupVO = new TokenGroupVO();
+        tokenGroupVO.setType(TOKEN_GROUP);
+        tokenGroupVO.setGroupId(groupId);
+        tokenGroupVO.setUserId(userId);
+        tokenGroupVO.setMemberType(typeName);
+        String key = getGroupUserKey(groupId, userId);
+        String json = RedisUtil.objectToJsonString(tokenGroupVO);
+        redisDao.deleteStringValue(key);
+        redisDao.createStringValue(key, json);
     }
 
     /**
@@ -172,7 +192,33 @@ public class RedisServiceImpl implements RedisService {
      */
     @Override
     public String getGroupAuthorityToken(Integer userId, Integer groupId) {
-        return null;
+        String json = redisDao.getStringValue(getGroupUserKey(groupId, userId));
+        if (StringUtils.isEmpty(json)) {
+            return null;
+        }
+        TokenGroupVO tokenGroupVO = (TokenGroupVO) RedisUtil.jsonStringToObject(json, TokenGroupVO.class);
+        return tokenGroupVO.getMemberType();
+    }
+
+    /**
+     * 用户移出群聊
+     *
+     * @param userId  用户id
+     * @param groupId 群聊id
+     */
+    @Override
+    public void deleteGroupAuthorityToken(Integer userId, Integer groupId) {
+        redisDao.deleteStringValue(getGroupUserKey(groupId, userId));
+    }
+
+    /**
+     * 解散群
+     *
+     * @param groupId 群聊id
+     */
+    @Override
+    public void deleteGroupToken(Integer groupId) {
+        redisDao.deleteKeys(getGroupKey(groupId));
     }
 
     private String getFriendKey(Integer userId, Integer friendId) {
@@ -183,7 +229,11 @@ public class RedisServiceImpl implements RedisService {
         return TOKEN_TIMESTAMP + "_" + userId;
     }
 
-    private String getGroupKey(Integer groupId, Integer userId) {
+    private String getGroupUserKey(Integer groupId, Integer userId) {
         return TOKEN_GROUP + "_" + groupId + "_" + userId;
+    }
+
+    private String getGroupKey(Integer groupId) {
+        return TOKEN_GROUP + "_" + groupId + "_";
     }
 }

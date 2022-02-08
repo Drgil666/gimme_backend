@@ -4,12 +4,10 @@ package com.project.gimme.controller;
 import com.project.gimme.annotation.LoginAuthorize;
 import com.project.gimme.exception.ErrorCode;
 import com.project.gimme.pojo.Friend;
-import com.project.gimme.pojo.User;
 import com.project.gimme.pojo.vo.CudRequestVO;
 import com.project.gimme.pojo.vo.Response;
 import com.project.gimme.service.FriendService;
 import com.project.gimme.service.RedisService;
-import com.project.gimme.service.UserService;
 import com.project.gimme.utils.AssertionUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -19,7 +17,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * @author Gilbert
@@ -31,8 +28,6 @@ import java.util.List;
 @RequestMapping("/api/friend")
 @Api(tags = "好友")
 public class FriendController {
-    @Resource
-    private UserService userService;
     @Resource
     private RedisService redisService;
     @Resource
@@ -73,6 +68,10 @@ public class FriendController {
             }
             case CudRequestVO.DELETE_METHOD: {
                 if (friendService.deleteFriend(userId, request.getKey()) > 0) {
+                    for (Integer friendId : request.getKey()) {
+                        redisService.deleteUserLoginToken(userId, friendId);
+                        //处理缓存
+                    }
                     return Response.createSuc(null);
                 } else {
                     return Response.createErr("删除失败!");
@@ -99,19 +98,5 @@ public class FriendController {
         } else {
             return Response.createErr("获取好友关系失败!");
         }
-    }
-
-    @ResponseBody
-    @GetMapping("/list")
-    @ApiOperation(value = "通过关键词查找用户列表")
-    @LoginAuthorize()
-    public Response<List<User>> getFriendList(@ApiParam(value = "加密验证参数")
-                                              @RequestHeader("Token") String token,
-                                              @ApiParam(value = "关键词")
-                                              @RequestParam(value = "keyword", defaultValue = "")
-                                                      String keyword) {
-        Integer userId = redisService.getUserId(token);
-        List<User> userList = userService.getFriendUserList(userId, keyword);
-        return Response.createSuc(userList);
     }
 }

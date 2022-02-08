@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
+import java.util.Set;
 
 /**
  * @author Gilbert
@@ -80,6 +81,19 @@ public class RedisDaoImpl implements RedisDao {
     @Override
     public void deleteHashValue(String name, String key) {
         stringRedisTemplate.boundHashOps(name).delete(key);
+    }
+
+    /**
+     * 批量寻找关键词并删除
+     *
+     * @param key 关键词
+     */
+    @Override
+    public void deleteKeys(String key) {
+        Set<String> keys = stringRedisTemplate.keys(key + "*");
+        if (keys != null) {
+            stringRedisTemplate.delete(keys);
+        }
     }
 
 }

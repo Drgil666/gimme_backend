@@ -30,7 +30,7 @@ public class GroupUserServiceImplTest {
         groupUser.setGroupId(3);
         groupUser.setUserId(1);
         groupUser.setGroupNick("nick1");
-        groupUser.setType(UserUtil.Character.TYPE_USER.getCode());
+        groupUser.setType(UserUtil.UserCharacter.TYPE_USER.getCode());
         System.out.println(groupUserService.createGroupUser(groupUser));
     }
 
