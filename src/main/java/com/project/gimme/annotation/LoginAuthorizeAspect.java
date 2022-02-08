@@ -39,7 +39,7 @@ public class LoginAuthorizeAspect {
         if (redisService.checkUserLoginToken(token)) {
             return proceedingJoinPoint.proceed();
         } else {
-            throw new ErrorException(ErrorCode.TOKEN_AUTHORIZE_ILLEGAL);
+            throw new ErrorException(ErrorCode.TOKEN_ILLEGAL);
         }
     }
 

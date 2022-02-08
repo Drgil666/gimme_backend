@@ -45,6 +45,9 @@ public class GroupUserController {
         Integer userId = redisService.getUserId(token);
         switch (request.getMethod()) {
             case CudRequestVO.CREATE_METHOD: {
+                if (groupUserService.getGroupUser(request.getData().getGroupId(), userId) != null) {
+                    return Response.createErr("该成员已在群聊中!");
+                }
                 if (groupUserService.createGroupUser(request.getData())) {
                     redisService.createGroupAuthorityToken(userId,
                             request.getData().getGroupId(),

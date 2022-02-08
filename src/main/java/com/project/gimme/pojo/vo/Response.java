@@ -38,7 +38,7 @@ public class Response<T> {
     }
 
     public static <T> Response<T> createTokenAuthorizedErr() {
-        return new Response<>(ErrorCode.TOKEN_AUTHORIZE_ILLEGAL.getCode(), ErrorCode.TOKEN_AUTHORIZE_ILLEGAL.getMsg(), null);
+        return new Response<>(ErrorCode.TOKEN_ILLEGAL.getCode(), ErrorCode.TOKEN_ILLEGAL.getMsg(), null);
     }
 
     public static <T> Response<T> createUnknownMethodErr() {

@@ -197,6 +197,9 @@ public class RedisServiceImpl implements RedisService {
             return null;
         }
         TokenGroupVO tokenGroupVO = (TokenGroupVO) RedisUtil.jsonStringToObject(json, TokenGroupVO.class);
+        if (tokenGroupVO == null) {
+            return null;
+        }
         return tokenGroupVO.getMemberType();
     }
 

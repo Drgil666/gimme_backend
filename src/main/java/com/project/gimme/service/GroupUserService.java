@@ -43,4 +43,13 @@ public interface GroupUserService {
      */
     Long deleteGroupUser(Integer groupId, List<Integer> userIdList);
 
+    /**
+     * 判断是否有权限
+     *
+     * @param userId   用户id
+     * @param groupId  群聊id
+     * @param typeName 类型id
+     * @return 是否有权限
+     */
+    Boolean authorityCheck(Integer userId, Integer groupId, String typeName);
 }
