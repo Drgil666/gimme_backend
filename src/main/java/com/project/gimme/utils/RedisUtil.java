@@ -14,7 +14,8 @@ public class RedisUtil {
     public static final String TOKEN_USER_LOGIN = "token_user_login";
     public static final String TOKEN_FRIEND = "token_friend";
     public static final String TOKEN_GROUP = "token_group";
-    public static final String TOKEN_PARAM_UUID = "uuid";
+    public static final String TOKEN_CHANNEL = "token_channel";
+    public static final String TOKEN_UUID = "uuid";
     public static final String TOKEN_TIMESTAMP = "timestamp";
     public static final String TOKEN_TYPE = "token_type";
 
@@ -36,7 +37,11 @@ public class RedisUtil {
         /**
          * 时间戳token
          */
-        TYPE_TIMESTAMP(3, TOKEN_TIMESTAMP);
+        TYPE_TIMESTAMP(3, TOKEN_TIMESTAMP),
+        /**
+         *
+         */
+        TYPE_CHANNEL(4, TOKEN_CHANNEL);
         private final Integer code;
         private final String name;
     }

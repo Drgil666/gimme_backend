@@ -52,14 +52,15 @@ public interface GroupMapper {
     List<Group> getGroupByIdAndKeyword(@Param("keyword") String keyword);
 
     /**
-     * 根据userId获取群列表
+     * 根据userId和关键词获取群列表
      *
-     * @param userId 用户id
+     * @param userId  用户id
+     * @param keyword 关键词
      * @return 群列表
      */
     @Select("select group.* from `group`,group_user where " +
-            "group_user.user_id=#{userId} and group_user.group_id=`group`.id")
-    List<Group> getGroupList(@Param("userId") Integer userId);
+            "group_user.user_id=#{userId} and group_user.group_id=`group`.id and `group`.nick like CONCAT('%',#{keyword},'%')")
+    List<Group> getGroupList(@Param("userId") Integer userId, @Param("keyword") String keyword);
 
     /**
      * 如果已加入频道，获取频道信息

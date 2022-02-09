@@ -57,7 +57,9 @@ public class GroupController {
                     groupUser.setUserId(userId);
                     groupUser.setType(UserUtil.GroupCharacter.TYPE_GROUP_OWNER.getCode());
                     groupUserService.createGroupUser(groupUser);
-                    //自己成为群主
+                    redisService.createGroupAuthorityToken(userId, request.getData().getId(),
+                            UserUtil.GroupCharacter.TYPE_GROUP_OWNER.getName());
+                    //自己成为群主,写入缓存
                     return Response.createSuc(request.getData());
                 } else {
                     return Response.createErr(ErrorCode.UNKNOWN_ERROR.getCode(), "创建群聊失败!");
@@ -75,7 +77,6 @@ public class GroupController {
             case CudRequestVO.DELETE_METHOD: {
                 groupUserService.authorityCheck(userId, request.getData().getId(),
                         UserUtil.GROUP_OWNER_ATTRIBUTE);
-                //TODO:可能有一点bug,目前只支持单个删除
                 if (groupService.deleteGroup(request.getData().getId()) == 1) {
                     redisService.deleteGroupToken(request.getData().getId());
                     //删除Token
@@ -98,6 +99,9 @@ public class GroupController {
                                     @ApiParam(value = "群聊id")
                                     @RequestParam(value = "groupId") Integer groupId) {
         AssertionUtil.notNull(groupId, ErrorCode.BIZ_PARAM_ILLEGAL, "groupId不可为空!");
+        if (!redisService.checkGroupExist(groupId)) {
+            return Response.createErr(ErrorCode.INNER_PARAM_ILLEGAL.getCode(), "获取失败!");
+        }
         Group group = groupService.getGroup(groupId);
         if (group != null) {
             return Response.createSuc(group);
@@ -113,9 +117,12 @@ public class GroupController {
     public Response<List<Group>> getGroupList(@ApiParam(value = "加密验证参数")
                                               @RequestHeader("Token") String token,
                                               @ApiParam(value = "群聊id")
-                                              @RequestParam(value = "groupId") Integer groupId) {
+                                              @RequestParam(value = "groupId") Integer groupId,
+                                              @ApiParam(value = "关键词")
+                                              @RequestParam(value = "keyword", defaultValue = "", required = false)
+                                                      String keyword) {
         AssertionUtil.notNull(groupId, ErrorCode.BIZ_PARAM_ILLEGAL, "groupId不可为空!");
-        List<Group> groupList = groupService.getGroupList(groupId);
+        List<Group> groupList = groupService.getGroupList(groupId, keyword);
         if (groupList != null) {
             return Response.createSuc(groupList);
         } else {

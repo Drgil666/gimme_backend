@@ -59,8 +59,8 @@ public class ChannelServiceImpl implements ChannelService {
      * @return 影响行数
      */
     @Override
-    public Long deleteChannel(List<Integer> idList) {
-        return channelMapper.deleteChannel(idList);
+    public Long deleteChannelList(List<Integer> idList) {
+        return channelMapper.deleteChannelList(idList);
     }
 
     /**
@@ -96,5 +96,16 @@ public class ChannelServiceImpl implements ChannelService {
     @Override
     public ChannelVO getChannelVoIfNotJoin(Integer channelId) {
         return channelMapper.getChannelVoIfNotJoin(channelId);
+    }
+
+    /**
+     * 删除频道
+     *
+     * @param id id
+     * @return 影响行数
+     */
+    @Override
+    public Long deleteChannel(Integer id) {
+        return channelMapper.deleteChannel(id);
     }
 }

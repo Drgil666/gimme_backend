@@ -60,12 +60,13 @@ public interface GroupService {
     GroupVO getGroupVoIfNotJoin(Integer groupId);
 
     /**
-     * 根据userId获取群列表
+     * 根据userId和关键词获取群列表
      *
-     * @param userId 用户id
+     * @param userId  用户id
+     * @param keyword 关键词
      * @return 群列表
      */
-    List<Group> getGroupList(Integer userId);
+    List<Group> getGroupList(Integer userId, String keyword);
 
     /**
      * 批量删除群聊

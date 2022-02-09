@@ -61,4 +61,12 @@ public interface RedisDao {
      * @param key 关键词
      */
     void deleteKeys(String key);
+
+    /**
+     * 确认是否存在
+     *
+     * @param key 关键词
+     * @return 是否存在
+     */
+    Boolean checkIfExist(String key);
 }

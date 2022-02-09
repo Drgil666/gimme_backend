@@ -22,6 +22,11 @@ public class ChannelUser {
     @ApiModelProperty(value = "用户id", name = "userId", required = true)
     private Integer userId;
     /**
+     * 用户权限类型
+     */
+    @ApiModelProperty(value = "权限类型", name = "type")
+    private Integer type;
+    /**
      * 频道昵称
      */
     @ApiModelProperty(value = "频道昵称", name = "channelNick")

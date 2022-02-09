@@ -42,4 +42,14 @@ public interface ChannelUserService {
      * @return 影响行数
      */
     Long deleteChannelUser(Integer channelId, List<Integer> idList);
+
+    /**
+     * 判断是否有权限
+     *
+     * @param userId    用户id
+     * @param channelId 频道id
+     * @param typeName  类型id
+     * @return 是否有权限
+     */
+    void authorityCheck(Integer userId, Integer channelId, String typeName);
 }

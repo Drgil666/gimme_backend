@@ -87,14 +87,15 @@ public class GroupServiceImpl implements GroupService {
     }
 
     /**
-     * 根据userId获取群列表
+     * 根据userId和关键词获取群列表
      *
-     * @param userId 用户id
+     * @param userId  用户id
+     * @param keyword 关键词
      * @return 群列表
      */
     @Override
-    public List<Group> getGroupList(Integer userId) {
-        return groupMapper.getGroupList(userId);
+    public List<Group> getGroupList(Integer userId, String keyword) {
+        return groupMapper.getGroupList(userId, keyword);
     }
 
     /**

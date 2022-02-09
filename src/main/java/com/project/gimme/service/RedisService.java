@@ -86,4 +86,54 @@ public interface RedisService {
      * @param groupId 群聊id
      */
     void deleteGroupToken(Integer groupId);
+
+    /**
+     * 为群聊创建人员权利token
+     *
+     * @param userId    用户id
+     * @param channelId 群聊id
+     * @param typeName  类型名称
+     */
+    void createChannelAuthorityToken(Integer userId, Integer channelId, String typeName);
+
+    /**
+     * 通过用户id与群聊id获取权限token
+     *
+     * @param userId    用户id
+     * @param channelId 群聊id
+     * @return token权限
+     */
+    String getChannelAuthorityToken(Integer userId, Integer channelId);
+
+    /**
+     * 用户移出群聊
+     *
+     * @param userId    用户id
+     * @param channelId 群聊id
+     */
+    void deleteChannelAuthorityToken(Integer userId, Integer channelId);
+
+    /**
+     * 解散群
+     *
+     * @param channelId 群聊id
+     */
+    void deleteChannelToken(Integer channelId);
+
+    /**
+     * 检查该群是否已存在
+     *
+     * @param groupId 群id
+     * @return 是否存在
+     */
+    Boolean checkGroupExist(Integer groupId);
+
+    /**
+     * 检查该频道是否已存在
+     *
+     * @param channelId 频道id
+     * @return 是否存在
+     */
+    Boolean checkChannelExist(Integer channelId);
+
 }

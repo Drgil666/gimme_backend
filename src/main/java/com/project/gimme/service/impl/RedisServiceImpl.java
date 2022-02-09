@@ -224,6 +224,89 @@ public class RedisServiceImpl implements RedisService {
         redisDao.deleteKeys(getGroupKey(groupId));
     }
 
+    /**
+     * 为群聊创建人员权利token
+     *
+     * @param userId    用户id
+     * @param channelId 群聊id
+     * @param typeName  类型名称
+     */
+    @Override
+    public void createChannelAuthorityToken(Integer userId, Integer channelId, String typeName) {
+        TokenGroupVO tokenGroupVO = new TokenGroupVO();
+        tokenGroupVO.setType(TOKEN_CHANNEL);
+        tokenGroupVO.setGroupId(channelId);
+        tokenGroupVO.setUserId(userId);
+        tokenGroupVO.setMemberType(typeName);
+        String key = getChannelUserKey(channelId, userId);
+        String json = RedisUtil.objectToJsonString(tokenGroupVO);
+        redisDao.deleteStringValue(key);
+        redisDao.createStringValue(key, json);
+    }
+
+    /**
+     * 通过用户id与群聊id获取权限token
+     *
+     * @param userId    用户id
+     * @param channelId 群聊id
+     * @return token权限
+     */
+    @Override
+    public String getChannelAuthorityToken(Integer userId, Integer channelId) {
+        String json = redisDao.getStringValue(getChannelUserKey(channelId, userId));
+        if (StringUtils.isEmpty(json)) {
+            return null;
+        }
+        TokenGroupVO tokenGroupVO = (TokenGroupVO) RedisUtil.jsonStringToObject(json, TokenGroupVO.class);
+        if (tokenGroupVO == null) {
+            return null;
+        }
+        return tokenGroupVO.getMemberType();
+    }
+
+    /**
+     * 用户移出群聊
+     *
+     * @param userId    用户id
+     * @param channelId 群聊id
+     */
+    @Override
+    public void deleteChannelAuthorityToken(Integer userId, Integer channelId) {
+        redisDao.deleteStringValue(getChannelUserKey(channelId, userId));
+    }
+
+    /**
+     * 解散群
+     *
+     * @param channelId 群聊id
+     */
+    @Override
+    public void deleteChannelToken(Integer channelId) {
+        redisDao.deleteKeys(getChannelKey(channelId));
+    }
+
+    /**
+     * 检查该群是否已存在
+     *
+     * @param groupId 群id
+     * @return 是否存在
+     */
+    @Override
+    public Boolean checkGroupExist(Integer groupId) {
+        return redisDao.checkIfExist(getGroupKey(groupId));
+    }
+
+    /**
+     * 检查该频道是否已存在
+     *
+     * @param channelId 频道id
+     * @return 是否存在
+     */
+    @Override
+    public Boolean checkChannelExist(Integer channelId) {
+        return redisDao.checkIfExist(getChannelKey(channelId));
+    }
+
     private String getFriendKey(Integer userId, Integer friendId) {
         return TOKEN_FRIEND + "_" + userId + "_" + friendId;
     }
@@ -238,5 +321,13 @@ public class RedisServiceImpl implements RedisService {
 
     private String getGroupKey(Integer groupId) {
         return TOKEN_GROUP + "_" + groupId + "_";
+    }
+
+    private String getChannelUserKey(Integer channelId, Integer userId) {
+        return TOKEN_CHANNEL + "_" + channelId + "_" + userId;
+    }
+
+    private String getChannelKey(Integer channelId) {
+        return TOKEN_CHANNEL + "_" + channelId + "_";
     }
 }

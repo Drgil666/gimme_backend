@@ -17,9 +17,9 @@ public interface ChannelUserMapper {
      * @param channelUser 被创建的频道成员类
      * @return 是否成功
      */
-    @Insert("insert into channel_user (channel_id, user_id,channel_nick) values " +
+    @Insert("insert into channel_user (channel_id, user_id,channel_nick,type) values " +
             "(#{channelUser.channelId},#{channelUser.userId}," +
-            "#{channelUser.channelNick})")
+            "#{channelUser.channelNick},#{channelUser.type})")
     Boolean createChannelUser(@Param("channelUser") ChannelUser channelUser);
 
     /**
@@ -28,7 +28,7 @@ public interface ChannelUserMapper {
      * @param channelUser 要更新的频道成员
      * @return 影响行数
      */
-    @Update("update channel_user set channel_nick=#{channelUser.channelNick} " +
+    @Update("update channel_user set channel_nick=#{channelUser.channelNick},type=#{channelUser.type} " +
             "where channel_id=#{channelUser.channelId} and " +
             "user_id=#{channelUser.userId}")
     Long updateChannelUser(@Param("channelUser") ChannelUser channelUser);

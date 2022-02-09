@@ -1,8 +1,13 @@
 package com.project.gimme.service.impl;
 
+import com.project.gimme.exception.ErrorCode;
+import com.project.gimme.exception.ErrorException;
 import com.project.gimme.mapper.ChannelUserMapper;
 import com.project.gimme.pojo.ChannelUser;
 import com.project.gimme.service.ChannelUserService;
+import com.project.gimme.service.RedisService;
+import com.project.gimme.utils.AssertionUtil;
+import com.project.gimme.utils.UserUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -16,6 +21,8 @@ import java.util.List;
 public class ChannelUserServiceImpl implements ChannelUserService {
     @Resource
     private ChannelUserMapper channelUserMapper;
+    @Resource
+    private RedisService redisService;
 
     /**
      * 创建频道成员
@@ -61,5 +68,26 @@ public class ChannelUserServiceImpl implements ChannelUserService {
     @Override
     public Long deleteChannelUser(Integer channelId, List<Integer> idList) {
         return channelUserMapper.deleteChannelUser(channelId, idList);
+    }
+
+    /**
+     * 判断是否有权限
+     *
+     * @param userId    用户id
+     * @param channelId 群聊id
+     * @param typeName  类型id
+     * @return 是否有权限
+     */
+    @Override
+    public void authorityCheck(Integer userId, Integer channelId, String typeName) {
+        String userTypeName = redisService.getChannelAuthorityToken(userId, channelId);
+        AssertionUtil.notNull(userTypeName, ErrorCode.AUTHORIZE_ILLEGAL, ErrorCode.AUTHORIZE_ILLEGAL.getMsg());
+        Integer userValue = UserUtil.getChannelCharacterByName(userTypeName);
+        Integer value = UserUtil.getChannelCharacterByName(typeName);
+        AssertionUtil.notNull(userValue, ErrorCode.AUTHORIZE_ILLEGAL, ErrorCode.AUTHORIZE_ILLEGAL.getMsg());
+        AssertionUtil.notNull(value, ErrorCode.AUTHORIZE_ILLEGAL, ErrorCode.AUTHORIZE_ILLEGAL.getMsg());
+        if (userValue > value) {
+            throw new ErrorException(ErrorCode.AUTHORIZE_ILLEGAL);
+        }
     }
 }

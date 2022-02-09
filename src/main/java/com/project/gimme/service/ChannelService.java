@@ -40,7 +40,7 @@ public interface ChannelService {
      * @param idList id列表
      * @return 影响行数
      */
-    Long deleteChannel(List<Integer> idList);
+    Long deleteChannelList(List<Integer> idList);
 
     /**
      * 根据关键词查找频道列表
@@ -67,4 +67,12 @@ public interface ChannelService {
      * @return 频道信息
      */
     ChannelVO getChannelVoIfNotJoin(Integer channelId);
+
+    /**
+     * 删除频道
+     *
+     * @param id id
+     * @return 影响行数
+     */
+    Long deleteChannel(Integer id);
 }

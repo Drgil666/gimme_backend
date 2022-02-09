@@ -96,4 +96,16 @@ public class RedisDaoImpl implements RedisDao {
         }
     }
 
+    /**
+     * 确认是否存在
+     *
+     * @param key 关键词
+     * @return 是否存在
+     */
+    @Override
+    public Boolean checkIfExist(String key) {
+        Set<String> keys = stringRedisTemplate.keys(key + "*");
+        return keys != null && keys.size() != 0;
+    }
+
 }

@@ -50,6 +50,6 @@ public class ChannelServiceImplTest {
         List<Integer> idList = new ArrayList<>();
         idList.add(1);
         idList.add(2);
-        System.out.println(channelService.deleteChannel(idList));
+        System.out.println(channelService.deleteChannelList(idList));
     }
 }

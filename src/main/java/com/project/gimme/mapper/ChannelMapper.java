@@ -84,5 +84,14 @@ public interface ChannelMapper {
      * @param idList id列表
      * @return 影响行数
      */
-    Long deleteChannel(@Param("id") List<Integer> idList);
+    Long deleteChannelList(@Param("id") List<Integer> idList);
+
+    /**
+     * 删除频道
+     *
+     * @param id id
+     * @return 影响行数
+     */
+    @Delete(" delete from channel where id=#{id}")
+    Long deleteChannel(@Param("id") Integer id);
 }

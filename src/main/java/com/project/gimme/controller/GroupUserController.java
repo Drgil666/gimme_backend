@@ -27,7 +27,7 @@ import javax.annotation.Resource;
 @Slf4j
 @CrossOrigin(origins = "*")
 @RequestMapping("/api/group/user")
-@Api(tags = "群聊")
+@Api(tags = "群聊成员")
 public class GroupUserController {
     @Resource
     private RedisService redisService;
@@ -43,23 +43,40 @@ public class GroupUserController {
                                             @ApiParam(value = "包含群聊信息，操作信息")
                                             @RequestBody CudRequestVO<GroupUser, Integer> request) {
         Integer userId = redisService.getUserId(token);
+        groupUserService.authorityCheck(userId, request.getData().getGroupId(), UserUtil.GROUP_ADMIN_ATTRIBUTE);
         switch (request.getMethod()) {
             case CudRequestVO.CREATE_METHOD: {
-                if (groupUserService.getGroupUser(request.getData().getGroupId(), userId) != null) {
-                    return Response.createErr("该成员已在群聊中!");
-                }
-                if (groupUserService.createGroupUser(request.getData())) {
-                    redisService.createGroupAuthorityToken(userId,
-                            request.getData().getGroupId(),
-                            UserUtil.GROUP_CHARACTER_LIST[request.getData().getType()].getName());
-                    return Response.createSuc(request.getData());
+                boolean isExist = false;
+                if (redisService.getGroupAuthorityToken(request.getData().getUserId(),
+                        request.getData().getGroupId()) != null) {
+                    //token内已存在
+                    isExist = true;
                 } else {
-                    return Response.createErr(ErrorCode.BIZ_PARAM_ILLEGAL.getCode(), "加入群聊失败!");
+                    if (groupUserService.getGroupUser(request.getData().getGroupId(), request.getData().getUserId()) != null) {
+                        isExist = true;
+                        GroupUser groupUser = groupUserService.getGroupUser(request.getData().getGroupId(), request.getData().getUserId());
+                        redisService.createGroupAuthorityToken(groupUser.getUserId(),
+                                groupUser.getGroupId(),
+                                UserUtil.GROUP_CHARACTER_LIST[groupUser.getType()].getName());
+                        //新建token
+                    }
+                }
+                if (isExist) {
+                    return Response.createErr("该成员已在群聊中!");
+                } else {
+                    if (groupUserService.createGroupUser(request.getData())) {
+                        redisService.createGroupAuthorityToken(request.getData().getUserId(),
+                                request.getData().getGroupId(),
+                                UserUtil.GROUP_CHARACTER_LIST[request.getData().getType()].getName());
+                        return Response.createSuc(request.getData());
+                    } else {
+                        return Response.createErr(ErrorCode.BIZ_PARAM_ILLEGAL.getCode(), "加入群聊失败!");
+                    }
                 }
             }
             case CudRequestVO.UPDATE_METHOD: {
                 if (groupUserService.updateGroupUser(request.getData()) == 1) {
-                    redisService.createGroupAuthorityToken(userId,
+                    redisService.createGroupAuthorityToken(request.getData().getUserId(),
                             request.getData().getGroupId(),
                             UserUtil.GROUP_CHARACTER_LIST[request.getData().getType()].getName());
                     return Response.createSuc(request.getData());
@@ -93,6 +110,7 @@ public class GroupUserController {
                                             @RequestParam(value = "groupId") Integer groupId) {
         Integer userId = redisService.getUserId(token);
         AssertionUtil.notNull(groupId, ErrorCode.BIZ_PARAM_ILLEGAL, "groupId不可为空!");
+        groupUserService.authorityCheck(userId, groupId, UserUtil.GROUP_USER_ATTRIBUTE);
         GroupUser groupUser = groupUserService.getGroupUser(groupId, userId);
         if (groupUser != null) {
             return Response.createSuc(groupUser);
