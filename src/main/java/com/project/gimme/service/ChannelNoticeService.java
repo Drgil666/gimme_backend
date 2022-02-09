@@ -36,8 +36,17 @@ public interface ChannelNoticeService {
     /**
      * 批量删除频道
      *
-     * @param idList id列表
+     * @param idList    id列表
+     * @param channelId 频道id
      * @return 影响行数
      */
-    Long deleteChannelNotice(List<Integer> idList);
+    Long deleteChannelNotice(Integer channelId, List<Integer> idList);
+
+    /**
+     * 获取频道公告列表
+     *
+     * @param channelId 频道id
+     * @return 频道公告列表
+     */
+    List<ChannelNotice> getChannelNoticeList(Integer channelId);
 }

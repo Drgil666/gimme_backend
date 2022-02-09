@@ -48,8 +48,18 @@ public interface ChannelNoticeMapper {
     /**
      * 批量删除频道
      *
-     * @param idList id列表
+     * @param idList    id列表
+     * @param channelId 频道id
      * @return 影响行数
      */
-    Long deleteChannelNotice(@Param("id") List<Integer> idList);
+    Long deleteChannelNotice(@Param("channelId") Integer channelId, @Param("id") List<Integer> idList);
+
+    /**
+     * 获取频道公告列表
+     *
+     * @param channelId 频道id
+     * @return 频道公告列表
+     */
+    @Select("select * from channel_notice where channel_id=#{channelId}")
+    List<ChannelNotice> getChannelNoticeList(@Param("channelId") Integer channelId);
 }

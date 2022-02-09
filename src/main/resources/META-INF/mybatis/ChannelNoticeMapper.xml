@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.project.gimme.mapper.ChannelNoticeMapper">
     <delete id="deleteChannelNotice" parameterType="java.util.List">
-        delete from channel_notice where id in
+        delete from channel_notice where channel_id=#{channelId} and id in
         <foreach collection="id" item="id" open="(" separator="," close=")">
             #{id}
         </foreach>

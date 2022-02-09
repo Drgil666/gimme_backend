@@ -53,11 +53,23 @@ public class ChannelNoticeServiceImpl implements ChannelNoticeService {
     /**
      * 批量删除频道
      *
-     * @param idList id列表
+     * @param idList    id列表
+     * @param channelId 频道id
      * @return 影响行数
      */
     @Override
-    public Long deleteChannelNotice(List<Integer> idList) {
-        return channelNoticeMapper.deleteChannelNotice(idList);
+    public Long deleteChannelNotice(Integer channelId, List<Integer> idList) {
+        return channelNoticeMapper.deleteChannelNotice(channelId, idList);
+    }
+
+    /**
+     * 获取频道公告列表
+     *
+     * @param channelId 频道id
+     * @return 频道公告列表
+     */
+    @Override
+    public List<ChannelNotice> getChannelNoticeList(Integer channelId) {
+        return channelNoticeMapper.getChannelNoticeList(channelId);
     }
 }

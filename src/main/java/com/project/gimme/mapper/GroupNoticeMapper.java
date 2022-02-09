@@ -18,8 +18,8 @@ public interface GroupNoticeMapper {
      * @return 是否成功
      */
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
-    @Insert("insert into group_notice (owner_id, group_id,text) values " +
-            "(#{groupNotice.ownerId},#{groupNotice.groupId},#{groupNotice.text})")
+    @Insert("insert into group_notice (owner_id, group_id,text,create_time) values " +
+            "(#{groupNotice.ownerId},#{groupNotice.groupId},#{groupNotice.text},#{groupNotice,createTime})")
     Boolean createGroupNotice(@Param("groupNotice") GroupNotice groupNotice);
 
     /**
@@ -29,7 +29,7 @@ public interface GroupNoticeMapper {
      * @return 影响行数
      */
     @Update("update group_notice set owner_id=#{groupNotice.ownerId}," +
-            "group_id=#{groupNotice.groupId},text=#{groupNotice.text} where id=#{groupNotice.id}")
+            "group_id=#{groupNotice.groupId},text=#{groupNotice.text},create_time=#{groupNotice.createTime} where id=#{groupNotice.id}")
     Long updateGroupNotice(@Param("groupNotice") GroupNotice groupNotice);
 
     /**
