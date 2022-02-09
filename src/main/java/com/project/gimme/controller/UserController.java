@@ -25,6 +25,8 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.project.gimme.utils.RedisUtil.TOKEN;
+
 /**
  * @author Gilbert
  * @Date 2020/9/24 16:28
@@ -74,9 +76,9 @@ public class UserController {
     @ApiOperation(value = "通过用户id获取用户")
     @LoginAuthorize()
     public Response<User> getUser(@ApiParam(value = "加密验证参数")
-                                  @RequestHeader("Token") String token,
+                                      @RequestHeader(TOKEN) String token,
                                   @ApiParam(value = "用户id")
-                                  @RequestParam(value = "userId", required = false) Integer userId) {
+                                      @RequestParam(value = "userId", required = false) Integer userId) {
         if (userId == null) {
             userId = redisService.getUserId(token);
         }
@@ -121,13 +123,13 @@ public class UserController {
     @ApiOperation(value = "通过关键词查找用户列表")
     @LoginAuthorize()
     public Response<UserVO> user(@ApiParam(value = "加密验证参数")
-                                 @RequestHeader("Token") String token,
+                                     @RequestHeader(TOKEN) String token,
                                  @ApiParam(value = "好友id")
-                                 @PathVariable(value = "friendId") Integer friendId,
+                                     @PathVariable(value = "friendId") Integer friendId,
                                  @ApiParam(value = "获取方式")
-                                 @RequestParam(value = "type") String type,
+                                     @RequestParam(value = "type") String type,
                                  @ApiParam(value = "群聊/频道id")
-                                 @RequestParam(value = "objectId", required = false) Integer objectId) {
+                                     @RequestParam(value = "objectId", required = false) Integer objectId) {
         Integer userId = redisService.getUserId(token);
         boolean isFriend = false;
         if (redisService.checkFriendToken(userId, friendId)) {
@@ -177,10 +179,10 @@ public class UserController {
     @ApiOperation(value = "通过关键词查找用户列表")
     @LoginAuthorize()
     public Response<List<User>> getFriendList(@ApiParam(value = "加密验证参数")
-                                              @RequestHeader("Token") String token,
+                                                  @RequestHeader(TOKEN) String token,
                                               @ApiParam(value = "关键词")
-                                              @RequestParam(value = "keyword", defaultValue = "")
-                                                      String keyword) {
+                                                  @RequestParam(value = "keyword", defaultValue = "")
+                                                          String keyword) {
         Integer userId = redisService.getUserId(token);
         List<User> userList = userService.getFriendUserList(userId, keyword);
         return Response.createSuc(userList);

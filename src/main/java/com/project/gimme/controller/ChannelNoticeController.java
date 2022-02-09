@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.util.List;
 
+import static com.project.gimme.utils.RedisUtil.TOKEN;
+
 /**
  * @author Gilbert
  * @Date 2020/9/24 16:28
@@ -43,7 +45,7 @@ public class ChannelNoticeController {
     @ApiOperation(value = "创建/更新/删除频道公告")
     @LoginAuthorize()
     public Response<ChannelNotice> cudChannelNotice(@ApiParam(value = "加密验证参数")
-                                                    @RequestHeader("Token") String token,
+                                                    @RequestHeader(TOKEN) String token,
                                                     @ApiParam(value = "包含用户信息，操作信息")
                                                     @RequestBody CudRequestVO<ChannelNotice, Integer> request) {
         Integer userId = redisService.getUserId(token);
@@ -81,12 +83,12 @@ public class ChannelNoticeController {
     @ApiOperation(value = "通过频道公告id获取频道")
     @LoginAuthorize()
     public Response<ChannelNotice> getChannelNotice(@ApiParam(value = "加密验证参数")
-                                                    @RequestHeader("Token") String token,
+                                                        @RequestHeader(TOKEN) String token,
                                                     @ApiParam(value = "频道id")
-                                                    @RequestParam(value = "channelId")
-                                                            Integer channelId,
+                                                        @RequestParam(value = "channelId")
+                                                                Integer channelId,
                                                     @ApiParam(value = "用户id")
-                                                    @RequestParam(value = "channelNoticeId") Integer channelNoticeId) {
+                                                        @RequestParam(value = "channelNoticeId") Integer channelNoticeId) {
         Integer userId = redisService.getUserId(token);
         channelUserService.authorityCheck(userId, channelId, UserUtil.CHANNEL_USER_ATTRIBUTE);
         ChannelNotice channelNotice = channelNoticeService.getChannelNotice(channelNoticeId);
@@ -102,9 +104,9 @@ public class ChannelNoticeController {
     @ApiOperation(value = "获取频道公告列表")
     @LoginAuthorize()
     public Response<List<ChannelNotice>> getChannelNoticeList(@ApiParam(value = "加密验证参数")
-                                                              @RequestHeader("Token") String token,
+                                                                  @RequestHeader(TOKEN) String token,
                                                               @ApiParam(value = "频道id")
-                                                              @RequestParam(value = "channelId") Integer channelId) {
+                                                                  @RequestParam(value = "channelId") Integer channelId) {
         Integer userId = redisService.getUserId(token);
         channelUserService.authorityCheck(userId, channelId, UserUtil.CHANNEL_USER_ATTRIBUTE);
         AssertionUtil.notNull(channelId, ErrorCode.BIZ_PARAM_ILLEGAL, "channelId不能为空!");

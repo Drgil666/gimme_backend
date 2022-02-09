@@ -19,7 +19,7 @@ public interface GroupNoticeMapper {
      */
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     @Insert("insert into group_notice (owner_id, group_id,text,create_time) values " +
-            "(#{groupNotice.ownerId},#{groupNotice.groupId},#{groupNotice.text},#{groupNotice,createTime})")
+            "(#{groupNotice.ownerId},#{groupNotice.groupId},#{groupNotice.text},#{groupNotice.createTime})")
     Boolean createGroupNotice(@Param("groupNotice") GroupNotice groupNotice);
 
     /**

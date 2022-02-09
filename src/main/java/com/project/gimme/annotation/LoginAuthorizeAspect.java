@@ -14,6 +14,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import static com.project.gimme.utils.RedisUtil.TOKEN;
+
 /**
  * @author zxl
  */
@@ -23,7 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 public class LoginAuthorizeAspect {
     @Resource
     private RedisService redisService;
-    public static final String TOKEN = "Token";
+
 
     /**
      * 环绕

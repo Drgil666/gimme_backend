@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.util.List;
 
+import static com.project.gimme.utils.RedisUtil.TOKEN;
+
 /**
  * @author Gilbert
  * @Date 2020/9/24 16:28
@@ -44,7 +46,7 @@ public class ChannelController {
     @ApiOperation(value = "创建/更新/删除频道")
     @LoginAuthorize()
     public Response<Channel> cudChannel(@ApiParam(value = "加密验证参数")
-                                        @RequestHeader("Token") String token,
+                                        @RequestHeader(TOKEN) String token,
                                         @ApiParam(value = "包含群聊信息，操作信息")
                                         @RequestBody CudRequestVO<Channel, Integer> request) {
         Integer userId = redisService.getUserId(token);
@@ -86,9 +88,9 @@ public class ChannelController {
     @ApiOperation(value = "获取频道信息")
     @LoginAuthorize()
     public Response<Channel> getChannel(@ApiParam(value = "加密验证参数")
-                                        @RequestHeader("Token") String token,
+                                            @RequestHeader(TOKEN) String token,
                                         @ApiParam(value = "频道id")
-                                        @RequestParam(value = "channelId") Integer channelId) {
+                                            @RequestParam(value = "channelId") Integer channelId) {
         AssertionUtil.notNull(channelId, ErrorCode.BIZ_PARAM_ILLEGAL, "channelId不可为空!");
         Channel channel = channelService.getChannel(channelId);
         if (channel != null) {
@@ -103,12 +105,12 @@ public class ChannelController {
     @ApiOperation(value = "获取群聊信息")
     @LoginAuthorize()
     public Response<List<Channel>> getChannelList(@ApiParam(value = "加密验证参数")
-                                                  @RequestHeader("Token") String token,
+                                                      @RequestHeader(TOKEN) String token,
                                                   @ApiParam(value = "频道id")
-                                                  @RequestParam(value = "channelId") Integer channelId,
+                                                      @RequestParam(value = "channelId") Integer channelId,
                                                   @ApiParam(value = "关键词")
-                                                  @RequestParam(value = "keyword", defaultValue = "", required = false)
-                                                          String keyword) {
+                                                      @RequestParam(value = "keyword", defaultValue = "", required = false)
+                                                              String keyword) {
         AssertionUtil.notNull(channelId, ErrorCode.BIZ_PARAM_ILLEGAL, "channelId不可为空!");
         List<Channel> channelList = channelService.getChannelList(keyword, channelId);
         if (channelList != null) {
@@ -123,9 +125,9 @@ public class ChannelController {
     @ApiOperation(value = "获取频道信息")
     @LoginAuthorize()
     public Response<ChannelVO> getGroupInfo(@ApiParam(value = "加密验证参数")
-                                            @RequestHeader("Token") String token,
+                                                @RequestHeader(TOKEN) String token,
                                             @ApiParam(value = "频道id")
-                                            @RequestParam(value = "channelId") Integer channelId) {
+                                                @RequestParam(value = "channelId") Integer channelId) {
         AssertionUtil.notNull(channelId, ErrorCode.BIZ_PARAM_ILLEGAL, "groupId不可为空!");
         Integer userId = redisService.getUserId(token);
         String authority = redisService.getGroupAuthorityToken(userId, channelId);

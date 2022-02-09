@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
+import static com.project.gimme.utils.RedisUtil.TOKEN;
+
 /**
  * @author Gilbert
  * @Date 2020/9/24 16:28
@@ -39,7 +41,7 @@ public class GroupUserController {
     @ApiOperation(value = "创建/更新/删除群聊关系")
     @LoginAuthorize()
     public Response<GroupUser> cudGroupUser(@ApiParam(value = "加密验证参数")
-                                            @RequestHeader("Token") String token,
+                                            @RequestHeader(TOKEN) String token,
                                             @ApiParam(value = "包含群聊信息，操作信息")
                                             @RequestBody CudRequestVO<GroupUser, Integer> request) {
         Integer userId = redisService.getUserId(token);
@@ -105,9 +107,9 @@ public class GroupUserController {
     @ApiOperation(value = "获取群聊信息")
     @LoginAuthorize()
     public Response<GroupUser> getGroupUser(@ApiParam(value = "加密验证参数")
-                                            @RequestHeader("Token") String token,
+                                                @RequestHeader(TOKEN) String token,
                                             @ApiParam(value = "群聊id")
-                                            @RequestParam(value = "groupId") Integer groupId) {
+                                                @RequestParam(value = "groupId") Integer groupId) {
         Integer userId = redisService.getUserId(token);
         AssertionUtil.notNull(groupId, ErrorCode.BIZ_PARAM_ILLEGAL, "groupId不可为空!");
         groupUserService.authorityCheck(userId, groupId, UserUtil.GROUP_USER_ATTRIBUTE);

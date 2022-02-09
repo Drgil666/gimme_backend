@@ -97,7 +97,7 @@ public class ChatMsgServiceImpl implements ChatMsgService {
     @Override
     public List<MessageVO> getMessageVoByObjectId(Integer userId) {
         List<Friend> friendList = friendMapper.getFriendList(userId);
-        List<Group> groupList = groupMapper.getGroupList(userId);
+        List<Group> groupList = groupMapper.getGroupList(userId, "");
         List<Channel> channelList = channelMapper.getChannelList("", userId);
         List<MessageVO> messageVOList = new ArrayList<>();
         for (ChatMsgUtil.Character character : ChatMsgUtil.CHARACTER_LIST) {

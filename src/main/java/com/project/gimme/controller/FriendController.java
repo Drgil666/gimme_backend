@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
+import static com.project.gimme.utils.RedisUtil.TOKEN;
+
 /**
  * @author Gilbert
  * @Date 2020/9/24 16:28
@@ -38,7 +40,7 @@ public class FriendController {
     @ApiOperation(value = "创建/更新/删除好友")
     @LoginAuthorize()
     public Response<Friend> cudFriend(@ApiParam(value = "加密验证参数")
-                                      @RequestHeader("Token") String token,
+                                      @RequestHeader(TOKEN) String token,
                                       @ApiParam(value = "包含用户信息，操作信息")
                                       @RequestBody CudRequestVO<Friend, Integer> request) {
         Integer userId = redisService.getUserId(token);
@@ -87,9 +89,9 @@ public class FriendController {
     @ApiOperation(value = "获取朋友关系")
     @LoginAuthorize()
     public Response<Friend> getFriend(@ApiParam(value = "加密验证参数")
-                                      @RequestHeader("Token") String token,
+                                          @RequestHeader(TOKEN) String token,
                                       @ApiParam(value = "好友id")
-                                      @RequestParam(value = "friendId", required = false) Integer friendId) {
+                                          @RequestParam(value = "friendId", required = false) Integer friendId) {
         Integer userId = redisService.getUserId(token);
         AssertionUtil.notNull(friendId, ErrorCode.BIZ_PARAM_ILLEGAL, "friendId不能为空!");
         Friend friend = friendService.getFriend(userId, friendId);

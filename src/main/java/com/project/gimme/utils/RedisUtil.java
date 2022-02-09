@@ -18,7 +18,7 @@ public class RedisUtil {
     public static final String TOKEN_UUID = "uuid";
     public static final String TOKEN_TIMESTAMP = "timestamp";
     public static final String TOKEN_TYPE = "token_type";
-
+    public static final String TOKEN = "token";
     @AllArgsConstructor
     @Getter
     public enum Character {
