@@ -58,7 +58,7 @@ public interface GroupMapper {
      * @param keyword 关键词
      * @return 群列表
      */
-    @Select("select group.* from `group`,group_user where " +
+    @Select("select `group`.* from `group`,group_user where " +
             "group_user.user_id=#{userId} and group_user.group_id=`group`.id and `group`.nick like CONCAT('%',#{keyword},'%')")
     List<Group> getGroupList(@Param("userId") Integer userId, @Param("keyword") String keyword);
 
@@ -69,10 +69,10 @@ public interface GroupMapper {
      * @param groupId 群聊id
      * @return 频道信息
      */
-    @Select("select 'group'.*,(select count(*) from group_user where group_id=#{groupId})" +
+    @Select("select `group`.*,(select count(*) from group_user where group_id=#{groupId})" +
             "as totalCount,(select group_user.group_nick from group_user where " +
             "group_user.user_id=#{userId} and group_id=#{groupId}) as myNote " +
-            "from 'group' where 'group'.id=#{groupId}")
+            "from `group` where `group`.id=#{groupId}")
     GroupVO getGroupVoIfJoin(@Param("userId") Integer userId, @Param("groupId") Integer groupId);
 
     /**
@@ -81,8 +81,8 @@ public interface GroupMapper {
      * @param groupId 群聊id
      * @return 频道信息
      */
-    @Select("select 'group'.*,(select count(*) from group_user where group_id=#{groupId})" +
-            "as totalCount from 'group' where 'group'.id=#{'group'Id}")
+    @Select("select `group`.*,(select count(*) from group_user where group_id=#{groupId})" +
+            "as totalCount from `group` where `group`.id=#{groupId}")
     GroupVO getGroupVoIfNotJoin(@Param("groupId") Integer groupId);
 
     /**
@@ -99,6 +99,6 @@ public interface GroupMapper {
      * @param groupId 群聊id
      * @return 影响行数
      */
-    @Delete("delete from 'group' where id=#{groupId}")
+    @Delete("delete from `group` where id=#{groupId}")
     Long deleteGroup(@Param("groupId") Integer groupId);
 }

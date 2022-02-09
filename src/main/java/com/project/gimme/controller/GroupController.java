@@ -47,9 +47,9 @@ public class GroupController {
     @ApiOperation(value = "创建/更新/删除群聊")
     @LoginAuthorize()
     public Response<Group> cudGroup(@ApiParam(value = "加密验证参数")
-                                        @RequestHeader(TOKEN) String token,
+                                    @RequestHeader(TOKEN) String token,
                                     @ApiParam(value = "包含群聊信息，操作信息")
-                                        @RequestBody CudRequestVO<Group, Integer> request) {
+                                    @RequestBody CudRequestVO<Group, Integer> request) {
         Integer userId = redisService.getUserId(token);
         switch (request.getMethod()) {
             case CudRequestVO.CREATE_METHOD: {
@@ -97,9 +97,9 @@ public class GroupController {
     @ApiOperation(value = "获取群聊信息")
     @LoginAuthorize()
     public Response<Group> getGroup(@ApiParam(value = "加密验证参数")
-                                        @RequestHeader(TOKEN) String token,
+                                    @RequestHeader(TOKEN) String token,
                                     @ApiParam(value = "群聊id")
-                                        @RequestParam(value = "groupId") Integer groupId) {
+                                    @RequestParam(value = "groupId") Integer groupId) {
         AssertionUtil.notNull(groupId, ErrorCode.BIZ_PARAM_ILLEGAL, "groupId不可为空!");
         if (!redisService.checkGroupExist(groupId)) {
             return Response.createErr(ErrorCode.INNER_PARAM_ILLEGAL.getCode(), "获取失败!");
@@ -117,14 +117,12 @@ public class GroupController {
     @ApiOperation(value = "获取群聊信息")
     @LoginAuthorize()
     public Response<List<Group>> getGroupList(@ApiParam(value = "加密验证参数")
-                                                  @RequestHeader(TOKEN) String token,
-                                              @ApiParam(value = "群聊id")
-                                                  @RequestParam(value = "groupId") Integer groupId,
+                                              @RequestHeader(TOKEN) String token,
                                               @ApiParam(value = "关键词")
-                                                  @RequestParam(value = "keyword", defaultValue = "", required = false)
-                                                          String keyword) {
-        AssertionUtil.notNull(groupId, ErrorCode.BIZ_PARAM_ILLEGAL, "groupId不可为空!");
-        List<Group> groupList = groupService.getGroupList(groupId, keyword);
+                                              @RequestParam(value = "keyword", defaultValue = "", required = false)
+                                                      String keyword) {
+        Integer userId = redisService.getUserId(token);
+        List<Group> groupList = groupService.getGroupList(userId, keyword);
         if (groupList != null) {
             return Response.createSuc(groupList);
         } else {
@@ -137,9 +135,9 @@ public class GroupController {
     @ApiOperation(value = "获取群聊信息")
     @LoginAuthorize()
     public Response<GroupVO> getGroupInfo(@ApiParam(value = "加密验证参数")
-                                              @RequestHeader(TOKEN) String token,
+                                          @RequestHeader(TOKEN) String token,
                                           @ApiParam(value = "群聊id")
-                                              @RequestParam(value = "groupId") Integer groupId) {
+                                          @RequestParam(value = "groupId") Integer groupId) {
         AssertionUtil.notNull(groupId, ErrorCode.BIZ_PARAM_ILLEGAL, "groupId不可为空!");
         Integer userId = redisService.getUserId(token);
         String authority = redisService.getGroupAuthorityToken(userId, groupId);

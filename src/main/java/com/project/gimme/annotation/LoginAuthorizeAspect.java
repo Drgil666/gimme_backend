@@ -8,11 +8,13 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Enumeration;
 
 import static com.project.gimme.utils.RedisUtil.TOKEN;
 
@@ -37,8 +39,21 @@ public class LoginAuthorizeAspect {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         assert attributes != null;
         HttpServletRequest request = attributes.getRequest();
+        //检查token是否存在
+        Enumeration<String> headerNames = request.getHeaderNames();
+        boolean tokenExist = false;
+        while (headerNames.hasMoreElements()) {
+            String headName = headerNames.nextElement();
+            if (headName.equals(TOKEN)) {
+                tokenExist = true;
+                break;
+            }
+        }
+        if (!tokenExist) {
+            throw new ErrorException(ErrorCode.TOKEN_ILLEGAL, "token不存在!");
+        }
         String token = request.getHeader(TOKEN);
-        if (redisService.checkUserLoginToken(token)) {
+        if (!StringUtils.isEmpty(token) && redisService.checkUserLoginToken(token)) {
             return proceedingJoinPoint.proceed();
         } else {
             throw new ErrorException(ErrorCode.TOKEN_ILLEGAL);
