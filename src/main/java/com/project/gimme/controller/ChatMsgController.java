@@ -5,6 +5,7 @@ import com.project.gimme.annotation.LoginAuthorize;
 import com.project.gimme.exception.ErrorCode;
 import com.project.gimme.pojo.ChatMsg;
 import com.project.gimme.pojo.vo.CudRequestVO;
+import com.project.gimme.pojo.vo.MessageVO;
 import com.project.gimme.pojo.vo.Response;
 import com.project.gimme.service.ChatMsgService;
 import com.project.gimme.service.RedisService;
@@ -108,6 +109,21 @@ public class ChatMsgController {
             return Response.createSuc(chatMsgList);
         } else {
             return Response.createErr("获取失败!");
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/list/info")
+    @ApiOperation(value = "获取用户好友/群聊/频道信息")
+    @LoginAuthorize()
+    public Response<List<MessageVO>> getMessageVoByObjectId(@ApiParam(value = "加密验证参数")
+                                                            @RequestHeader(TOKEN) String token) {
+        Integer userId = redisService.getUserId(token);
+        List<MessageVO> messageVOList = chatMsgService.getMessageVoByUserId(userId);
+        if (messageVOList != null) {
+            return Response.createSuc(messageVOList);
+        } else {
+            return Response.createErr("信息获取失败!");
         }
     }
 }

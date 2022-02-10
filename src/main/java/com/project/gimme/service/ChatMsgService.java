@@ -58,7 +58,7 @@ public interface ChatMsgService {
      * @param userId 用户id
      * @return 好友消息
      */
-    List<MessageVO> getMessageVoByObjectId(Integer userId);
+    List<MessageVO> getMessageVoByUserId(Integer userId);
 
     /**
      * 判断是否合法

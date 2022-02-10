@@ -99,7 +99,7 @@ public class ChatMsgServiceImpl implements ChatMsgService {
      * @return 好友消息
      */
     @Override
-    public List<MessageVO> getMessageVoByObjectId(Integer userId) {
+    public List<MessageVO> getMessageVoByUserId(Integer userId) {
         List<Friend> friendList = friendMapper.getFriendList(userId);
         List<Group> groupList = groupMapper.getGroupList(userId, "");
         List<Channel> channelList = channelMapper.getChannelList("", userId);
