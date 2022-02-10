@@ -10,6 +10,7 @@ import com.project.gimme.pojo.Friend;
 import com.project.gimme.pojo.Group;
 import com.project.gimme.pojo.vo.MessageVO;
 import com.project.gimme.service.ChatMsgService;
+import com.project.gimme.service.RedisService;
 import com.project.gimme.utils.ChatMsgUtil;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +32,8 @@ public class ChatMsgServiceImpl implements ChatMsgService {
     private GroupMapper groupMapper;
     @Resource
     private ChannelMapper channelMapper;
+    @Resource
+    private RedisService redisService;
 
     /**
      * 创建聊天信息
@@ -61,8 +64,8 @@ public class ChatMsgServiceImpl implements ChatMsgService {
      * @return 聊天信息
      */
     @Override
-    public ChatMsg getChannelUser(Integer id) {
-        return chatMsgMapper.getChannelMsg(id);
+    public ChatMsg getChatMsg(Integer id) {
+        return chatMsgMapper.getChatMsg(id);
     }
 
     /**
@@ -70,11 +73,12 @@ public class ChatMsgServiceImpl implements ChatMsgService {
      *
      * @param type     信息类型
      * @param objectId 对应id
+     * @param keyword  关键词
      * @return 聊天信息列表
      */
     @Override
-    public List<ChatMsg> getChannelUserListByObjectId(Integer type, Integer objectId) {
-        return chatMsgMapper.getChannelMsgListByObjectId(type, objectId);
+    public List<ChatMsg> getChatMsgListByObjectId(Integer type, Integer objectId, String keyword) {
+        return chatMsgMapper.getChatMsgListByObjectId(type, objectId, keyword);
     }
 
     /**
@@ -126,5 +130,26 @@ public class ChatMsgServiceImpl implements ChatMsgService {
             }
         });
         return messageVOList;
+    }
+
+    /**
+     * 判断是否合法
+     *
+     * @param type     类型
+     * @param userId   用户id
+     * @param objectId 对象id
+     * @return 是否合法
+     */
+    @Override
+    public Boolean checkValidity(Integer type, Integer userId, Integer objectId) {
+        if (type.equals(ChatMsgUtil.Character.TYPE_FRIEND.getCode())) {
+            return redisService.checkFriendToken(userId, type);
+        } else if (type.equals(ChatMsgUtil.Character.TYPE_GROUP.getCode())) {
+            return redisService.getGroupAuthorityToken(userId, objectId) != null;
+        } else if (type.equals(ChatMsgUtil.Character.TYPE_CHANNEL.getCode())) {
+            return redisService.getChannelAuthorityToken(userId, objectId) != null;
+        } else {
+            return false;
+        }
     }
 }

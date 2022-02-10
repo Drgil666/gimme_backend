@@ -50,6 +50,6 @@ public class GroupNoticeServiceImplTest {
         List<Integer> idList = new ArrayList<>();
         idList.add(1);
         idList.add(2);
-        System.out.println(groupNoticeService.deleteGroupNotice(idList));
+        System.out.println(groupNoticeService.deleteGroupNotice(2, idList));
     }
 }

@@ -64,11 +64,12 @@ public class GroupNoticeServiceImpl implements GroupNoticeService {
     /**
      * 批量删除群公告
      *
-     * @param idList id列表
+     * @param groupId 群聊id
+     * @param idList  id列表
      * @return 影响行数
      */
     @Override
-    public Long deleteGroupNotice(List<Integer> idList) {
-        return groupNoticeMapper.deleteGroupNotice(idList);
+    public Long deleteGroupNotice(Integer groupId, List<Integer> idList) {
+        return groupNoticeMapper.deleteGroupNotice(groupId, idList);
     }
 }

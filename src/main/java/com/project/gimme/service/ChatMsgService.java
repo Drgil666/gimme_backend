@@ -32,17 +32,17 @@ public interface ChatMsgService {
      * @param id 聊天信息id
      * @return 聊天信息
      */
-    ChatMsg getChannelUser(Integer id);
+    ChatMsg getChatMsg(Integer id);
 
     /**
      * 获取好友聊天/群聊/频道公告聊天记录
      *
      * @param type     信息类型
      * @param objectId 对应id
+     * @param keyword  关键词
      * @return 聊天信息列表
      */
-    List<ChatMsg> getChannelUserListByObjectId(Integer type,
-                                               Integer objectId);
+    List<ChatMsg> getChatMsgListByObjectId(Integer type, Integer objectId, String keyword);
 
     /**
      * 批量删除聊天信息
@@ -59,4 +59,14 @@ public interface ChatMsgService {
      * @return 好友消息
      */
     List<MessageVO> getMessageVoByObjectId(Integer userId);
+
+    /**
+     * 判断是否合法
+     *
+     * @param type     类型
+     * @param userId   用户id
+     * @param objectId 对象id
+     * @return 是否合法
+     */
+    Boolean checkValidity(Integer type, Integer userId, Integer objectId);
 }

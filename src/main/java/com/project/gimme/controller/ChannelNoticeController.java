@@ -55,7 +55,7 @@ public class ChannelNoticeController {
                 if (channelNoticeService.createChannelNotice(request.getData()) != null) {
                     return Response.createSuc(request.getData());
                 } else {
-                    return Response.createErr("创建用户失败!");
+                    return Response.createErr("创建公告失败!");
                 }
             }
             case CudRequestVO.UPDATE_METHOD: {
@@ -83,19 +83,19 @@ public class ChannelNoticeController {
     @ApiOperation(value = "通过频道公告id获取频道")
     @LoginAuthorize()
     public Response<ChannelNotice> getChannelNotice(@ApiParam(value = "加密验证参数")
-                                                        @RequestHeader(TOKEN) String token,
+                                                    @RequestHeader(TOKEN) String token,
                                                     @ApiParam(value = "频道id")
-                                                        @RequestParam(value = "channelId")
-                                                                Integer channelId,
-                                                    @ApiParam(value = "用户id")
-                                                        @RequestParam(value = "channelNoticeId") Integer channelNoticeId) {
+                                                    @RequestParam(value = "channelId")
+                                                            Integer channelId,
+                                                    @ApiParam(value = "公告id")
+                                                    @RequestParam(value = "channelNoticeId") Integer groupNoticeId) {
         Integer userId = redisService.getUserId(token);
-        channelUserService.authorityCheck(userId, channelId, UserUtil.CHANNEL_USER_ATTRIBUTE);
-        ChannelNotice channelNotice = channelNoticeService.getChannelNotice(channelNoticeId);
+        channelUserService.authorityCheck(userId, channelId, UserUtil.GROUP_USER_ATTRIBUTE);
+        ChannelNotice channelNotice = channelNoticeService.getChannelNotice(groupNoticeId);
         if (channelNotice != null) {
             return Response.createSuc(channelNotice);
         } else {
-            return Response.createErr(ErrorCode.INNER_PARAM_ILLEGAL.getCode(), "频道公告不存在!");
+            return Response.createErr(ErrorCode.INNER_PARAM_ILLEGAL.getCode(), "公告不存在!");
         }
     }
 
@@ -114,7 +114,7 @@ public class ChannelNoticeController {
         if (channelNoticeList != null) {
             return Response.createSuc(channelNoticeList);
         } else {
-            return Response.createErr(ErrorCode.BIZ_PARAM_ILLEGAL.getCode(), "获取频道公告失败!");
+            return Response.createErr(ErrorCode.BIZ_PARAM_ILLEGAL.getCode(), "获取公告失败!");
         }
     }
 }

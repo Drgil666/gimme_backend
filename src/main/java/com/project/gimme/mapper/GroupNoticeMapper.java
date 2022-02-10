@@ -53,8 +53,9 @@ public interface GroupNoticeMapper {
     /**
      * 批量删除群公告
      *
-     * @param idList id列表
+     * @param groupId 群聊id
+     * @param idList  id列表
      * @return 影响行数
      */
-    Long deleteGroupNotice(@Param("id") List<Integer> idList);
+    Long deleteGroupNotice(@Param("groupId") Integer groupId, @Param("id") List<Integer> idList);
 }

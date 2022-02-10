@@ -43,18 +43,21 @@ public interface ChatMsgMapper {
      * @return 聊天信息
      */
     @Select("select * from chat_msg where id=#{id}")
-    ChatMsg getChannelMsg(@Param("id") Integer id);
+    ChatMsg getChatMsg(@Param("id") Integer id);
 
     /**
      * 获取好友聊天/群聊/频道公告聊天记录
      *
      * @param type     信息类型
      * @param objectId 对应id
+     * @param keyword  关键词
      * @return 聊天信息列表
      */
-    @Select("select * from chat_msg where type=#{type} and object_id=#{objectId}")
-    List<ChatMsg> getChannelMsgListByObjectId(@Param("type") Integer type,
-                                              @Param("objectId") Integer objectId);
+    @Select("select * from chat_msg where type=#{type} and object_id=#{objectId} " +
+            "and (text like CONCAT('%',#{keyword},'%') or owner_id like CONCAT('%',#{keyword},'%'))")
+    List<ChatMsg> getChatMsgListByObjectId(@Param("type") Integer type,
+                                           @Param("objectId") Integer objectId,
+                                           @Param("keyword") String keyword);
 
     /**
      * 获取用户好友/群聊/频道信息
