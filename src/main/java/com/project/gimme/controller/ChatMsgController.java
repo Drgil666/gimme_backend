@@ -46,9 +46,7 @@ public class ChatMsgController {
         Integer userId = redisService.getUserId(token);
         request.getData().setOwnerId(userId);
         Integer type = request.getData().getType();
-        if (!chatMsgService.checkValidity(type, userId, request.getData().getObjectId())) {
-            return Response.createErr(ErrorCode.BIZ_PARAM_ILLEGAL.getCode(), "发送失败!");
-        }
+        chatMsgService.checkValidity(type, userId, request.getData().getObjectId());
         switch (request.getMethod()) {
             case CudRequestVO.CREATE_METHOD: {
                 if (chatMsgService.createChatMsg(request.getData())) {

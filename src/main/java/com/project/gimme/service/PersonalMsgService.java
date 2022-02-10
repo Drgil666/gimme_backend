@@ -57,4 +57,14 @@ public interface PersonalMsgService {
      * @return 频道
      */
     List<PersonalMsg> getPersonalMsgList(Integer userId);
+
+    /**
+     * 检查合法性
+     *
+     * @param type     类型
+     * @param userId   用户id
+     * @param objectId 好友/群聊/频道id
+     * @param typeName 权限类型
+     */
+    void checkValidity(Integer type, Integer userId, Integer objectId, String typeName);
 }

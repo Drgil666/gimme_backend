@@ -68,5 +68,5 @@ public interface ChatMsgService {
      * @param objectId 对象id
      * @return 是否合法
      */
-    Boolean checkValidity(Integer type, Integer userId, Integer objectId);
+    void checkValidity(Integer type, Integer userId, Integer objectId);
 }

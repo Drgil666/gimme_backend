@@ -17,6 +17,8 @@ public class UserUtil {
     public static final String CHANNEL_OWNER_ATTRIBUTE = "channel_owner";
     public static final String CHANNEL_USER_ATTRIBUTE = "channel_user";
     public static final String USER_ATTRIBUTE = "user";
+    public static final String ADMIN_ATTRIBUTE = "admin";
+    public static final String OWNER_ATTRIBUTE = "owner";
 
     @AllArgsConstructor
     @Getter
@@ -26,9 +28,17 @@ public class UserUtil {
          */
         TYPE_ROOT(0, ROOT_ATTRIBUTE),
         /**
+         * 创建者用户
+         */
+        TYPE_OWNER(1, OWNER_ATTRIBUTE),
+        /**
+         * 管理员用户
+         */
+        TYPE_ADMIN(2, ADMIN_ATTRIBUTE),
+        /**
          * 普通用户
          */
-        TYPE_USER(1, USER_ATTRIBUTE);
+        TYPE_USER(3, USER_ATTRIBUTE);
         private final Integer code;
         private final String name;
     }

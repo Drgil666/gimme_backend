@@ -1,13 +1,22 @@
 package com.project.gimme.service.impl;
 
+import com.project.gimme.exception.ErrorCode;
 import com.project.gimme.mapper.PersonalMsgMapper;
 import com.project.gimme.pojo.PersonalMsg;
 import com.project.gimme.pojo.vo.PersonalMsgVO;
+import com.project.gimme.service.ChannelUserService;
+import com.project.gimme.service.GroupUserService;
 import com.project.gimme.service.PersonalMsgService;
+import com.project.gimme.service.RedisService;
+import com.project.gimme.utils.AssertionUtil;
+import com.project.gimme.utils.ChatMsgUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
+
+import static com.project.gimme.utils.UserUtil.*;
 
 /**
  * @author DrGilbert
@@ -17,6 +26,12 @@ import java.util.List;
 public class PersonalMsgServiceImpl implements PersonalMsgService {
     @Resource
     private PersonalMsgMapper personalMsgMapper;
+    @Resource
+    private RedisService redisService;
+    @Resource
+    private GroupUserService groupUserService;
+    @Resource
+    private ChannelUserService channelUserService;
 
     /**
      * 创建信息通知
@@ -82,5 +97,49 @@ public class PersonalMsgServiceImpl implements PersonalMsgService {
     @Override
     public List<PersonalMsg> getPersonalMsgList(Integer userId) {
         return personalMsgMapper.getPersonalMsgList(userId);
+    }
+
+    /**
+     * 检查合法性
+     *
+     * @param type     类型
+     * @param userId   用户id
+     * @param objectId 好友/群聊/频道id
+     * @param typeName 权限类型
+     */
+    @Override
+    public void checkValidity(Integer type, Integer userId, Integer objectId, String typeName) {
+        boolean flag = false;
+        if (type.equals(ChatMsgUtil.Character.TYPE_FRIEND.getCode())) {
+            if (redisService.checkFriendToken(userId, type)) {
+                flag = true;
+            }
+        } else if (type.equals(ChatMsgUtil.Character.TYPE_GROUP.getCode())) {
+            String userValue = redisService.getGroupAuthorityToken(userId, objectId);
+            if (!StringUtils.isEmpty(userValue)) {
+                if (typeName.equals(ADMIN_ATTRIBUTE)) {
+                    groupUserService.authorityCheck(userId, objectId, GROUP_ADMIN_ATTRIBUTE);
+                    flag = true;
+                } else if (typeName.equals(OWNER_ATTRIBUTE)) {
+                    groupUserService.authorityCheck(userId, objectId, GROUP_OWNER_ATTRIBUTE);
+                    flag = true;
+                } else if (typeName.equals(USER_ATTRIBUTE)) {
+                    groupUserService.authorityCheck(userId, objectId, GROUP_USER_ATTRIBUTE);
+                    flag = true;
+                }
+            }
+        } else if (type.equals(ChatMsgUtil.Character.TYPE_CHANNEL.getCode())) {
+            String userValue = redisService.getChannelAuthorityToken(userId, objectId);
+            if (!StringUtils.isEmpty(userValue)) {
+                if (typeName.equals(OWNER_ATTRIBUTE)) {
+                    channelUserService.authorityCheck(userId, objectId, CHANNEL_OWNER_ATTRIBUTE);
+                    flag = true;
+                } else if (typeName.equals(USER_ATTRIBUTE)) {
+                    channelUserService.authorityCheck(userId, objectId, CHANNEL_USER_ATTRIBUTE);
+                    flag = true;
+                }
+            }
+        }
+        AssertionUtil.notNull(flag, ErrorCode.BIZ_PARAM_ILLEGAL, "操作失败!");
     }
 }

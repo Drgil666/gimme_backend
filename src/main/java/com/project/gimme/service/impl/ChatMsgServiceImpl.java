@@ -1,5 +1,6 @@
 package com.project.gimme.service.impl;
 
+import com.project.gimme.exception.ErrorCode;
 import com.project.gimme.mapper.ChannelMapper;
 import com.project.gimme.mapper.ChatMsgMapper;
 import com.project.gimme.mapper.FriendMapper;
@@ -11,6 +12,7 @@ import com.project.gimme.pojo.Group;
 import com.project.gimme.pojo.vo.MessageVO;
 import com.project.gimme.service.ChatMsgService;
 import com.project.gimme.service.RedisService;
+import com.project.gimme.utils.AssertionUtil;
 import com.project.gimme.utils.ChatMsgUtil;
 import org.springframework.stereotype.Service;
 
@@ -141,15 +143,21 @@ public class ChatMsgServiceImpl implements ChatMsgService {
      * @return 是否合法
      */
     @Override
-    public Boolean checkValidity(Integer type, Integer userId, Integer objectId) {
+    public void checkValidity(Integer type, Integer userId, Integer objectId) {
+        boolean flag = false;
         if (type.equals(ChatMsgUtil.Character.TYPE_FRIEND.getCode())) {
-            return redisService.checkFriendToken(userId, type);
+            if (redisService.checkFriendToken(userId, type)) {
+                flag = true;
+            }
         } else if (type.equals(ChatMsgUtil.Character.TYPE_GROUP.getCode())) {
-            return redisService.getGroupAuthorityToken(userId, objectId) != null;
+            if (redisService.getGroupAuthorityToken(userId, objectId) != null) {
+                flag = true;
+            }
         } else if (type.equals(ChatMsgUtil.Character.TYPE_CHANNEL.getCode())) {
-            return redisService.getChannelAuthorityToken(userId, objectId) != null;
-        } else {
-            return false;
+            if (redisService.getChannelAuthorityToken(userId, objectId) != null) {
+                flag = true;
+            }
         }
+        AssertionUtil.notNull(flag, ErrorCode.BIZ_PARAM_ILLEGAL, "操作失败!");
     }
 }
