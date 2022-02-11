@@ -143,17 +143,17 @@ public class ChatMsgServiceImpl implements ChatMsgService {
      * @return 是否合法
      */
     @Override
-    public void checkValidity(Integer type, Integer userId, Integer objectId) {
+    public void checkValidity(String type, Integer userId, Integer objectId) {
         boolean flag = false;
-        if (type.equals(ChatMsgUtil.Character.TYPE_FRIEND.getCode())) {
-            if (redisService.checkFriendToken(userId, type)) {
+        if (type.equals(ChatMsgUtil.Character.TYPE_FRIEND.getName())) {
+            if (redisService.checkFriendToken(userId, objectId)) {
                 flag = true;
             }
-        } else if (type.equals(ChatMsgUtil.Character.TYPE_GROUP.getCode())) {
+        } else if (type.equals(ChatMsgUtil.Character.TYPE_GROUP.getName())) {
             if (redisService.getGroupAuthorityToken(userId, objectId) != null) {
                 flag = true;
             }
-        } else if (type.equals(ChatMsgUtil.Character.TYPE_CHANNEL.getCode())) {
+        } else if (type.equals(ChatMsgUtil.Character.TYPE_CHANNEL.getName())) {
             if (redisService.getChannelAuthorityToken(userId, objectId) != null) {
                 flag = true;
             }

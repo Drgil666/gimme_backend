@@ -59,6 +59,14 @@ public interface PersonalMsgService {
     List<PersonalMsg> getPersonalMsgList(Integer userId);
 
     /**
+     * 通过用户id获取个人信息通知具体类
+     *
+     * @param userId 频道id
+     * @return 频道
+     */
+    List<PersonalMsgVO> getPersonalMsgVOList(Integer userId);
+
+    /**
      * 检查合法性
      *
      * @param type     类型
@@ -66,5 +74,5 @@ public interface PersonalMsgService {
      * @param objectId 好友/群聊/频道id
      * @param typeName 权限类型
      */
-    void checkValidity(Integer type, Integer userId, Integer objectId, String typeName);
+    void checkValidity(String type, Integer userId, Integer objectId, String typeName);
 }

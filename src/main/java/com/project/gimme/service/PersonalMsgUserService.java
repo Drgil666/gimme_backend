@@ -43,4 +43,11 @@ public interface PersonalMsgUserService {
      */
     List<PersonalMsgUser> getPersonalMsgUserList(Integer personalMsgId);
 
+    /**
+     * 批量创建群消息个人信息用户
+     *
+     * @param personalMsgId 信息id
+     * @param groupId       群聊id
+     */
+    void createGroupPersonalMsgUser(Integer personalMsgId, Integer groupId);
 }

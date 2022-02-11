@@ -57,7 +57,7 @@ public class GroupController {
                     GroupUser groupUser = new GroupUser();
                     groupUser.setGroupId(request.getData().getId());
                     groupUser.setUserId(userId);
-                    groupUser.setType(UserUtil.GroupCharacter.TYPE_GROUP_OWNER.getCode());
+                    groupUser.setType(UserUtil.GroupCharacter.TYPE_GROUP_OWNER.getName());
                     groupUserService.createGroupUser(groupUser);
                     redisService.createGroupAuthorityToken(userId, request.getData().getId(),
                             UserUtil.GroupCharacter.TYPE_GROUP_OWNER.getName());

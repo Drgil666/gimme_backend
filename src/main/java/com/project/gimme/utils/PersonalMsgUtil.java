@@ -29,7 +29,7 @@ public class PersonalMsgUtil {
 
     @AllArgsConstructor
     @Getter
-    public enum MsgType {
+    public enum FriendMsgType {
         /**
          * 添加好友请求
          */
@@ -37,7 +37,14 @@ public class PersonalMsgUtil {
         /**
          * 删除好友通知
          */
-        TYPE_DELETE_FRIEND(1, DELETE_FRIEND_ATTRIBUTE),
+        TYPE_DELETE_FRIEND(1, DELETE_FRIEND_ATTRIBUTE);
+        private final Integer code;
+        private final String name;
+    }
+
+    @AllArgsConstructor
+    @Getter
+    public enum GroupMsgType {
         /**
          * 创建频道通知
          */
@@ -57,7 +64,14 @@ public class PersonalMsgUtil {
         /**
          * 删除群成员通知
          */
-        TYPE_DELETE_GROUP_MEMBER(6, DELETE_GROUP_MEMBER_ATTRIBUTE),
+        TYPE_DELETE_GROUP_MEMBER(6, DELETE_GROUP_MEMBER_ATTRIBUTE);
+        private final Integer code;
+        private final String name;
+    }
+
+    @AllArgsConstructor
+    @Getter
+    public enum ChannelMsgType {
         /**
          * 创建频道通知
          */
@@ -105,8 +119,12 @@ public class PersonalMsgUtil {
         private final String name;
     }
 
-    public static final MsgType[] MSG_TYPE_LIST = MsgType.values();
-    public static final HashMap<String, Integer> CHAT_MSG_MAP = getMsgTypeMap();
+    public static final FriendMsgType[] FRIEND_MSG_TYPE_LIST = FriendMsgType.values();
+    public static final HashMap<String, Integer> FRIEND_CHAT_MSG_MAP = getFriendMsgTypeMap();
+    public static final GroupMsgType[] GROUP_MSG_TYPE_LIST = GroupMsgType.values();
+    public static final HashMap<String, Integer> GROUP_CHAT_MSG_MAP = getGroupMsgTypeMap();
+    public static final ChannelMsgType[] CHANNEL_MSG_TYPE_LIST = ChannelMsgType.values();
+    public static final HashMap<String, Integer> CHANNEL_CHAT_MSG_MAP = getChannelMsgTypeMap();
     public static final Status[] STATUS_LIST = Status.values();
     public static final HashMap<String, Integer> STATUS_MAP = getStatusMap();
 
@@ -118,24 +136,54 @@ public class PersonalMsgUtil {
         return hashMap;
     }
 
-    public static HashMap<String, Integer> getMsgTypeMap() {
-        HashMap<String, Integer> hashMap = new HashMap<>(10);
-        for (MsgType msgType : MSG_TYPE_LIST) {
-            hashMap.put(msgType.name, msgType.code);
-        }
-        return hashMap;
-    }
-
-    public static Integer getTypeMsgByName(String name) {
-        if (CHAT_MSG_MAP.containsKey(name)) {
-            return CHAT_MSG_MAP.get(name);
+    public static Integer getStatusByName(String name) {
+        if (STATUS_MAP.containsKey(name)) {
+            return STATUS_MAP.get(name);
         }
         return null;
     }
 
-    public static Integer getStatusByName(String name) {
-        if (STATUS_MAP.containsKey(name)) {
-            return STATUS_MAP.get(name);
+    public static HashMap<String, Integer> getFriendMsgTypeMap() {
+        HashMap<String, Integer> hashMap = new HashMap<>(10);
+        for (FriendMsgType friendMsgType : FRIEND_MSG_TYPE_LIST) {
+            hashMap.put(friendMsgType.name, friendMsgType.code);
+        }
+        return hashMap;
+    }
+
+    public static Integer getFriendTypeMsgByName(String name) {
+        if (FRIEND_CHAT_MSG_MAP.containsKey(name)) {
+            return FRIEND_CHAT_MSG_MAP.get(name);
+        }
+        return null;
+    }
+
+    public static HashMap<String, Integer> getGroupMsgTypeMap() {
+        HashMap<String, Integer> hashMap = new HashMap<>(10);
+        for (GroupMsgType groupMsgType : GROUP_MSG_TYPE_LIST) {
+            hashMap.put(groupMsgType.name, groupMsgType.code);
+        }
+        return hashMap;
+    }
+
+    public static Integer getGroupTypeMsgByName(String name) {
+        if (GROUP_CHAT_MSG_MAP.containsKey(name)) {
+            return GROUP_CHAT_MSG_MAP.get(name);
+        }
+        return null;
+    }
+
+    public static HashMap<String, Integer> getChannelMsgTypeMap() {
+        HashMap<String, Integer> hashMap = new HashMap<>(10);
+        for (ChannelMsgType channelMsgType : CHANNEL_MSG_TYPE_LIST) {
+            hashMap.put(channelMsgType.name, channelMsgType.code);
+        }
+        return hashMap;
+    }
+
+    public static Integer getChannelTypeMsgByName(String name) {
+        if (CHANNEL_CHAT_MSG_MAP.containsKey(name)) {
+            return CHANNEL_CHAT_MSG_MAP.get(name);
         }
         return null;
     }

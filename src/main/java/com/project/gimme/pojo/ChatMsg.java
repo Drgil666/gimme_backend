@@ -27,7 +27,7 @@ public class ChatMsg {
      * 聊天消息类型
      */
     @ApiModelProperty(value = "聊天消息类型", name = "type")
-    private Integer type;
+    private String type;
     /**
      * 接受者id/群聊id/频道公告id
      */

@@ -87,7 +87,7 @@ public class FriendController {
                         personalMsg.setOwnerId(userId);
                         personalMsg.setObjectId(friendId);
                         personalMsg.setStatus(PersonalMsgUtil.getStatusByName(NULL_ATTRIBUTE));
-                        personalMsg.setType(PersonalMsgUtil.MsgType.TYPE_DELETE_FRIEND.getCode());
+                        personalMsg.setType(PersonalMsgUtil.FriendMsgType.TYPE_DELETE_FRIEND.getName());
                         personalMsg.setNote(null);
                         personalMsg.setObjectId(null);
                         personalMsgService.createPersonalMsg(personalMsg);

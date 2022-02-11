@@ -25,7 +25,7 @@ public class GroupUser {
      * 用户权限类型
      */
     @ApiModelProperty(value = "权限类型", name = "type")
-    private Integer type;
+    private String type;
     /**
      * 群聊昵称
      */

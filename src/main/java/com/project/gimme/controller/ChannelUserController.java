@@ -60,8 +60,7 @@ public class ChannelUserController {
                         ChannelUser channelUser = channelUserService.getChannelUser(request.getData().getChannelId(),
                                 request.getData().getUserId());
                         redisService.createGroupAuthorityToken(channelUser.getUserId(),
-                                channelUser.getChannelId(),
-                                UserUtil.CHANNEL_CHARACTER_LIST[channelUser.getType()].getName());
+                                channelUser.getChannelId(), channelUser.getType());
                         //新建token
                     }
                 }
@@ -70,8 +69,7 @@ public class ChannelUserController {
                 } else {
                     if (channelUserService.createChannelUser(request.getData())) {
                         redisService.createChannelAuthorityToken(request.getData().getUserId(),
-                                request.getData().getChannelId(),
-                                UserUtil.CHANNEL_CHARACTER_LIST[request.getData().getType()].getName());
+                                request.getData().getChannelId(), request.getData().getType());
                         return Response.createSuc(request.getData());
                     } else {
                         return Response.createErr(ErrorCode.BIZ_PARAM_ILLEGAL.getCode(), "加入群聊失败!");
@@ -81,8 +79,7 @@ public class ChannelUserController {
             case CudRequestVO.UPDATE_METHOD: {
                 if (channelUserService.updateChannelUser(request.getData()) == 1) {
                     redisService.createChannelAuthorityToken(request.getData().getUserId(),
-                            request.getData().getChannelId(),
-                            UserUtil.CHANNEL_CHARACTER_LIST[request.getData().getType()].getName());
+                            request.getData().getChannelId(), request.getData().getType());
                     return Response.createSuc(request.getData());
                 } else {
                     return Response.createErr(ErrorCode.BIZ_PARAM_ILLEGAL.getCode(), "更新失败!");

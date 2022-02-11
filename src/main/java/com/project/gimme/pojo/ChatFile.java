@@ -39,10 +39,10 @@ public class ChatFile {
     @ApiModelProperty(value = "文件名", name = "filename")
     private String filename;
     /**
-     * 好友/群聊/频道id
+     * 好友/群聊/频道
      */
     @ApiModelProperty(value = "好友/群聊/频道id", name = "type")
-    private Integer type;
+    private String type;
     /**
      * 文件大小(bit为单位)
      */

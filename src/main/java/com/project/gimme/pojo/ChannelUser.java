@@ -25,7 +25,7 @@ public class ChannelUser {
      * 用户权限类型
      */
     @ApiModelProperty(value = "权限类型", name = "type")
-    private Integer type;
+    private String type;
     /**
      * 频道昵称
      */

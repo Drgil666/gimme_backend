@@ -21,7 +21,7 @@ public class PersonalMsg {
      * 消息通知类型
      */
     @ApiModelProperty(value = "消息通知类型", name = "type")
-    private Integer type;
+    private String type;
     /**
      * 消息创建者id
      */

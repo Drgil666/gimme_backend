@@ -2,18 +2,20 @@ package com.project.gimme.service.impl;
 
 import com.project.gimme.exception.ErrorCode;
 import com.project.gimme.mapper.PersonalMsgMapper;
+import com.project.gimme.pojo.Channel;
+import com.project.gimme.pojo.Group;
 import com.project.gimme.pojo.PersonalMsg;
+import com.project.gimme.pojo.User;
 import com.project.gimme.pojo.vo.PersonalMsgVO;
-import com.project.gimme.service.ChannelUserService;
-import com.project.gimme.service.GroupUserService;
-import com.project.gimme.service.PersonalMsgService;
-import com.project.gimme.service.RedisService;
+import com.project.gimme.service.*;
 import com.project.gimme.utils.AssertionUtil;
 import com.project.gimme.utils.ChatMsgUtil;
+import com.project.gimme.utils.PersonalMsgUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.project.gimme.utils.UserUtil.*;
@@ -32,6 +34,12 @@ public class PersonalMsgServiceImpl implements PersonalMsgService {
     private GroupUserService groupUserService;
     @Resource
     private ChannelUserService channelUserService;
+    @Resource
+    private UserService userService;
+    @Resource
+    private GroupService groupService;
+    @Resource
+    private ChannelService channelService;
 
     /**
      * 创建信息通知
@@ -74,7 +82,7 @@ public class PersonalMsgServiceImpl implements PersonalMsgService {
      */
     @Override
     public PersonalMsgVO getPersonalMsgVO(Integer id) {
-        return null;
+        return getPersonalMsgVO(personalMsgMapper.getPersonalMsg(id));
     }
 
     /**
@@ -100,6 +108,23 @@ public class PersonalMsgServiceImpl implements PersonalMsgService {
     }
 
     /**
+     * 通过用户id获取个人信息通知具体类
+     *
+     * @param userId 频道id
+     * @return 频道
+     */
+    @Override
+    public List<PersonalMsgVO> getPersonalMsgVOList(Integer userId) {
+        List<PersonalMsg> personalMsgList = personalMsgMapper.getPersonalMsgList(userId);
+        List<PersonalMsgVO> personalMsgVOList = new ArrayList<>();
+        for (PersonalMsg personalMsg : personalMsgList) {
+            PersonalMsgVO personalMsgVO = getPersonalMsgVO(personalMsg);
+            personalMsgVOList.add(personalMsgVO);
+        }
+        return personalMsgVOList;
+    }
+
+    /**
      * 检查合法性
      *
      * @param type     类型
@@ -108,13 +133,13 @@ public class PersonalMsgServiceImpl implements PersonalMsgService {
      * @param typeName 权限类型
      */
     @Override
-    public void checkValidity(Integer type, Integer userId, Integer objectId, String typeName) {
+    public void checkValidity(String type, Integer userId, Integer objectId, String typeName) {
         boolean flag = false;
-        if (type.equals(ChatMsgUtil.Character.TYPE_FRIEND.getCode())) {
-            if (redisService.checkFriendToken(userId, type)) {
+        if (type.equals(ChatMsgUtil.Character.TYPE_FRIEND.getName())) {
+            if (redisService.checkFriendToken(userId, objectId)) {
                 flag = true;
             }
-        } else if (type.equals(ChatMsgUtil.Character.TYPE_GROUP.getCode())) {
+        } else if (type.equals(ChatMsgUtil.Character.TYPE_GROUP.getName())) {
             String userValue = redisService.getGroupAuthorityToken(userId, objectId);
             if (!StringUtils.isEmpty(userValue)) {
                 if (typeName.equals(ADMIN_ATTRIBUTE)) {
@@ -128,7 +153,7 @@ public class PersonalMsgServiceImpl implements PersonalMsgService {
                     flag = true;
                 }
             }
-        } else if (type.equals(ChatMsgUtil.Character.TYPE_CHANNEL.getCode())) {
+        } else if (type.equals(ChatMsgUtil.Character.TYPE_CHANNEL.getName())) {
             String userValue = redisService.getChannelAuthorityToken(userId, objectId);
             if (!StringUtils.isEmpty(userValue)) {
                 if (typeName.equals(OWNER_ATTRIBUTE)) {
@@ -141,5 +166,23 @@ public class PersonalMsgServiceImpl implements PersonalMsgService {
             }
         }
         AssertionUtil.notNull(flag, ErrorCode.BIZ_PARAM_ILLEGAL, "操作失败!");
+    }
+
+    private PersonalMsgVO getPersonalMsgVO(PersonalMsg personalMsg) {
+        PersonalMsgVO personalMsgVO = (PersonalMsgVO) personalMsg;
+        User user = userService.getUser(personalMsgVO.getOwnerId());
+        personalMsgVO.setOwnerNick(user.getNick());
+        user = userService.getUser(personalMsgVO.getOperatorId());
+        personalMsgVO.setOperatorNick(user.getNick());
+        if (PersonalMsgUtil.getFriendTypeMsgByName(personalMsg.getType()) != null) {
+            personalMsgVO.setObjectNick(null);
+        } else if (PersonalMsgUtil.getGroupTypeMsgByName(personalMsg.getType()) != null) {
+            Group group = groupService.getGroup(personalMsg.getObjectId());
+            personalMsgVO.setObjectNick(group.getNick());
+        } else if (PersonalMsgUtil.getChannelTypeMsgByName(personalMsg.getType()) != null) {
+            Channel channel = channelService.getChannel(personalMsg.getObjectId());
+            personalMsgVO.setObjectNick(channel.getNick());
+        }
+        return personalMsgVO;
     }
 }

@@ -1,6 +1,7 @@
 package com.project.gimme.mapper;
 
 import com.project.gimme.pojo.PersonalMsg;
+import com.project.gimme.pojo.vo.PersonalMsgVO;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -63,4 +64,16 @@ public interface PersonalMsgMapper {
             "where personal_msg_user.accept_id=#{userId} " +
             "and personal_msg_user.personal_msg_id=personal_msg.id")
     List<PersonalMsg> getPersonalMsgList(@Param("userId") Integer userId);
+
+    /**
+     * 通过用户id获取个人信息通知具体类
+     *
+     * @param userId 频道id
+     * @return 频道
+     */
+    @Select("select personal_msg.*,user.nick as operatorNick from personal_msg,personal_msg_user,user " +
+            "where personal_msg_user.accept_id=#{userId} " +
+            "and personal_msg_user.personal_msg_id=personal_msg.id " +
+            "union select nick as operatorNick from user where user.id=#{userId}")
+    public List<PersonalMsgVO> getPersonalMsgVOList(Integer userId);
 }

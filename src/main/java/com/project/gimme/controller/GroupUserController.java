@@ -58,8 +58,7 @@ public class GroupUserController {
                         isExist = true;
                         GroupUser groupUser = groupUserService.getGroupUser(request.getData().getGroupId(), request.getData().getUserId());
                         redisService.createGroupAuthorityToken(groupUser.getUserId(),
-                                groupUser.getGroupId(),
-                                UserUtil.GROUP_CHARACTER_LIST[groupUser.getType()].getName());
+                                groupUser.getGroupId(), groupUser.getType());
                         //新建token
                     }
                 }
@@ -68,8 +67,7 @@ public class GroupUserController {
                 } else {
                     if (groupUserService.createGroupUser(request.getData())) {
                         redisService.createGroupAuthorityToken(request.getData().getUserId(),
-                                request.getData().getGroupId(),
-                                UserUtil.GROUP_CHARACTER_LIST[request.getData().getType()].getName());
+                                request.getData().getGroupId(), request.getData().getType());
                         return Response.createSuc(request.getData());
                     } else {
                         return Response.createErr(ErrorCode.BIZ_PARAM_ILLEGAL.getCode(), "加入群聊失败!");
@@ -79,8 +77,7 @@ public class GroupUserController {
             case CudRequestVO.UPDATE_METHOD: {
                 if (groupUserService.updateGroupUser(request.getData()) == 1) {
                     redisService.createGroupAuthorityToken(request.getData().getUserId(),
-                            request.getData().getGroupId(),
-                            UserUtil.GROUP_CHARACTER_LIST[request.getData().getType()].getName());
+                            request.getData().getGroupId(), request.getData().getType());
                     return Response.createSuc(request.getData());
                 } else {
                     return Response.createErr(ErrorCode.BIZ_PARAM_ILLEGAL.getCode(), "更新失败!");

@@ -45,8 +45,7 @@ public class ChatMsgController {
                                         @RequestBody CudRequestVO<ChatMsg, Integer> request) {
         Integer userId = redisService.getUserId(token);
         request.getData().setOwnerId(userId);
-        Integer type = request.getData().getType();
-        chatMsgService.checkValidity(type, userId, request.getData().getObjectId());
+        chatMsgService.checkValidity(request.getData().getType(), userId, request.getData().getObjectId());
         switch (request.getMethod()) {
             case CudRequestVO.CREATE_METHOD: {
                 if (chatMsgService.createChatMsg(request.getData())) {

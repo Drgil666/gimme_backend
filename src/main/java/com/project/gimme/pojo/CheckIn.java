@@ -30,5 +30,5 @@ public class CheckIn {
      * 签到类型
      */
     @ApiModelProperty(value = "签到类型", name = "type")
-    private Integer type;
+    private String type;
 }

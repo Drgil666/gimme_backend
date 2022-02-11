@@ -2,7 +2,10 @@ package com.project.gimme.service.impl;
 
 import com.project.gimme.mapper.PersonalMsgUserMapper;
 import com.project.gimme.pojo.PersonalMsgUser;
+import com.project.gimme.service.ChannelUserService;
+import com.project.gimme.service.GroupUserService;
 import com.project.gimme.service.PersonalMsgUserService;
+import com.project.gimme.utils.UserUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -16,6 +19,10 @@ import java.util.List;
 public class PersonalMsgUserServiceImpl implements PersonalMsgUserService {
     @Resource
     private PersonalMsgUserMapper personalMsgUserMapper;
+    @Resource
+    private GroupUserService groupUserService;
+    @Resource
+    private ChannelUserService channelUserService;
 
     /**
      * 创建信息通知用户
@@ -60,5 +67,22 @@ public class PersonalMsgUserServiceImpl implements PersonalMsgUserService {
     @Override
     public List<PersonalMsgUser> getPersonalMsgUserList(Integer personalMsgId) {
         return personalMsgUserMapper.getPersonalMsgUserList(personalMsgId);
+    }
+
+    /**
+     * 批量创建群消息个人信息用户
+     *
+     * @param personalMsgId 信息id
+     * @param groupId       群聊id
+     */
+    @Override
+    public void createGroupPersonalMsgUser(Integer personalMsgId, Integer groupId) {
+        List<Integer> idList = groupUserService.getGroupAdminList(groupId, UserUtil.GroupCharacter.TYPE_GROUP_ADMIN.getCode());
+        for (Integer id : idList) {
+            PersonalMsgUser personalMsgUser = new PersonalMsgUser();
+            personalMsgUser.setPersonalMsgId(personalMsgId);
+            personalMsgUser.setAcceptId(id);
+            personalMsgUserMapper.createPersonalMsgUser(personalMsgUser);
+        }
     }
 }

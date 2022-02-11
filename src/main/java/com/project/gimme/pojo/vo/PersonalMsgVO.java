@@ -24,4 +24,9 @@ public class PersonalMsgVO extends PersonalMsg {
      */
     @ApiModelProperty(value = "被操作用户名", name = "operatorNick")
     private String operatorNick;
+    /**
+     * 操作者用户名
+     */
+    @ApiModelProperty(value = "操作用户名", name = "ownerNick")
+    private String ownerNick;
 }
