@@ -30,7 +30,7 @@ import static com.project.gimme.utils.UserUtil.ADMIN_ATTRIBUTE;
 @Controller
 @Slf4j
 @CrossOrigin(origins = "*")
-@RequestMapping("/api/user")
+@RequestMapping("/api/personalMsg")
 @Api(tags = "用户")
 public class PersonalMsgController {
     @Resource
@@ -53,12 +53,6 @@ public class PersonalMsgController {
                 personalMsgService.checkValidity(request.getData().getType(),
                         userId, request.getData().getObjectId(), ADMIN_ATTRIBUTE);
                 if (personalMsgService.createPersonalMsg(request.getData())) {
-                    PersonalMsgUser personalMsgUser = new PersonalMsgUser();
-                    personalMsgUser.setAcceptId(request.getData().getOperatorId());
-                    personalMsgUser.setPersonalMsgId(request.getData().getId());
-                    personalMsgUserService.createPersonalMsgUser(personalMsgUser);
-                    personalMsgUser.setAcceptId(userId);
-                    personalMsgUserService.createPersonalMsgUser(personalMsgUser);
                     return Response.createSuc(request.getData());
                     //双方都会收到信息
                 } else {

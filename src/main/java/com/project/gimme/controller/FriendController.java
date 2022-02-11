@@ -4,11 +4,16 @@ package com.project.gimme.controller;
 import com.project.gimme.annotation.LoginAuthorize;
 import com.project.gimme.exception.ErrorCode;
 import com.project.gimme.pojo.Friend;
+import com.project.gimme.pojo.PersonalMsg;
+import com.project.gimme.pojo.PersonalMsgUser;
 import com.project.gimme.pojo.vo.CudRequestVO;
 import com.project.gimme.pojo.vo.Response;
 import com.project.gimme.service.FriendService;
+import com.project.gimme.service.PersonalMsgService;
+import com.project.gimme.service.PersonalMsgUserService;
 import com.project.gimme.service.RedisService;
 import com.project.gimme.utils.AssertionUtil;
+import com.project.gimme.utils.PersonalMsgUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -18,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
+import static com.project.gimme.utils.PersonalMsgUtil.NULL_ATTRIBUTE;
 import static com.project.gimme.utils.RedisUtil.TOKEN;
 
 /**
@@ -34,6 +40,10 @@ public class FriendController {
     private RedisService redisService;
     @Resource
     private FriendService friendService;
+    @Resource
+    private PersonalMsgService personalMsgService;
+    @Resource
+    private PersonalMsgUserService personalMsgUserService;
 
     @ResponseBody
     @PostMapping()
@@ -73,6 +83,19 @@ public class FriendController {
                     for (Integer friendId : request.getKey()) {
                         redisService.deleteUserLoginToken(userId, friendId);
                         //处理缓存
+                        PersonalMsg personalMsg = new PersonalMsg();
+                        personalMsg.setOwnerId(userId);
+                        personalMsg.setObjectId(friendId);
+                        personalMsg.setStatus(PersonalMsgUtil.getStatusByName(NULL_ATTRIBUTE));
+                        personalMsg.setType(PersonalMsgUtil.MsgType.TYPE_DELETE_FRIEND.getCode());
+                        personalMsg.setNote(null);
+                        personalMsg.setObjectId(null);
+                        personalMsgService.createPersonalMsg(personalMsg);
+                        PersonalMsgUser personalMsgUser = new PersonalMsgUser();
+                        personalMsgUser.setPersonalMsgId(personalMsg.getId());
+                        personalMsgUser.setAcceptId(friendId);
+                        personalMsgUserService.createPersonalMsgUser(personalMsgUser);
+                        //通知信息
                     }
                     return Response.createSuc(null);
                 } else {
@@ -89,9 +112,9 @@ public class FriendController {
     @ApiOperation(value = "获取朋友关系")
     @LoginAuthorize()
     public Response<Friend> getFriend(@ApiParam(value = "加密验证参数")
-                                          @RequestHeader(TOKEN) String token,
+                                      @RequestHeader(TOKEN) String token,
                                       @ApiParam(value = "好友id")
-                                          @RequestParam(value = "friendId", required = false) Integer friendId) {
+                                      @RequestParam(value = "friendId", required = false) Integer friendId) {
         Integer userId = redisService.getUserId(token);
         AssertionUtil.notNull(friendId, ErrorCode.BIZ_PARAM_ILLEGAL, "friendId不能为空!");
         Friend friend = friendService.getFriend(userId, friendId);

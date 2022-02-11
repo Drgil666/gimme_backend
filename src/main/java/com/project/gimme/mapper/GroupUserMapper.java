@@ -50,4 +50,14 @@ public interface GroupUserMapper {
      * @return 影响行数
      */
     Long deleteGroupUser(@Param("groupId") Integer groupId, @Param("userId") List<Integer> userIdList);
+
+    /**
+     * 获取人员列表
+     *
+     * @param groupId 群聊id
+     * @param type    权限类型
+     * @return
+     */
+    @Select("select user_id from group_user where group_id=#{groupId} and type<=#{type}")
+    List<Integer> getGroupAdminList(Integer groupId, Integer type);
 }

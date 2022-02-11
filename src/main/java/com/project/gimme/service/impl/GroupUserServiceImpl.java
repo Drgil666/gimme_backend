@@ -90,4 +90,16 @@ public class GroupUserServiceImpl implements GroupUserService {
             throw new ErrorException(ErrorCode.AUTHORIZE_ILLEGAL);
         }
     }
+
+    /**
+     * 获取人员列表
+     *
+     * @param groupId 群聊id
+     * @param type    权限类型
+     * @return
+     */
+    @Override
+    public List<Integer> getGroupAdminList(Integer groupId, Integer type) {
+        return groupUserMapper.getGroupAdminList(groupId, type);
+    }
 }

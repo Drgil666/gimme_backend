@@ -52,4 +52,13 @@ public interface GroupUserService {
      * @return 是否有权限
      */
     void authorityCheck(Integer userId, Integer groupId, String typeName);
+
+    /**
+     * 获取人员列表
+     *
+     * @param groupId 群聊id
+     * @param type    权限类型
+     * @return
+     */
+    List<Integer> getGroupAdminList(Integer groupId, Integer type);
 }

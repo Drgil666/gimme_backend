@@ -109,9 +109,9 @@ public class ChannelUserController {
     @ApiOperation(value = "获取群聊信息")
     @LoginAuthorize()
     public Response<ChannelUser> getChannelUser(@ApiParam(value = "加密验证参数")
-                                                    @RequestHeader(TOKEN) String token,
+                                                @RequestHeader(TOKEN) String token,
                                                 @ApiParam(value = "频道id")
-                                                    @RequestParam(value = "channelId") Integer channelId) {
+                                                @RequestParam(value = "channelId") Integer channelId) {
         Integer userId = redisService.getUserId(token);
         AssertionUtil.notNull(channelId, ErrorCode.BIZ_PARAM_ILLEGAL, "groupId不可为空!");
         channelUserService.authorityCheck(userId, channelId, UserUtil.GROUP_USER_ATTRIBUTE);

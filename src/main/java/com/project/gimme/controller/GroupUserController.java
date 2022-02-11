@@ -107,9 +107,9 @@ public class GroupUserController {
     @ApiOperation(value = "获取群聊信息")
     @LoginAuthorize()
     public Response<GroupUser> getGroupUser(@ApiParam(value = "加密验证参数")
-                                                @RequestHeader(TOKEN) String token,
+                                            @RequestHeader(TOKEN) String token,
                                             @ApiParam(value = "群聊id")
-                                                @RequestParam(value = "groupId") Integer groupId) {
+                                            @RequestParam(value = "groupId") Integer groupId) {
         Integer userId = redisService.getUserId(token);
         AssertionUtil.notNull(groupId, ErrorCode.BIZ_PARAM_ILLEGAL, "groupId不可为空!");
         groupUserService.authorityCheck(userId, groupId, UserUtil.GROUP_USER_ATTRIBUTE);

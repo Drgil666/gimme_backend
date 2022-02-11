@@ -10,26 +10,26 @@ import java.util.HashMap;
  * @date 2022/1/14 16:04
  */
 public class PersonalMsgUtil {
-    private static final String INSERT_FRIEND_ATTRIBUTE = "insert_friend";
-    private static final String DELETE_FRIEND_ATTRIBUTE = "delete_friend";
-    private static final String INSERT_GROUP_ATTRIBUTE = "insert_group";
-    private static final String DELETE_GROUP_ATTRIBUTE = "delete_group";
-    private static final String INSERT_GROUP_MEMBER_ATTRIBUTE = "insert_group_member";
-    private static final String UPDATE_GROUP_MEMBER_ATTRIBUTE = "update_group_member";
-    private static final String DELETE_GROUP_MEMBER_ATTRIBUTE = "channel";
-    private static final String INSERT_CHANNEL_ATTRIBUTE = "insert_channel";
-    private static final String UPDATE_CHANNEL_ATTRIBUTE = "update_channel";
-    private static final String DELETE_CHANNEL_ATTRIBUTE = "delete_channel";
-    private static final String INSERT_CHANNEL_MEMBER_ATTRIBUTE = "insert_channel_member";
-    private static final String UPDATE_CHANNEL_MEMBER_ATTRIBUTE = "update_channel_member";
-    private static final String DELETE_CHANNEL_MEMBER_ATTRIBUTE = "delete_channel_member";
-    private static final String ACCEPT_ATTRIBUTE = "accept";
-    private static final String REJECT_ATTRIBUTE = "reject";
-    private static final String NULL_ATTRIBUTE = "null";
+    public static final String INSERT_FRIEND_ATTRIBUTE = "insert_friend";
+    public static final String DELETE_FRIEND_ATTRIBUTE = "delete_friend";
+    public static final String INSERT_GROUP_ATTRIBUTE = "insert_group";
+    public static final String DELETE_GROUP_ATTRIBUTE = "delete_group";
+    public static final String INSERT_GROUP_MEMBER_ATTRIBUTE = "insert_group_member";
+    public static final String UPDATE_GROUP_MEMBER_ATTRIBUTE = "update_group_member";
+    public static final String DELETE_GROUP_MEMBER_ATTRIBUTE = "channel";
+    public static final String INSERT_CHANNEL_ATTRIBUTE = "insert_channel";
+    public static final String UPDATE_CHANNEL_ATTRIBUTE = "update_channel";
+    public static final String DELETE_CHANNEL_ATTRIBUTE = "delete_channel";
+    public static final String INSERT_CHANNEL_MEMBER_ATTRIBUTE = "insert_channel_member";
+    public static final String UPDATE_CHANNEL_MEMBER_ATTRIBUTE = "update_channel_member";
+    public static final String DELETE_CHANNEL_MEMBER_ATTRIBUTE = "delete_channel_member";
+    public static final String ACCEPT_ATTRIBUTE = "已同意";
+    public static final String REJECT_ATTRIBUTE = "已拒绝";
+    public static final String NULL_ATTRIBUTE = "null";
 
     @AllArgsConstructor
     @Getter
-    public enum Character {
+    public enum MsgType {
         /**
          * 添加好友请求
          */
@@ -105,8 +105,8 @@ public class PersonalMsgUtil {
         private final String name;
     }
 
-    public static final Character[] CHARACTER_LIST = Character.values();
-    public static final HashMap<String, Integer> CHARACTER_MAP = getCharacterMap();
+    public static final MsgType[] MSG_TYPE_LIST = MsgType.values();
+    public static final HashMap<String, Integer> CHAT_MSG_MAP = getMsgTypeMap();
     public static final Status[] STATUS_LIST = Status.values();
     public static final HashMap<String, Integer> STATUS_MAP = getStatusMap();
 
@@ -118,17 +118,17 @@ public class PersonalMsgUtil {
         return hashMap;
     }
 
-    public static HashMap<String, Integer> getCharacterMap() {
+    public static HashMap<String, Integer> getMsgTypeMap() {
         HashMap<String, Integer> hashMap = new HashMap<>(10);
-        for (Character character : CHARACTER_LIST) {
-            hashMap.put(character.name, character.code);
+        for (MsgType msgType : MSG_TYPE_LIST) {
+            hashMap.put(msgType.name, msgType.code);
         }
         return hashMap;
     }
 
-    public static Integer getCharacterByName(String name) {
-        if (CHARACTER_MAP.containsKey(name)) {
-            return CHARACTER_MAP.get(name);
+    public static Integer getTypeMsgByName(String name) {
+        if (CHAT_MSG_MAP.containsKey(name)) {
+            return CHAT_MSG_MAP.get(name);
         }
         return null;
     }
