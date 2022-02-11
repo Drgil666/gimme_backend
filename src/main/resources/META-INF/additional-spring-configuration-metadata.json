@@ -24,6 +24,11 @@
       "name": "token.validity",
       "type": "java.lang.Long",
       "description": "Description for token.validity."
+    },
+    {
+      "name": "netty.port",
+      "type": "java.lang.Integer",
+      "description": "Description for netty.port."
     }
   ]
 }

@@ -26,14 +26,14 @@ public class PersonalMsgServiceImplTest {
         personalMsg.setOwnerId(1);
         personalMsg.setOperatorId(2);
         personalMsg.setObjectId(2);
-        personalMsg.setType(1);
+        personalMsg.setType("test");
         System.out.println(personalMsgService.createPersonalMsg(personalMsg));
     }
 
     @Test
     public void updatePersonalMsg() {
         PersonalMsg personalMsg = personalMsgService.getPersonalMsg(1);
-        personalMsg.setType(2);
+        personalMsg.setType("test");
         System.out.println(personalMsgService.updatePersonalMsg(personalMsg));
     }
 

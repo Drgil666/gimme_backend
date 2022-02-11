@@ -25,7 +25,7 @@ public class CheckInServiceImplTest {
         CheckIn checkIn = new CheckIn();
         checkIn.setAddress("111");
         checkIn.setGroupId(3);
-        checkIn.setType(1);
+        checkIn.setType("test");
         System.out.println(checkInService.createCheckIn(checkIn));
     }
 
