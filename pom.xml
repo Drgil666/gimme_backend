@@ -152,10 +152,11 @@
             <artifactId>spring-boot-starter-current-limiting</artifactId>
             <version>0.0.5.RELEASE</version>
         </dependency>
-        <!--        Netty实现UDP轮询-->
+        <!--        SDK-->
         <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-all</artifactId>
+            <groupId>cn.rongcloud.im</groupId>
+            <artifactId>server-sdk-java</artifactId>
+            <version>3.2.17</version>
         </dependency>
     </dependencies>
 

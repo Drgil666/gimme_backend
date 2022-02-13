@@ -187,6 +187,7 @@ public class UserServiceImpl implements UserService {
     public String login(Integer userId, String password) {
         AssertionUtil.notNull(userId, ErrorCode.BIZ_PARAM_ILLEGAL, "userId不可为空!");
         User user = userMapper.getUser(userId);
+        AssertionUtil.notNull(user, ErrorCode.BIZ_PARAM_ILLEGAL, "用户名或密码错误!");
         if (BcryptUtil.checkPassword(password, user.getPassword())) {
             return redisService.createUserLoginToken(userId);
         } else {

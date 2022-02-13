@@ -191,6 +191,6 @@ public class UserController {
     @ResponseBody
     @GetMapping("/check")
     public String check() {
-        return "ok2";
+        return "已与服务器连接成功!";
     }
 }
