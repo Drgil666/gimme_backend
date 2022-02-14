@@ -106,13 +106,11 @@ public class ChannelController {
     @LoginAuthorize()
     public Response<List<Channel>> getChannelList(@ApiParam(value = "加密验证参数")
                                                       @RequestHeader(TOKEN) String token,
-                                                  @ApiParam(value = "频道id")
-                                                      @RequestParam(value = "channelId") Integer channelId,
                                                   @ApiParam(value = "关键词")
                                                       @RequestParam(value = "keyword", defaultValue = "", required = false)
                                                               String keyword) {
-        AssertionUtil.notNull(channelId, ErrorCode.BIZ_PARAM_ILLEGAL, "channelId不可为空!");
-        List<Channel> channelList = channelService.getChannelList(keyword, channelId);
+        Integer userId = redisService.getUserId(token);
+        List<Channel> channelList = channelService.getChannelList(keyword, userId);
         if (channelList != null) {
             return Response.createSuc(channelList);
         } else {
@@ -128,7 +126,7 @@ public class ChannelController {
                                                 @RequestHeader(TOKEN) String token,
                                             @ApiParam(value = "频道id")
                                                 @RequestParam(value = "channelId") Integer channelId) {
-        AssertionUtil.notNull(channelId, ErrorCode.BIZ_PARAM_ILLEGAL, "groupId不可为空!");
+        AssertionUtil.notNull(channelId, ErrorCode.BIZ_PARAM_ILLEGAL, "channelId不可为空!");
         Integer userId = redisService.getUserId(token);
         String authority = redisService.getGroupAuthorityToken(userId, channelId);
         ChannelVO channelVO;

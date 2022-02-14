@@ -26,9 +26,14 @@
       "description": "Description for token.validity."
     },
     {
-      "name": "netty.port",
-      "type": "java.lang.Integer",
-      "description": "Description for netty.port."
+      "name": "sdk.app.key",
+      "type": "java.lang.String",
+      "description": "Description for sdk.app.key."
+    },
+    {
+      "name": "sdk.app.secret",
+      "type": "java.lang.String",
+      "description": "Description for sdk.app.secret."
     }
   ]
 }
