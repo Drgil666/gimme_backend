@@ -9,6 +9,7 @@ import com.project.gimme.pojo.vo.MessageVO;
 import com.project.gimme.pojo.vo.Response;
 import com.project.gimme.service.ChatMsgService;
 import com.project.gimme.service.RedisService;
+import com.project.gimme.utils.AssertionUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 import static com.project.gimme.utils.RedisUtil.TOKEN;
@@ -114,9 +116,12 @@ public class ChatMsgController {
     @ApiOperation(value = "获取用户好友/群聊/频道信息")
     @LoginAuthorize()
     public Response<List<MessageVO>> getMessageVoByObjectId(@ApiParam(value = "加密验证参数")
-                                                            @RequestHeader(TOKEN) String token) {
+                                                            @RequestHeader(TOKEN) String token,
+                                                            @ApiParam(value = "时间戳")
+                                                            @RequestParam("timestamp") Date timestamp) {
         Integer userId = redisService.getUserId(token);
-        List<MessageVO> messageVOList = chatMsgService.getMessageVoByUserId(userId);
+        AssertionUtil.notNull(timestamp, ErrorCode.BIZ_PARAM_ILLEGAL, "timestamp不可为空!");
+        List<MessageVO> messageVOList = chatMsgService.getMessageVoByUserId(userId, timestamp);
         if (messageVOList != null) {
             return Response.createSuc(messageVOList);
         } else {

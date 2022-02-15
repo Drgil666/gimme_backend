@@ -1,6 +1,8 @@
 package com.project.gimme.service.impl;
 
 import com.project.gimme.GimmeApplication;
+import com.project.gimme.mapper.ChatMsgMapper;
+import com.project.gimme.pojo.vo.MessageVO;
 import com.project.gimme.service.ChatMsgService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
+import java.util.Date;
 
 /**
  * @author DrGilbert
@@ -18,6 +21,8 @@ import javax.annotation.Resource;
 public class ChatMsgServiceImplTest {
     @Resource
     private ChatMsgService chatMsgService;
+    @Resource
+    private ChatMsgMapper chatMsgMapper;
 
     @Test
     public void createChatMsg() {
@@ -37,5 +42,39 @@ public class ChatMsgServiceImplTest {
 
     @Test
     public void deleteChatMsg() {
+    }
+
+    @Test
+    public void testCreateChatMsg() {
+    }
+
+    @Test
+    public void testUpdateChatMsg() {
+    }
+
+    @Test
+    public void getChatMsg() {
+    }
+
+    @Test
+    public void getChatMsgListByObjectId() {
+    }
+
+    @Test
+    public void testDeleteChatMsg() {
+    }
+
+    @Test
+    public void getMessageVoByUserId() {
+        Integer userId = 2;
+        Integer objectId = 3;
+        Integer type = 0;
+        Date date = new Date("2019/09/09 11:20:20");
+        MessageVO messageVO = chatMsgMapper.getFriendMessageVoByObjectId(userId, objectId, date);
+        System.out.println(messageVO.toString());
+    }
+
+    @Test
+    public void checkValidity() {
     }
 }

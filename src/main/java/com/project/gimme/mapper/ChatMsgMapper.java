@@ -4,6 +4,7 @@ import com.project.gimme.pojo.ChatMsg;
 import com.project.gimme.pojo.vo.MessageVO;
 import org.apache.ibatis.annotations.*;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -60,16 +61,79 @@ public interface ChatMsgMapper {
                                            @Param("keyword") String keyword);
 
     /**
-     * 获取用户好友/群聊/频道信息
+     * 获取用户频道信息
      *
-     * @param userId   用户id
-     * @param type     类型
-     * @param objectId 好友/群聊/频道id
+     * @param userId    用户id
+     * @param objectId  好友/群聊/频道id
+     * @param timestamp 时间戳
      * @return 聊天消息
      */
-    MessageVO getMessageVoByObjectId(@Param("userId") Integer userId,
-                                     @Param("type") Integer type,
-                                     @Param("objectId") Integer objectId);
+    @Select("select " +
+            "channel_notice.text as text," +
+            "channel.id as objectId," +
+            "channel.nick as nick," +
+            "channel.avatar as avatar," +
+            "channel_notice.create_time as timestamp," +
+            "(select count(*) from channel_notice " +
+            "where channel_notice.channel_id=#{objectId} " +
+            "and channel_notice.create_time>=#{timestamp}) as newMessageCount " +
+            "from channel,channel_notice,channel_user " +
+            "where channel_user.user_id=#{userId} and channel_user.channel_id=#{objectId} " +
+            "and channel_user.channel_id=channel.id and channel_notice.channel_id=channel.id " +
+            "order by channel_notice.create_time DESC limit 1")
+    MessageVO getChannelMessageVoByObjectId(@Param("userId") Integer userId,
+                                            @Param("objectId") Integer objectId,
+                                            @Param("timestamp") Date timestamp);
+
+    /**
+     * 获取用户好友信息
+     *
+     * @param userId    用户id
+     * @param objectId  好友/群聊/频道id
+     * @param timestamp 时间戳
+     * @return 聊天消息
+     */
+    @Select("select chat_msg.text as text," +
+            "chat_msg.timestamp as timestamp," +
+            "chat_msg.type as type," +
+            "friend.friend_id as object_id," +
+            "user.avatar as avatar," +
+            "friend.friend_note as nick," +
+            "(select count(*) from chat_msg where owner_id=#{userId} and object_id=#{objectId} " +
+            "and type='0' and timestamp >= #{timestamp}) as newMessageCount " +
+            "from chat_msg,user,friend " +
+            "where chat_msg.type='0' and chat_msg.owner_id=#{userId} and " +
+            "chat_msg.object_id=#{objectId} and friend.user_id=#{userId} " +
+            "and friend.friend_id=#{objectId} and friend.friend_id=user.id " +
+            "order by chat_msg.timestamp DESC limit 1")
+    MessageVO getFriendMessageVoByObjectId(@Param("userId") Integer userId,
+                                           @Param("objectId") Integer objectId,
+                                           @Param("timestamp") Date timestamp);
+
+    /**
+     * 获取用户频道信息
+     *
+     * @param userId    用户id
+     * @param objectId  好友/群聊/频道id
+     * @param timestamp 时间戳
+     * @return 聊天消息
+     */
+    @Select("select chat_msg.text as text," +
+            "chat_msg.timestamp as timestamp," +
+            "chat_msg.type as type," +
+            "`group`.id as object_id," +
+            "`group`.avatar as avatar," +
+            "`group`.nick as nick," +
+            "(select count(*) from chat_msg where owner_id=#{userId} and object_id=#{objectId} " +
+            "and type='1' and timestamp >= #{timestamp}) as newMessageCount " +
+            "from chat_msg,`group`,group_user " +
+            "where chat_msg.type='1' and chat_msg.owner_id=#{userId} and " +
+            "chat_msg.object_id=#{objectId} and group_user.user_id=#{userId} " +
+            "and group_user.group_id=#{objectId} and `group`.id=group_user.group_id " +
+            "order by chat_msg.timestamp DESC limit 1")
+    MessageVO getGroupMessageVoByObjectId(@Param("userId") Integer userId,
+                                          @Param("objectId") Integer objectId,
+                                          @Param("timestamp") Date timestamp);
 
     /**
      * 批量删除聊天信息

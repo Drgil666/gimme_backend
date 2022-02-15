@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -97,11 +98,12 @@ public class ChatMsgServiceImpl implements ChatMsgService {
     /**
      * 获取用户好友/群聊/频道信息
      *
-     * @param userId 用户id
+     * @param userId    用户id
+     * @param timestamp 时间戳
      * @return 好友消息
      */
     @Override
-    public List<MessageVO> getMessageVoByUserId(Integer userId) {
+    public List<MessageVO> getMessageVoByUserId(Integer userId, Date timestamp) {
         List<Friend> friendList = friendMapper.getFriendList(userId);
         List<Group> groupList = groupMapper.getGroupList(userId, "");
         List<Channel> channelList = channelMapper.getChannelList("", userId);
@@ -109,18 +111,28 @@ public class ChatMsgServiceImpl implements ChatMsgService {
         for (ChatMsgUtil.Character character : ChatMsgUtil.CHARACTER_LIST) {
             if (character.equals(ChatMsgUtil.Character.TYPE_FRIEND)) {
                 for (Friend friend : friendList) {
-                    MessageVO messageVO = chatMsgMapper.getMessageVoByObjectId(userId, character.getCode(), friend.getFriendId());
-                    messageVOList.add(messageVO);
+                    MessageVO messageVO = chatMsgMapper.getFriendMessageVoByObjectId(
+                            userId, friend.getFriendId(), timestamp);
+                    if (messageVO != null) {
+                        messageVOList.add(messageVO);
+                    }
                 }
             } else if (character.equals(ChatMsgUtil.Character.TYPE_GROUP)) {
                 for (Group group : groupList) {
-                    MessageVO messageVO = chatMsgMapper.getMessageVoByObjectId(userId, character.getCode(), group.getId());
-                    messageVOList.add(messageVO);
+                    MessageVO messageVO = chatMsgMapper.getGroupMessageVoByObjectId(
+                            userId, group.getId(), timestamp);
+                    if (messageVO != null) {
+                        messageVOList.add(messageVO);
+                    }
                 }
             } else if (character.equals(ChatMsgUtil.Character.TYPE_CHANNEL)) {
                 for (Channel channel : channelList) {
-                    MessageVO messageVO = chatMsgMapper.getMessageVoByObjectId(userId, character.getCode(), channel.getId());
-                    messageVOList.add(messageVO);
+                    MessageVO messageVO = chatMsgMapper.getChannelMessageVoByObjectId(
+                            userId, channel.getId(), timestamp);
+                    if (messageVO != null) {
+                        messageVO.setType(character.getCode().toString());
+                        messageVOList.add(messageVO);
+                    }
                 }
             }
         }
@@ -128,7 +140,7 @@ public class ChatMsgServiceImpl implements ChatMsgService {
             if (a.getTimestamp().equals(b.getTimestamp())) {
                 return 0;
             } else {
-                return a.getTimestamp().after(b.getTimestamp()) ? 1 : -1;
+                return a.getTimestamp().before(b.getTimestamp()) ? 1 : -1;
             }
         });
         return messageVOList;
