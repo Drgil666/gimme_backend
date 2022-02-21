@@ -130,7 +130,7 @@ public class ChatMsgServiceImpl implements ChatMsgService {
                     MessageVO messageVO = chatMsgMapper.getChannelMessageVoByObjectId(
                             userId, channel.getId(), timestamp);
                     if (messageVO != null) {
-                        messageVO.setType(character.getCode().toString());
+                        messageVO.setType(character.getName ());
                         messageVOList.add(messageVO);
                     }
                 }
@@ -152,7 +152,6 @@ public class ChatMsgServiceImpl implements ChatMsgService {
      * @param type     类型
      * @param userId   用户id
      * @param objectId 对象id
-     * @return 是否合法
      */
     @Override
     public void checkValidity(String type, Integer userId, Integer objectId) {

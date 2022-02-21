@@ -10,6 +10,7 @@ import com.project.gimme.utils.AssertionUtil;
 import com.project.gimme.utils.BcryptUtil;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.List;
 
@@ -23,7 +24,13 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
     @Resource
     private RedisService redisService;
-
+    /**
+     * 手动激活mysql
+     */
+    @PostConstruct
+    public void init(){
+        userMapper.getUser (1);
+    }
     /**
      * 创建用户
      *
