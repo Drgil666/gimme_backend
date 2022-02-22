@@ -166,9 +166,15 @@ public interface UserMapper {
      * @param keyword 关键词
      * @return 好友列表
      */
-    @Select("select user.* from user,friend where friend.user_id=#{userId} " +
-            "and friend.friend_id=user.id and (user.id like CONCAT('%',#{keyword},'%') " +
-            "or user.nick like CONCAT('%',#{keyword},'%'))")
-    List<User> getFriendUserList(@Param("userId") Integer userId,
-                                 @Param("keyword") String keyword);
+    @Select ("select user.* from user,friend where friend.user_id=#{userId} " + "and friend.friend_id=user.id and (user.id like CONCAT('%',#{keyword},'%') " + "or user.nick like CONCAT('%',#{keyword},'%'))")
+    List<User> getFriendUserList (@Param ("userId") Integer userId,@Param ("keyword") String keyword);
+    /**
+     * 通过userId和关键词获取好友列表
+     *
+     * @param userId  userId
+     * @param keyword 关键词
+     * @return 好友列表
+     */
+    @Select ("select user.*,country.nick as countryNick,friend.friend_note as note," + "province.nick as provinceNick,city.nick as cityNick," + "occupation.nick as occupationNick from occupation,country,province,city,user,friend where " + "friend.user_id=#{userId} and province.id=user.province and country.id=user.country and city.id=user.city " + "and occupation.id=user.occupation " + "and friend.friend_id=user.id and (user.id like CONCAT('%',#{keyword},'%') " + "or user.nick like CONCAT('%',#{keyword},'%'))")
+    List<UserVO> getFriendListInfo (@Param ("userId") Integer userId,@Param ("keyword") String keyword);
 }

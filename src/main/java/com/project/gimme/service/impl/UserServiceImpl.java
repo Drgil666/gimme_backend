@@ -210,10 +210,25 @@ public class UserServiceImpl implements UserService {
      * @return 好友列表
      */
     @Override
-    public List<User> getFriendUserList(Integer userId, String keyword) {
-        List<User> userList = userMapper.getFriendUserList(userId, keyword);
+    public List<User> getFriendUserList (Integer userId,String keyword) {
+        List<User> userList = userMapper.getFriendUserList (userId,keyword);
         for (User user : userList) {
-            user.setPassword(null);
+            user.setPassword (null);
+        }
+        return userList;
+    }
+    /**
+     * 通过userId和关键词获取好友列表
+     *
+     * @param userId  userId
+     * @param keyword 关键词
+     * @return 好友列表
+     */
+    @Override
+    public List<UserVO> getFriendListInfo (Integer userId,String keyword) {
+        List<UserVO> userList = userMapper.getFriendListInfo (userId,keyword);
+        for (UserVO userVO : userList) {
+            userVO.setPassword (null);
         }
         return userList;
     }
