@@ -26,13 +26,14 @@ public interface GroupNoticeService {
     Long updateGroupNotice(GroupNotice groupNotice);
 
     /**
-     * 通过id获取群公告
+     * 通过groupId或者groupNotice获取群公告
      *
-     * @param id 群公告id
+     * @param groupId       群id
+     * @param groupNoticeId 群公告id
      * @return 群公告
      */
 
-    GroupNotice getGroupNotice(Integer id);
+    GroupNotice getGroupNotice(Integer groupId, Integer groupNoticeId);
 
     /**
      * 根据群id获取群公告列表

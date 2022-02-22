@@ -89,10 +89,10 @@ public class GroupNoticeController {
                                                 @RequestParam(value = "groupId")
                                                         Integer groupId,
                                                 @ApiParam(value = "公告id")
-                                                @RequestParam(value = "groupNoticeId") Integer groupNoticeId) {
+                                                @RequestParam(value = "groupNoticeId", required = false) Integer groupNoticeId) {
         Integer userId = redisService.getUserId(token);
         groupUserService.authorityCheck(userId, groupId, UserUtil.CHANNEL_USER_ATTRIBUTE);
-        GroupNotice groupNotice = groupNoticeService.getGroupNotice(groupNoticeId);
+        GroupNotice groupNotice = groupNoticeService.getGroupNotice(groupId, groupNoticeId);
         if (groupNotice != null) {
             return Response.createSuc(groupNotice);
         } else {

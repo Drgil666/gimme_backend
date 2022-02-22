@@ -42,6 +42,15 @@ public interface GroupNoticeMapper {
     GroupNotice getGroupNotice(@Param("id") Integer id);
 
     /**
+     * 通过id获取群最新公告
+     *
+     * @param id 群公告id
+     * @return 群公告
+     */
+    @Select("select * from group_notice where group_id=#{id} order by create_time DESC LIMIT 1")
+    GroupNotice getNewGroupNotice(@Param("id") Integer id);
+
+    /**
      * 根据群id获取群公告列表
      *
      * @param groupId 群id

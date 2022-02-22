@@ -34,14 +34,14 @@ public class GroupNoticeServiceImplTest {
 
     @Test
     public void updateGroupNotice() {
-        GroupNotice groupNotice = groupNoticeService.getGroupNotice(1);
+        GroupNotice groupNotice = groupNoticeService.getGroupNotice(null, 1);
         groupNotice.setText("222");
         System.out.println(groupNoticeService.updateGroupNotice(groupNotice));
     }
 
     @Test
     public void getGroupNotice() {
-        GroupNotice groupNotice = groupNoticeService.getGroupNotice(1);
+        GroupNotice groupNotice = groupNoticeService.getGroupNotice(null, 1);
         System.out.println(groupNotice.getText());
     }
 

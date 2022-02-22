@@ -104,9 +104,9 @@ public class ChannelNoticeController {
     @ApiOperation(value = "获取频道公告列表")
     @LoginAuthorize()
     public Response<List<ChannelNotice>> getChannelNoticeList(@ApiParam(value = "加密验证参数")
-                                                                  @RequestHeader(TOKEN) String token,
+                                                              @RequestHeader(TOKEN) String token,
                                                               @ApiParam(value = "频道id")
-                                                                  @RequestParam(value = "channelId") Integer channelId) {
+                                                              @RequestParam(value = "channelId") Integer channelId) {
         Integer userId = redisService.getUserId(token);
         channelUserService.authorityCheck(userId, channelId, UserUtil.CHANNEL_USER_ATTRIBUTE);
         AssertionUtil.notNull(channelId, ErrorCode.BIZ_PARAM_ILLEGAL, "channelId不能为空!");
