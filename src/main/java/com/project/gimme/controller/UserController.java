@@ -113,9 +113,18 @@ public class UserController {
 
     @ResponseBody
     @GetMapping("/{friendId}")
-    @ApiOperation(value = "通过关键词查找用户列表")
+    @ApiOperation(value = "通过关键词查找用户信息")
     @LoginAuthorize()
-    public Response<UserVO> getUserVo(@ApiParam(value = "加密验证参数") @RequestHeader(TOKEN) String token, @ApiParam(value = "好友id") @PathVariable(value = "friendId") Integer friendId, @ApiParam(value = "获取方式") @RequestParam(value = "type") String type, @ApiParam(value = "群聊/频道id") @RequestParam(value = "objectId", required = false) Integer objectId) {
+    public Response<UserVO> getUserVo(@ApiParam(value = "加密验证参数")
+                                      @RequestHeader(TOKEN) String token,
+                                      @ApiParam(value = "好友id")
+                                      @PathVariable(value = "friendId")
+                                              Integer friendId,
+                                      @ApiParam(value = "获取方式")
+                                      @RequestParam(value = "type") String type,
+                                      @ApiParam(value = "群聊/频道id")
+                                      @RequestParam(value = "objectId", required = false)
+                                              Integer objectId) {
         Integer userId = redisService.getUserId(token);
         boolean isFriend = false;
         if (redisService.checkFriendToken(userId, friendId)) {
@@ -160,9 +169,11 @@ public class UserController {
 
     @ResponseBody
     @GetMapping("/friend/list")
-    @ApiOperation(value = "通过关键词查找用户列表")
+    @ApiOperation(value = "通过关键词查找好友列表")
     @LoginAuthorize()
-    public Response<List<User>> getFriendList(@ApiParam(value = "加密验证参数") @RequestHeader(TOKEN) String token, @ApiParam(value = "关键词") @RequestParam(value = "keyword", defaultValue = "") String keyword) {
+    public Response<List<User>> getFriendList(@ApiParam(value = "加密验证参数")
+                                              @RequestHeader(TOKEN) String token,
+                                              @ApiParam(value = "关键词") @RequestParam(value = "keyword", defaultValue = "") String keyword) {
         Integer userId = redisService.getUserId(token);
         List<User> userList = userService.getFriendUserList(userId, keyword);
         return Response.createSuc(userList);
@@ -170,9 +181,12 @@ public class UserController {
 
     @ResponseBody
     @GetMapping("/friend/list/info")
-    @ApiOperation(value = "通过关键词查找用户列表")
+    @ApiOperation(value = "通过关键词查找好友列表")
     @LoginAuthorize()
-    public Response<List<UserVO>> getFriendListInfo(@ApiParam(value = "加密验证参数") @RequestHeader(TOKEN) String token, @ApiParam(value = "关键词") @RequestParam(value = "keyword", defaultValue = "") String keyword) {
+    public Response<List<UserVO>> getFriendListInfo(@ApiParam(value = "加密验证参数")
+                                                    @RequestHeader(TOKEN) String token,
+                                                    @ApiParam(value = "关键词")
+                                                    @RequestParam(value = "keyword", defaultValue = "") String keyword) {
         Integer userId = redisService.getUserId(token);
         List<UserVO> userList = userService.getFriendListInfo(userId, keyword);
         return Response.createSuc(userList);

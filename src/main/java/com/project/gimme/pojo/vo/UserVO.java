@@ -44,4 +44,9 @@ public class UserVO extends User {
      */
     @ApiModelProperty(value = "职业名", name = "occupationNick")
     private String occupationNick;
+    /**
+     * 群权限/频道权限
+     */
+    @ApiModelProperty(value = "群权限/频道权限", name = "otherType")
+    private String otherType;
 }

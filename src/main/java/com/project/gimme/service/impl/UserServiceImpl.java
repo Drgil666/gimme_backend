@@ -24,13 +24,15 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
     @Resource
     private RedisService redisService;
+
     /**
      * 手动激活mysql
      */
     @PostConstruct
-    public void init(){
-        userMapper.getUser (1);
+    public void init() {
+        userMapper.getUser(1);
     }
+
     /**
      * 创建用户
      *
@@ -210,13 +212,14 @@ public class UserServiceImpl implements UserService {
      * @return 好友列表
      */
     @Override
-    public List<User> getFriendUserList (Integer userId,String keyword) {
-        List<User> userList = userMapper.getFriendUserList (userId,keyword);
+    public List<User> getFriendUserList(Integer userId, String keyword) {
+        List<User> userList = userMapper.getFriendUserList(userId, keyword);
         for (User user : userList) {
-            user.setPassword (null);
+            user.setPassword(null);
         }
         return userList;
     }
+
     /**
      * 通过userId和关键词获取好友列表
      *
@@ -225,10 +228,42 @@ public class UserServiceImpl implements UserService {
      * @return 好友列表
      */
     @Override
-    public List<UserVO> getFriendListInfo (Integer userId,String keyword) {
-        List<UserVO> userList = userMapper.getFriendListInfo (userId,keyword);
+    public List<UserVO> getFriendListInfo(Integer userId, String keyword) {
+        List<UserVO> userList = userMapper.getFriendListInfo(userId, keyword);
         for (UserVO userVO : userList) {
-            userVO.setPassword (null);
+            userVO.setPassword(null);
+        }
+        return userList;
+    }
+
+    /**
+     * 获取群成员列表
+     *
+     * @param groupId 群id
+     * @param limit   个数限制
+     * @return 用户列表
+     */
+    @Override
+    public List<UserVO> getGroupMemberList(Integer groupId, Integer limit) {
+        List<UserVO> userList = userMapper.getGroupMemberList(groupId);
+        for (User user : userList) {
+            user.setPassword(null);
+        }
+        return userList;
+    }
+
+    /**
+     * 获取频道成员列表
+     *
+     * @param channelId 群id
+     * @param limit     个数限制
+     * @return 用户列表
+     */
+    @Override
+    public List<UserVO> getChannelMemberList(Integer channelId, Integer limit) {
+        List<UserVO> userList = userMapper.getChannelMemberList(channelId);
+        for (User user : userList) {
+            user.setPassword(null);
         }
         return userList;
     }
