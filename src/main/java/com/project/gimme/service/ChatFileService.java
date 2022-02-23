@@ -42,7 +42,7 @@ public interface ChatFileService {
      * @param type     朋友/群聊/频道id类型
      * @return 查询的用户列表
      */
-    List<ChatFile> getChatFileByGroupId(Integer type, Integer objectId, String keyword);
+    List<ChatFile> getChatFileByObjectId(Integer type, Integer objectId, String keyword);
 
     /**
      * 根据群聊id和文件名查询群文件列表
@@ -53,6 +53,14 @@ public interface ChatFileService {
      * @param type     朋友/群聊/频道id类型
      * @return 查询的用户列表
      */
-    List<ChatFileVO> getGroupFileVoByObjectId(Integer type, Integer userId,
-                                              Integer objectId, String keyword);
+    List<ChatFileVO> getChatFileVoByObjectId(Integer type, Integer userId,
+                                             Integer objectId, String keyword);
+
+    /**
+     * 批量删除聊天文件
+     *
+     * @param idList 文件的id列表
+     * @return 影响行数
+     */
+    Long deleteChatFile(List<Integer> idList);
 }

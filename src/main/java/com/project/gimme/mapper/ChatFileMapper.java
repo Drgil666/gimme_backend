@@ -55,7 +55,9 @@ public interface ChatFileMapper {
      * @return 查询的用户列表
      */
     @Select("select * from chat_file where type=#{type} and object_id=#{objectId} and file_name like CONCAT('%',#{keyword},'%')")
-    List<ChatFile> getGroupFileByObjectId(@Param("type") Integer type, @Param("objectId") Integer objectId, @Param("keyword") String keyword);
+    List<ChatFile> getGroupFileByObjectId(@Param("type") Integer type,
+                                          @Param("objectId") Integer objectId,
+                                          @Param("keyword") String keyword);
 
     /**
      * 根据群聊id和文件名查询群文件列表
@@ -67,8 +69,16 @@ public interface ChatFileMapper {
      * @return 查询的用户列表
      */
     List<ChatFileVO> getGroupFileVoByObjectId(@Param("type") Integer type,
-                                              @Param("Integer") Integer userId,
+                                              @Param("userId") Integer userId,
                                               @Param("objectId") Integer objectId,
                                               @Param("keyword") String keyword);
+
+    /**
+     * 批量删除聊天文件
+     *
+     * @param idList 文件的id列表
+     * @return 影响行数
+     */
+    Long deleteChatFile(@Param("id") List<Integer> idList);
 
 }

@@ -128,10 +128,9 @@ public interface UserService {
      * 获取群成员列表
      *
      * @param groupId 群id
-     * @param limit   个数限制
      * @return 用户列表
      */
-    List<UserVO> getGroupMemberList(Integer groupId, Integer limit);
+    List<UserVO> getGroupMemberList(Integer groupId);
 
     /**
      * 获取频道成员列表

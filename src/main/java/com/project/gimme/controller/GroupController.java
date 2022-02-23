@@ -8,9 +8,11 @@ import com.project.gimme.pojo.GroupUser;
 import com.project.gimme.pojo.vo.CudRequestVO;
 import com.project.gimme.pojo.vo.GroupVO;
 import com.project.gimme.pojo.vo.Response;
+import com.project.gimme.pojo.vo.UserVO;
 import com.project.gimme.service.GroupService;
 import com.project.gimme.service.GroupUserService;
 import com.project.gimme.service.RedisService;
+import com.project.gimme.service.UserService;
 import com.project.gimme.utils.AssertionUtil;
 import com.project.gimme.utils.UserUtil;
 import io.swagger.annotations.Api;
@@ -41,6 +43,8 @@ public class GroupController {
     private GroupService groupService;
     @Resource
     private GroupUserService groupUserService;
+    @Resource
+    private UserService userService;
 
     @ResponseBody
     @PostMapping()
@@ -151,6 +155,28 @@ public class GroupController {
             return Response.createSuc(groupVO);
         } else {
             return Response.createErr(ErrorCode.INNER_PARAM_ILLEGAL.getCode(), "获取失败!");
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/member/list")
+    @ApiOperation(value = "获取群聊信息")
+    @LoginAuthorize()
+    public Response<List<UserVO>> getGroupMemberList(@ApiParam(value = "加密验证参数")
+                                                     @RequestHeader(TOKEN) String token,
+                                                     @ApiParam(value = "群聊id")
+                                                     @RequestParam(value = "groupId") Integer groupId,
+                                                     @ApiParam(value = "个数限制")
+                                                     @RequestParam(value = "limit", required = false) Integer limit) {
+        AssertionUtil.notNull(groupId, ErrorCode.BIZ_PARAM_ILLEGAL, "groupId不可为空!");
+        List<UserVO> userVOList = userService.getGroupMemberList(groupId);
+        if (userVOList != null) {
+            if (limit != null) {
+                userVOList = userVOList.subList(0, Integer.min(limit, userVOList.size()));
+            }
+            return Response.createSuc(userVOList);
+        } else {
+            return Response.createErr(ErrorCode.BIZ_PARAM_ILLEGAL.getCode(), "获取失败!");
         }
     }
 }

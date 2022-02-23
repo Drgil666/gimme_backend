@@ -8,7 +8,9 @@ import com.project.gimme.service.RedisService;
 import com.project.gimme.service.UserService;
 import com.project.gimme.utils.AssertionUtil;
 import com.project.gimme.utils.BcryptUtil;
+import com.project.gimme.utils.UserUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -240,15 +242,27 @@ public class UserServiceImpl implements UserService {
      * 获取群成员列表
      *
      * @param groupId 群id
-     * @param limit   个数限制
      * @return 用户列表
      */
     @Override
-    public List<UserVO> getGroupMemberList(Integer groupId, Integer limit) {
+    public List<UserVO> getGroupMemberList(Integer groupId) {
         List<UserVO> userList = userMapper.getGroupMemberList(groupId);
         for (User user : userList) {
             user.setPassword(null);
         }
+        userList.sort((a, b) -> {
+            Integer codeA = UserUtil.getGroupCharacterByName(a.getOtherType());
+            Integer codeB = UserUtil.getGroupCharacterByName(b.getOtherType());
+            String nameA = (StringUtils.isEmpty(a.getOtherNick())) ? a.getNick() : a.getOtherNick();
+            String nameB = (StringUtils.isEmpty(b.getOtherNick())) ? b.getNick() : b.getOtherNick();
+            if (!codeA.equals(codeB)) {
+                return (codeA >= codeB) ? 1 : -1;
+            } else if (!nameA.equals(nameB)) {
+                return (nameA.compareTo(nameB) > 0) ? 1 : -1;
+            } else {
+                return 0;
+            }
+        });
         return userList;
     }
 

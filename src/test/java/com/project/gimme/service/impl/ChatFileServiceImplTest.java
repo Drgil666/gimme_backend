@@ -47,7 +47,7 @@ public class ChatFileServiceImplTest {
 
     @Test
     public void getGroupByGroupId() {
-        List<ChatFile> chatFileList = chatFileService.getChatFileByGroupId(1, 1, "");
+        List<ChatFile> chatFileList = chatFileService.getChatFileByObjectId(1, 1, "");
         for (ChatFile chatFile : chatFileList) {
             System.out.println(chatFile.getId());
         }

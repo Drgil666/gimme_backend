@@ -2,6 +2,7 @@ package com.project.gimme.service.impl;
 
 import com.project.gimme.GimmeApplication;
 import com.project.gimme.pojo.User;
+import com.project.gimme.pojo.vo.UserVO;
 import com.project.gimme.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -67,5 +68,17 @@ public class UserServiceImplTest {
         for (User user : userList) {
             System.out.println(user.getId());
         }
+    }
+
+    @Test
+    public void getGroupMemberList() {
+        List<UserVO> userVOList = userService.getGroupMemberList(5);
+        for (UserVO userVO : userVOList) {
+            System.out.println(userVO.getId() + " " + userVO.getOtherNick() + " " + userVO.getOtherType());
+        }
+    }
+
+    @Test
+    public void getChannelMemberList() {
     }
 }

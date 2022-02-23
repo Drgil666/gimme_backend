@@ -60,7 +60,7 @@ public class ChatFileServiceImpl implements ChatFileService {
      * @return 查询的用户列表
      */
     @Override
-    public List<ChatFile> getChatFileByGroupId(Integer type, Integer objectId, String keyword) {
+    public List<ChatFile> getChatFileByObjectId(Integer type, Integer objectId, String keyword) {
         return chatFileMapper.getGroupFileByObjectId(type, objectId, keyword);
     }
 
@@ -74,7 +74,18 @@ public class ChatFileServiceImpl implements ChatFileService {
      * @return 查询的用户列表
      */
     @Override
-    public List<ChatFileVO> getGroupFileVoByObjectId(Integer type, Integer userId, Integer objectId, String keyword) {
+    public List<ChatFileVO> getChatFileVoByObjectId(Integer type, Integer userId, Integer objectId, String keyword) {
         return chatFileMapper.getGroupFileVoByObjectId(type, userId, objectId, keyword);
+    }
+
+    /**
+     * 批量删除聊天文件
+     *
+     * @param idList 文件的id列表
+     * @return 影响行数
+     */
+    @Override
+    public Long deleteChatFile(List<Integer> idList) {
+        return chatFileMapper.deleteChatFile(idList);
     }
 }

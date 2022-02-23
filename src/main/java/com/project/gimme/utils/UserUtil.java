@@ -76,11 +76,11 @@ public class UserUtil {
         /**
          * 频道广播用户
          */
-        TYPE_CHANNEL_OWNER(4, CHANNEL_OWNER_ATTRIBUTE),
+        TYPE_CHANNEL_OWNER(1, CHANNEL_OWNER_ATTRIBUTE),
         /**
          * 频道普通用户
          */
-        TYPE_CHANNEL_USER(5, CHANNEL_USER_ATTRIBUTE);
+        TYPE_CHANNEL_USER(2, CHANNEL_USER_ATTRIBUTE);
         private final Integer code;
         private final String name;
     }
