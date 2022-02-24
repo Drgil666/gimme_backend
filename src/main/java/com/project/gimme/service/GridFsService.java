@@ -1,9 +1,9 @@
 package com.project.gimme.service;
 
-import com.mongodb.client.gridfs.model.GridFSFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * @author Gilbert
@@ -26,8 +26,9 @@ public interface GridFsService {
      *
      * @param mongoId 文件的mongoId
      * @return 对应的文件
+     * @throws IOException
      */
-    GridFSFile getFile(String mongoId);
+    InputStream getFile(String mongoId) throws IOException;
 
     /**
      * 删除文件

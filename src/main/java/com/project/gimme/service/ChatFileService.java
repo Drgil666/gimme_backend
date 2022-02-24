@@ -63,4 +63,5 @@ public interface ChatFileService {
      * @return 影响行数
      */
     Long deleteChatFile(List<Integer> idList);
+
 }

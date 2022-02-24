@@ -7,6 +7,7 @@ import com.project.gimme.dao.GridFsDao;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.gridfs.GridFsResource;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -54,13 +55,18 @@ public class GridFsDaoImpl implements GridFsDao {
      *
      * @param mongoId 要获取的文件名
      * @return 对应的文件
+     * @throws IOException IO异常
      */
     @Override
-    public GridFSFile getFile(String mongoId) {
+    public InputStream getFile(String mongoId) throws IOException {
         Query query = new Query();
         query.addCriteria(Criteria.where("_id").is(mongoId));
         GridFSFile file = gridFsTemplate.findOne(query);
-        return file;
+        if (file != null) {
+            GridFsResource resource = new GridFsResource(file);
+            return resource.getInputStream();
+        }
+        return null;
     }
 
     /**

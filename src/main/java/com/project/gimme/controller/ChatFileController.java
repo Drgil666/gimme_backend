@@ -6,19 +6,28 @@ import com.project.gimme.exception.ErrorCode;
 import com.project.gimme.pojo.ChatFile;
 import com.project.gimme.pojo.vo.ChatFileVO;
 import com.project.gimme.pojo.vo.CudRequestVO;
+import com.project.gimme.pojo.vo.FileVO;
 import com.project.gimme.pojo.vo.Response;
 import com.project.gimme.service.ChatFileService;
+import com.project.gimme.service.GridFsService;
 import com.project.gimme.service.RedisService;
 import com.project.gimme.utils.AssertionUtil;
 import com.project.gimme.utils.ChatMsgUtil;
+import com.project.gimme.utils.StreamUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Date;
 import java.util.List;
 
 import static com.project.gimme.utils.RedisUtil.TOKEN;
@@ -37,6 +46,8 @@ public class ChatFileController {
     private RedisService redisService;
     @Resource
     private ChatFileService chatFileService;
+    @Resource
+    private GridFsService gridFsService;
 
     @ResponseBody
     @PostMapping()
@@ -65,6 +76,11 @@ public class ChatFileController {
             }
             case CudRequestVO.DELETE_METHOD: {
                 if (chatFileService.deleteChatFile(request.getKey()) > 0) {
+                    for (Integer id : request.getKey()) {
+                        ChatFile chatFile = chatFileService.getChatFile(id);
+                        gridFsService.deleteFile(chatFile.getMongoId());
+                        //清楚对应的文件数据
+                    }
                     return Response.createSuc(null);
                 } else {
                     return Response.createErr("删除失败!");
@@ -140,6 +156,54 @@ public class ChatFileController {
             return Response.createSuc(chatFileVoList);
         } else {
             return Response.createErr("获取好友关系失败!");
+        }
+    }
+
+    @ResponseBody
+    @PostMapping("/upload")
+    @ApiOperation(value = "上传文件")
+    @LoginAuthorize()
+    public Response<FileVO> uploadFile(@ApiParam(value = "加密验证参数")
+                                       @RequestHeader(TOKEN) String token,
+                                       @ApiParam(value = "包含用户信息，操作信息")
+                                               MultipartFile file, String chatType, Integer objectId, String fileName, String fileType) throws IOException {
+        Integer userId = redisService.getUserId(token);
+        String mongoId = gridFsService.createFile(file, fileName, fileType);
+        if (!StringUtils.isEmpty(mongoId)) {
+            ChatFile chatFile = new ChatFile();
+            chatFile.setTimestamp(new Date());
+            chatFile.setOwnerId(userId);
+            chatFile.setSize(file.getSize());
+            chatFile.setMongoId(mongoId);
+            chatFile.setType(chatType);
+            chatFile.setObjectId(objectId);
+            chatFile.setFilename(fileName);
+            if (chatFileService.createChatFile(chatFile)) {
+                return Response.createSuc(null);
+            }
+        }
+        return Response.createErr(ErrorCode.BIZ_PARAM_ILLEGAL.getCode(), "上传失败!");
+    }
+
+    @ResponseBody
+    @GetMapping("/download")
+    @ApiOperation(value = "下载文件")
+    @LoginAuthorize()
+    public void downloadFile(@ApiParam(value = "加密验证参数")
+                             @RequestHeader(TOKEN) String token,
+                             @ApiParam(value = "文件id")
+                             @RequestParam(value = "mongoId") String mongoId, HttpServletResponse response) {
+        AssertionUtil.notNull(mongoId, ErrorCode.BIZ_PARAM_ILLEGAL, "mongoId不能为空!");
+        try {
+            InputStream inputStream = gridFsService.getFile(mongoId);
+            StreamUtil.copy(inputStream, response.getOutputStream());
+        } catch (IOException e) {
+            try {
+                response.getOutputStream().write(0);
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+            e.printStackTrace();
         }
     }
 }

@@ -1,6 +1,5 @@
 package com.project.gimme.dao.impl;
 
-import com.mongodb.client.gridfs.model.GridFSFile;
 import com.project.gimme.GimmeApplication;
 import com.project.gimme.dao.GridFsDao;
 import com.project.gimme.utils.BucketUtil;
@@ -38,9 +37,10 @@ public class GridFsDaoImplTest {
     }
 
     @Test
-    public void getFile() {
-        String id = "62173fa947d75c4927e011d2";
-        GridFSFile file = gridFsDao.getFile(id);
-        System.out.println(file.getFilename() + " " + file.getMetadata().toJson());
+    public void getFile() throws IOException {
+//        String id = "6217420a17a4d4553afee7d1";
+//        GridFSFile file = gridFsDao.getFile(id);
+//        if (file != null)
+//            System.out.println(file.getFilename() + " " + file.getMetadata().toJson());
     }
 }

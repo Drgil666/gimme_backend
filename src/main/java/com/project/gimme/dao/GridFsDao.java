@@ -1,9 +1,9 @@
 package com.project.gimme.dao;
 
-import com.mongodb.client.gridfs.model.GridFSFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * @author DrGilbert
@@ -26,8 +26,9 @@ public interface GridFsDao {
      *
      * @param mongoId 要获取的文件名
      * @return 对应的文件
+     * @throws IOException IO异常
      */
-    GridFSFile getFile(String mongoId);
+    InputStream getFile(String mongoId) throws IOException;
 
     /**
      * 批量删除文件

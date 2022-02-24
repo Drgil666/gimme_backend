@@ -1,6 +1,5 @@
 package com.project.gimme.service.impl;
 
-import com.mongodb.client.gridfs.model.GridFSFile;
 import com.project.gimme.dao.GridFsDao;
 import com.project.gimme.service.GridFsService;
 import org.springframework.stereotype.Service;
@@ -8,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * @author Gilbert
@@ -37,9 +37,10 @@ public class GridFsServiceImpl implements GridFsService {
      *
      * @param mongoId 文件的mongoId
      * @return 对应的文件
+     * @throws IOException
      */
     @Override
-    public GridFSFile getFile(String mongoId) {
+    public InputStream getFile(String mongoId) throws IOException {
         return gridFsDao.getFile(mongoId);
     }
 
