@@ -53,7 +53,7 @@ public interface ChatFileService {
      * @param type     朋友/群聊/频道id类型
      * @return 查询的用户列表
      */
-    List<ChatFileVO> getChatFileVoByObjectId(Integer type, Integer userId,
+    List<ChatFileVO> getChatFileVoByObjectId(String type, Integer userId,
                                              Integer objectId, String keyword);
 
     /**

@@ -15,16 +15,24 @@ public interface GridFsDao {
      *
      * @param file     要上传的文件
      * @param filename 存储文件名
+     * @param fileType 文件类型
      * @return 文件id
      * @throws IOException IO异常
      */
-    String uploadFile(MultipartFile file, String filename) throws IOException;
+    String createFile(MultipartFile file, String filename, String fileType) throws IOException;
 
     /**
      * 获取文件
      *
-     * @param fileName 要获取的文件名
+     * @param mongoId 要获取的文件名
      * @return 对应的文件
      */
-    GridFSFile getFile(String fileName);
+    GridFSFile getFile(String mongoId);
+
+    /**
+     * 批量删除文件
+     *
+     * @param mongoId 文件id列表
+     */
+    void deleteFile(String mongoId);
 }

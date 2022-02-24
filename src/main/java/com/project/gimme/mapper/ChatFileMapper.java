@@ -68,10 +68,50 @@ public interface ChatFileMapper {
      * @param type     朋友/群聊/频道id类型
      * @return 查询的用户列表
      */
-    List<ChatFileVO> getGroupFileVoByObjectId(@Param("type") Integer type,
-                                              @Param("userId") Integer userId,
+    @Select("select chat_file.*,group_user.group_nick as ownerNick from chat_file,group_user " +
+            "where chat_file.type='group' and chat_file.object_id=#{objectId} and " +
+            "group_user.user_id=chat_file.owner_id and group_user.group_id=#{objectId} " +
+            "and file_name like CONCAT('%',#{keyword},'%')")
+    List<ChatFileVO> getGroupFileVoByObjectId(@Param("userId") Integer userId,
                                               @Param("objectId") Integer objectId,
                                               @Param("keyword") String keyword);
+
+    /**
+     * 根据群聊id和文件名查询群文件列表
+     *
+     * @param objectId 朋友/群聊/频道id
+     * @param userId   用户id
+     * @param keyword  文件名
+     * @param type     朋友/群聊/频道id类型
+     * @return 查询的用户列表
+     */
+    @Select("select chat_file.*,channel_user.channel_nick as ownerNick from chat_file,channel_user " +
+            "where chat_file.type='channel' and chat_file.object_id=#{objectId} and " +
+            "channel_user.user_id=chat_file.owner_id and channel_user.channel_id=#{objectId} " +
+            "and file_name like CONCAT('%',#{keyword},'%')")
+    List<ChatFileVO> getChannelFileVoByObjectId(@Param("userId") Integer userId,
+                                                @Param("objectId") Integer objectId,
+                                                @Param("keyword") String keyword);
+
+    /**
+     * 根据群聊id和文件名查询群文件列表
+     *
+     * @param objectId 朋友/群聊/频道id
+     * @param userId   用户id
+     * @param keyword  文件名
+     * @param type     朋友/群聊/频道id类型
+     * @return 查询的用户列表
+     */
+    @Select("select chat_file.*,user.nick as ownerNick from chat_file,friend,user " +
+            "where chat_file.type='friend' and " +
+            "((chat_file.object_id=#{objectId} and friend.friend_id=chat_file.object_id and friend.user_id=#{userId}) " +
+            "or ((chat_file.owner_id=#{objectId} and friend.user_id=chat_file.object_id and " +
+            "friend.friend_id=#{userId}))) " +
+            "and friend.friend_id=chat_file.object_id and user.id=friend.friend_id " +
+            "and file_name like CONCAT('%',#{keyword},'%')")
+    List<ChatFileVO> getFriendFileVoByObjectId(@Param("userId") Integer userId,
+                                               @Param("objectId") Integer objectId,
+                                               @Param("keyword") String keyword);
 
     /**
      * 批量删除聊天文件

@@ -4,6 +4,7 @@ import com.project.gimme.mapper.ChatFileMapper;
 import com.project.gimme.pojo.ChatFile;
 import com.project.gimme.pojo.vo.ChatFileVO;
 import com.project.gimme.service.ChatFileService;
+import com.project.gimme.utils.ChatMsgUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -74,8 +75,16 @@ public class ChatFileServiceImpl implements ChatFileService {
      * @return 查询的用户列表
      */
     @Override
-    public List<ChatFileVO> getChatFileVoByObjectId(Integer type, Integer userId, Integer objectId, String keyword) {
-        return chatFileMapper.getGroupFileVoByObjectId(type, userId, objectId, keyword);
+    public List<ChatFileVO> getChatFileVoByObjectId(String type, Integer userId, Integer objectId, String keyword) {
+        if (type.equals(ChatMsgUtil.Character.TYPE_FRIEND.getName())) {
+            return chatFileMapper.getFriendFileVoByObjectId(userId, objectId, keyword);
+        } else if (type.equals(ChatMsgUtil.Character.TYPE_GROUP.getName())) {
+            return chatFileMapper.getGroupFileVoByObjectId(userId, objectId, keyword);
+        } else if (type.equals(ChatMsgUtil.Character.TYPE_CHANNEL.getName())) {
+            return chatFileMapper.getChannelFileVoByObjectId(userId, objectId, keyword);
+        } else {
+            return null;
+        }
     }
 
     /**

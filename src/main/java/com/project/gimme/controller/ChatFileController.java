@@ -135,9 +135,7 @@ public class ChatFileController {
         Integer userId = redisService.getUserId(token);
         AssertionUtil.notNull(objectId, ErrorCode.BIZ_PARAM_ILLEGAL, "objectId不能为空!");
         AssertionUtil.notNull(type, ErrorCode.BIZ_PARAM_ILLEGAL, "type不能为空!");
-        Integer chatType = ChatMsgUtil.getCharacterByName(type);
-        AssertionUtil.notNull(chatType, ErrorCode.BIZ_PARAM_ILLEGAL, "type类型错误!");
-        List<ChatFileVO> chatFileVoList = chatFileService.getChatFileVoByObjectId(chatType, userId, objectId, keyword);
+        List<ChatFileVO> chatFileVoList = chatFileService.getChatFileVoByObjectId(type, userId, objectId, keyword);
         if (chatFileVoList != null) {
             return Response.createSuc(chatFileVoList);
         } else {

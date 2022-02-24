@@ -1,28 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.project.gimme.mapper.ChatFileMapper">
-    <select id="getGroupFileVoByObjectId" resultType="com.project.gimme.pojo.vo.ChatFileVO">
-        <choose>
-            <when test="type='friend'">
-                select chat_file.*,user.nick as ownerNick from chat_file,friend,user
-                where chat_file.type=#{type} and (chat_file.object_id=#{objectId} or object_id=#{userId})
-                and friend.friend_id=chat_file.object_id and user.id=friend.friend_id
-                and file_name like CONCAT('%',#{keyword},'%')
-            </when>
-            <when test="type='group'">
-                select chat_file.*,group_user.group_nick as ownerNick from chat_file,group_user
-                where chat_file.type=#{type} and chat_file.object_id=#{objectId} and
-                group_user.user_id=chat_file.owner_id and group_user.group_id=#{objectId}
-                and file_name like CONCAT('%',#{keyword},'%')
-            </when>
-            <when test="type='channel'">
-                select chat_file.*,channel_user.channel_nick as ownerNick from chat_file,channel_user
-                where chat_file.type=#{type} and chat_file.object_id=#{objectId} and
-                channel_user.user_id=chat_file.owner_id and channel_user.channel_id=#{objectId}
-                and file_name like CONCAT('%',#{keyword},'%')
-            </when>
-        </choose>
-    </select>
     <delete id="deleteChatFile" parameterType="java.util.List">
         delete from chat_file where id in
         <foreach collection="id" item="id" open="(" separator="," close=")">
