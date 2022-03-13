@@ -13,11 +13,11 @@ import com.project.gimme.service.GridFsService;
 import com.project.gimme.service.RedisService;
 import com.project.gimme.utils.AssertionUtil;
 import com.project.gimme.utils.ChatMsgUtil;
-import com.project.gimme.utils.StreamUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.mongodb.gridfs.GridFsResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +27,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Date;
 import java.util.List;
 
@@ -93,7 +94,7 @@ public class ChatFileController {
 
     @ResponseBody
     @GetMapping()
-    @ApiOperation(value = "获取朋友关系")
+    @ApiOperation(value = "获取聊天文件")
     @LoginAuthorize()
     public Response<ChatFile> getChatFile(@ApiParam(value = "加密验证参数")
                                           @RequestHeader(TOKEN) String token,
@@ -165,19 +166,26 @@ public class ChatFileController {
     @LoginAuthorize()
     public Response<FileVO> uploadFile(@ApiParam(value = "加密验证参数")
                                        @RequestHeader(TOKEN) String token,
-                                       @ApiParam(value = "包含用户信息，操作信息")
-                                               MultipartFile file, String chatType, Integer objectId, String fileName, String fileType) throws IOException {
+                                       @ApiParam(value = "上传的文件")
+                                       @RequestParam(value = "file")
+                                               MultipartFile file,
+                                       @ApiParam(value = "会话类型")
+                                       @RequestParam(value = "chatType")
+                                               String chatType,
+                                       @ApiParam(value = "会话id")
+                                       @RequestParam(value = "objectId")
+                                               Integer objectId) throws IOException {
         Integer userId = redisService.getUserId(token);
-        String mongoId = gridFsService.createFile(file, fileName, fileType);
+        String mongoId = gridFsService.createFile(file);
         if (!StringUtils.isEmpty(mongoId)) {
             ChatFile chatFile = new ChatFile();
             chatFile.setTimestamp(new Date());
             chatFile.setOwnerId(userId);
-            chatFile.setSize(file.getSize());
+            chatFile.setSize(file.getSize() * 8);
             chatFile.setMongoId(mongoId);
             chatFile.setType(chatType);
             chatFile.setObjectId(objectId);
-            chatFile.setFilename(fileName);
+            chatFile.setFilename(file.getOriginalFilename());
             if (chatFileService.createChatFile(chatFile)) {
                 return Response.createSuc(null);
             }
@@ -192,17 +200,22 @@ public class ChatFileController {
     public void downloadFile(@ApiParam(value = "加密验证参数")
                              @RequestHeader(TOKEN) String token,
                              @ApiParam(value = "文件id")
-                             @RequestParam(value = "mongoId") String mongoId, HttpServletResponse response) {
-        AssertionUtil.notNull(mongoId, ErrorCode.BIZ_PARAM_ILLEGAL, "mongoId不能为空!");
+                             @RequestParam(value = "chatFileId") Integer chatFileId, HttpServletResponse response) {
+        AssertionUtil.notNull(chatFileId, ErrorCode.BIZ_PARAM_ILLEGAL, "chatFileId不能为空!");
+        ChatFile chatFile = chatFileService.getChatFile(chatFileId);
         try {
-            InputStream inputStream = gridFsService.getFile(mongoId);
-            StreamUtil.copy(inputStream, response.getOutputStream());
-        } catch (IOException e) {
-            try {
-                response.getOutputStream().write(0);
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
+            GridFsResource file = gridFsService.getFile(chatFile.getMongoId());
+            InputStream inputStream = file.getInputStream();
+            response.setContentType(file.getContentType());
+            response.setHeader("content-disposition", "attachment;filename=\"" + file.getFilename() + "\"");
+            OutputStream outputStream = response.getOutputStream();
+            byte[] buffer = new byte[1024];
+            int len = inputStream.read(buffer);
+            while (len != -1) {
+                outputStream.write(buffer, 0, len);
+                len = inputStream.read(buffer);
             }
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

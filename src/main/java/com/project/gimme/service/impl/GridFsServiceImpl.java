@@ -2,12 +2,12 @@ package com.project.gimme.service.impl;
 
 import com.project.gimme.dao.GridFsDao;
 import com.project.gimme.service.GridFsService;
+import org.springframework.data.mongodb.gridfs.GridFsResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * @author Gilbert
@@ -21,15 +21,13 @@ public class GridFsServiceImpl implements GridFsService {
     /**
      * 上传文件
      *
-     * @param file     文件
-     * @param fileName 文件名
-     * @param fileType 文件类型
+     * @param file 文件
      * @return 对应文件的mongoId
      * @throws IOException
      */
     @Override
-    public String createFile(MultipartFile file, String fileName, String fileType) throws IOException {
-        return gridFsDao.createFile(file, fileName, fileType);
+    public String createFile(MultipartFile file) throws IOException {
+        return gridFsDao.createFile(file);
     }
 
     /**
@@ -40,7 +38,7 @@ public class GridFsServiceImpl implements GridFsService {
      * @throws IOException
      */
     @Override
-    public InputStream getFile(String mongoId) throws IOException {
+    public GridFsResource getFile(String mongoId) throws IOException {
         return gridFsDao.getFile(mongoId);
     }
 

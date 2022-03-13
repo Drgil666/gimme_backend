@@ -1,9 +1,9 @@
 package com.project.gimme.dao;
 
+import org.springframework.data.mongodb.gridfs.GridFsResource;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * @author DrGilbert
@@ -13,13 +13,11 @@ public interface GridFsDao {
     /**
      * 上传文件
      *
-     * @param file     要上传的文件
-     * @param filename 存储文件名
-     * @param fileType 文件类型
+     * @param file 要上传的文件
      * @return 文件id
      * @throws IOException IO异常
      */
-    String createFile(MultipartFile file, String filename, String fileType) throws IOException;
+    String createFile(MultipartFile file) throws IOException;
 
     /**
      * 获取文件
@@ -28,7 +26,7 @@ public interface GridFsDao {
      * @return 对应的文件
      * @throws IOException IO异常
      */
-    InputStream getFile(String mongoId) throws IOException;
+    GridFsResource getFile(String mongoId) throws IOException;
 
     /**
      * 批量删除文件
