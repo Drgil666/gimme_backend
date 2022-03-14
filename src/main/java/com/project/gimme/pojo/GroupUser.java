@@ -4,6 +4,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * @author DrGilbert
  * @date 2022/1/3 10:47
@@ -31,4 +33,9 @@ public class GroupUser {
      */
     @ApiModelProperty(value = "群聊昵称", name = "groupNick")
     private String groupNick;
+    /**
+     * 最后获取信息的时间
+     */
+    @ApiModelProperty(value = "最后获取信息的时间", name = "msgTimestamp")
+    private Date msgTimestamp;
 }

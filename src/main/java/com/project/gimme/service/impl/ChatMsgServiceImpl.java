@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -98,12 +97,11 @@ public class ChatMsgServiceImpl implements ChatMsgService {
     /**
      * 获取用户好友/群聊/频道信息
      *
-     * @param userId    用户id
-     * @param timestamp 时间戳
+     * @param userId 用户id
      * @return 好友消息
      */
     @Override
-    public List<MessageVO> getMessageVoByUserId(Integer userId, Date timestamp) {
+    public List<MessageVO> getMessageVoByUserId(Integer userId) {
         List<Friend> friendList = friendMapper.getFriendList(userId);
         List<Group> groupList = groupMapper.getGroupList(userId, "");
         List<Channel> channelList = channelMapper.getChannelList("", userId);
@@ -112,7 +110,7 @@ public class ChatMsgServiceImpl implements ChatMsgService {
             if (character.equals(ChatMsgUtil.Character.TYPE_FRIEND)) {
                 for (Friend friend : friendList) {
                     MessageVO messageVO = chatMsgMapper.getFriendMessageVoByObjectId(
-                            userId, friend.getFriendId(), timestamp);
+                            userId, friend.getFriendId());
                     if (messageVO != null) {
                         messageVOList.add(messageVO);
                     }
@@ -120,7 +118,7 @@ public class ChatMsgServiceImpl implements ChatMsgService {
             } else if (character.equals(ChatMsgUtil.Character.TYPE_GROUP)) {
                 for (Group group : groupList) {
                     MessageVO messageVO = chatMsgMapper.getGroupMessageVoByObjectId(
-                            userId, group.getId(), timestamp);
+                            userId, group.getId());
                     if (messageVO != null) {
                         messageVOList.add(messageVO);
                     }
@@ -128,9 +126,9 @@ public class ChatMsgServiceImpl implements ChatMsgService {
             } else if (character.equals(ChatMsgUtil.Character.TYPE_CHANNEL)) {
                 for (Channel channel : channelList) {
                     MessageVO messageVO = chatMsgMapper.getChannelMessageVoByObjectId(
-                            userId, channel.getId(), timestamp);
+                            userId, channel.getId());
                     if (messageVO != null) {
-                        messageVO.setType(character.getName ());
+                        messageVO.setType(character.getName());
                         messageVOList.add(messageVO);
                     }
                 }

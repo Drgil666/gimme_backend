@@ -6,6 +6,7 @@ import com.project.gimme.service.FriendService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,6 +26,7 @@ public class FriendServiceImpl implements FriendService {
      */
     @Override
     public Boolean createFriend(Friend friend) {
+        friend.setMsgTimestamp(new Date());
         return friendMapper.createFriend(friend);
     }
 

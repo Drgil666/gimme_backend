@@ -4,6 +4,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * @author DrGilbert
  * @date 2022/1/4 11:21
@@ -31,4 +33,9 @@ public class ChannelUser {
      */
     @ApiModelProperty(value = "频道昵称", name = "channelNick")
     private String channelNick;
+    /**
+     * 最后获取信息的时间
+     */
+    @ApiModelProperty(value = "最后获取信息的时间", name = "msgTimestamp")
+    private Date msgTimestamp;
 }

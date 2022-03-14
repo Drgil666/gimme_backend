@@ -4,6 +4,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * @author DrGilbert
  * @date 2022/1/11 14:15
@@ -26,4 +28,9 @@ public class Friend {
      */
     @ApiModelProperty(value = "好友名备注", name = "friendNote")
     private String friendNote;
+    /**
+     * 最后获取信息的时间
+     */
+    @ApiModelProperty(value = "最后获取信息的时间", name = "msgTimestamp")
+    private Date msgTimestamp;
 }

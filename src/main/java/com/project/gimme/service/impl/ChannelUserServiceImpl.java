@@ -11,6 +11,7 @@ import com.project.gimme.utils.UserUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -32,6 +33,7 @@ public class ChannelUserServiceImpl implements ChannelUserService {
      */
     @Override
     public Boolean createChannelUser(ChannelUser channelUser) {
+        channelUser.setMsgTimestamp(new Date());
         return channelUserMapper.createChannelUser(channelUser);
     }
 

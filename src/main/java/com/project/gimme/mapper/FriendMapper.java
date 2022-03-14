@@ -17,8 +17,8 @@ public interface FriendMapper {
      * @param friend 要创建的朋友
      * @return 是否成功
      */
-    @Insert("insert into friend (user_id, friend_id, friend_note) VALUES " +
-            "(#{friend.userId},#{friend.friendId},#{friend.friendNote})")
+    @Insert("insert into friend (user_id, friend_id, friend_note,msg_timestamp) VALUES " +
+            "(#{friend.userId},#{friend.friendId},#{friend.friendNote},#{friend.msgTimestamp})")
     Boolean createFriend(@Param("friend") Friend friend);
 
     /**
@@ -27,8 +27,9 @@ public interface FriendMapper {
      * @param friend 要更新的朋友
      * @return 影响行数
      */
-    @Update("update friend set friend_note=#{friend.friendNote} where " +
-            "user_id=#{friend.userId} and friend_id=#{friend.friendId}")
+    @Update("update friend set friend_note=#{friend.friendNote}," +
+            "msg_timestamp=#{friend.msgTimestamp} " +
+            "where user_id=#{friend.userId} and friend_id=#{friend.friendId}")
     Long updateFriend(@Param("friend") Friend friend);
 
     /**

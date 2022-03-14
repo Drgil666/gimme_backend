@@ -3,7 +3,6 @@ package com.project.gimme.service;
 import com.project.gimme.pojo.ChatMsg;
 import com.project.gimme.pojo.vo.MessageVO;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -56,11 +55,10 @@ public interface ChatMsgService {
     /**
      * 获取用户好友/群聊/频道信息
      *
-     * @param userId    用户id
-     * @param timestamp 时间戳
+     * @param userId 用户id
      * @return 好友消息
      */
-    List<MessageVO> getMessageVoByUserId(Integer userId, Date timestamp);
+    List<MessageVO> getMessageVoByUserId(Integer userId);
 
     /**
      * 判断是否合法

@@ -10,7 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
-import java.util.Date;
 
 /**
  * @author DrGilbert
@@ -69,8 +68,7 @@ public class ChatMsgServiceImplTest {
         Integer userId = 2;
         Integer objectId = 3;
         Integer type = 0;
-        Date date = new Date("2019/09/09 11:20:20");
-        MessageVO messageVO = chatMsgMapper.getFriendMessageVoByObjectId(userId, objectId, date);
+        MessageVO messageVO = chatMsgMapper.getFriendMessageVoByObjectId(userId, objectId);
         System.out.println(messageVO.toString());
     }
 

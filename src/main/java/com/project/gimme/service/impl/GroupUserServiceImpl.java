@@ -11,6 +11,7 @@ import com.project.gimme.utils.UserUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -32,6 +33,7 @@ public class GroupUserServiceImpl implements GroupUserService {
      */
     @Override
     public Boolean createGroupUser(GroupUser groupUser) {
+        groupUser.setMsgTimestamp(new Date());
         return groupUserMapper.createGroupUser(groupUser);
     }
 

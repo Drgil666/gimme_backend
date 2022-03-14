@@ -182,6 +182,7 @@ public class ChatFileController {
             chatFile.setTimestamp(new Date());
             chatFile.setOwnerId(userId);
             chatFile.setSize(file.getSize() * 8);
+            //单位为bit
             chatFile.setMongoId(mongoId);
             chatFile.setType(chatType);
             chatFile.setObjectId(objectId);
