@@ -209,6 +209,7 @@ public class ChatFileController {
             InputStream inputStream = file.getInputStream();
             response.setContentType(file.getContentType());
             response.setHeader("content-disposition", "attachment;filename=\"" + file.getFilename() + "\"");
+            response.setHeader("file-name", file.getFilename());
             OutputStream outputStream = response.getOutputStream();
             byte[] buffer = new byte[1024];
             int len = inputStream.read(buffer);
