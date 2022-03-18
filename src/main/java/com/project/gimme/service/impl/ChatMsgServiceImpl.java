@@ -1,14 +1,9 @@
 package com.project.gimme.service.impl;
 
 import com.project.gimme.exception.ErrorCode;
-import com.project.gimme.mapper.ChannelMapper;
-import com.project.gimme.mapper.ChatMsgMapper;
-import com.project.gimme.mapper.FriendMapper;
-import com.project.gimme.mapper.GroupMapper;
-import com.project.gimme.pojo.Channel;
-import com.project.gimme.pojo.ChatMsg;
-import com.project.gimme.pojo.Friend;
-import com.project.gimme.pojo.Group;
+import com.project.gimme.mapper.*;
+import com.project.gimme.pojo.*;
+import com.project.gimme.pojo.vo.ChatMsgVO;
 import com.project.gimme.pojo.vo.MessageVO;
 import com.project.gimme.service.ChatMsgService;
 import com.project.gimme.service.RedisService;
@@ -36,6 +31,8 @@ public class ChatMsgServiceImpl implements ChatMsgService {
     private ChannelMapper channelMapper;
     @Resource
     private RedisService redisService;
+    @Resource
+    private UserMapper userMapper;
 
     /**
      * 创建聊天信息
@@ -79,8 +76,38 @@ public class ChatMsgServiceImpl implements ChatMsgService {
      * @return 聊天信息列表
      */
     @Override
-    public List<ChatMsg> getChatMsgListByObjectId(Integer type, Integer objectId, String keyword) {
+    public List<ChatMsg> getChatMsgListByObjectId(String type, Integer objectId, String keyword) {
         return chatMsgMapper.getChatMsgListByObjectId(type, objectId, keyword);
+    }
+
+    /**
+     * 获取好友聊天/群聊/频道公告聊天记录中间类
+     *
+     * @param userId   用户id
+     * @param type     信息类型
+     * @param objectId 对应id
+     * @param keyword  关键词
+     * @return 聊天信息列表
+     */
+    @Override
+    public List<ChatMsgVO> getChatMsgVoListByObjectId(Integer userId, String type, Integer objectId, String keyword) {
+        List<ChatMsg> chatMsgList = chatMsgMapper.getChatMsgListByObjectId(type, objectId, keyword);
+        List<ChatMsgVO> chatMsgVOList = new ArrayList<>();
+        for (ChatMsg chatMsg : chatMsgList) {
+            ChatMsgVO chatMsgVO = new ChatMsgVO();
+            chatMsgVO.setOwnerId(chatMsg.getOwnerId());
+            chatMsgVO.setId(chatMsg.getId());
+            chatMsgVO.setTimeStamp(chatMsg.getTimeStamp());
+            chatMsgVO.setType(chatMsg.getType());
+            chatMsgVO.setText(chatMsg.getText());
+            chatMsgVO.setObjectId(chatMsg.getObjectId());
+            chatMsgVO.setIsSelf(chatMsg.getOwnerId().equals(userId));
+            User user = userMapper.getUser(chatMsg.getOwnerId());
+            chatMsgVO.setOwnerNick(user.getNick());
+            //TODO:获取昵称的方式需要再修改
+            chatMsgVOList.add(chatMsgVO);
+        }
+        return chatMsgVOList;
     }
 
     /**

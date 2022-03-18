@@ -1,6 +1,7 @@
 package com.project.gimme.service;
 
 import com.project.gimme.pojo.ChatMsg;
+import com.project.gimme.pojo.vo.ChatMsgVO;
 import com.project.gimme.pojo.vo.MessageVO;
 
 import java.util.List;
@@ -42,7 +43,18 @@ public interface ChatMsgService {
      * @param keyword  关键词
      * @return 聊天信息列表
      */
-    List<ChatMsg> getChatMsgListByObjectId(Integer type, Integer objectId, String keyword);
+    List<ChatMsg> getChatMsgListByObjectId(String type, Integer objectId, String keyword);
+
+    /**
+     * 获取好友聊天/群聊/频道公告聊天记录中间类
+     *
+     * @param type     信息类型
+     * @param objectId 对应id
+     * @param keyword  关键词
+     * @param userId   用户id
+     * @return 聊天信息列表
+     */
+    List<ChatMsgVO> getChatMsgVoListByObjectId(Integer userId, String type, Integer objectId, String keyword);
 
     /**
      * 批量删除聊天信息

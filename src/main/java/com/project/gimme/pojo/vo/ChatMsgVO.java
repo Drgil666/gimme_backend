@@ -19,4 +19,8 @@ public class ChatMsgVO extends ChatMsg {
      */
     @ApiModelProperty(value = "是否是自己", name = "isSelf")
     private Boolean isSelf;
+    /**
+     * 消息发送者昵称
+     */
+    private String ownerNick;
 }

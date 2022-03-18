@@ -55,15 +55,15 @@ public interface ChatMsgMapper {
      */
     @Select("select * from chat_msg where type=#{type} and object_id=#{objectId} " +
             "and (text like CONCAT('%',#{keyword},'%') or owner_id like CONCAT('%',#{keyword},'%'))")
-    List<ChatMsg> getChatMsgListByObjectId(@Param("type") Integer type,
+    List<ChatMsg> getChatMsgListByObjectId(@Param("type") String type,
                                            @Param("objectId") Integer objectId,
                                            @Param("keyword") String keyword);
 
     /**
      * 获取用户频道信息
      *
-     * @param userId    用户id
-     * @param objectId  好友/群聊/频道id
+     * @param userId   用户id
+     * @param objectId 好友/群聊/频道id
      * @return 聊天消息
      */
     @Select("select " +
@@ -86,8 +86,8 @@ public interface ChatMsgMapper {
     /**
      * 获取用户好友信息
      *
-     * @param userId    用户id
-     * @param objectId  好友/群聊/频道id
+     * @param userId   用户id
+     * @param objectId 好友/群聊/频道id
      * @return 聊天消息
      */
     @Select("select chat_msg.text as text," +

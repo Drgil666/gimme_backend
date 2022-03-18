@@ -112,13 +112,13 @@ public class UserController {
     }
 
     @ResponseBody
-    @GetMapping("/{friendId}")
+    @GetMapping("/userVo")
     @ApiOperation(value = "通过关键词查找用户信息")
     @LoginAuthorize()
     public Response<UserVO> getUserVo(@ApiParam(value = "加密验证参数")
                                       @RequestHeader(TOKEN) String token,
                                       @ApiParam(value = "好友id")
-                                      @PathVariable(value = "friendId")
+                                      @RequestParam(value = "friendId")
                                               Integer friendId,
                                       @ApiParam(value = "获取方式")
                                       @RequestParam(value = "type") String type,

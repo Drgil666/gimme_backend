@@ -6,10 +6,7 @@ import com.project.gimme.pojo.ChannelUser;
 import com.project.gimme.pojo.ChatMsg;
 import com.project.gimme.pojo.Friend;
 import com.project.gimme.pojo.GroupUser;
-import com.project.gimme.pojo.vo.CudRequestVO;
-import com.project.gimme.pojo.vo.MessageVO;
-import com.project.gimme.pojo.vo.RefreshVO;
-import com.project.gimme.pojo.vo.Response;
+import com.project.gimme.pojo.vo.*;
 import com.project.gimme.service.*;
 import com.project.gimme.utils.ChatMsgUtil;
 import io.swagger.annotations.Api;
@@ -98,10 +95,30 @@ public class ChatMsgController {
     @GetMapping("/list")
     @ApiOperation(value = "通过关键词查找聊天消息列表")
     @LoginAuthorize()
-    public Response<List<ChatMsg>> getChatMsgList(@ApiParam(value = "关键词") @RequestParam(value = "keyword", defaultValue = "", required = false) String keyword, @ApiParam(value = "类型") @RequestParam(value = "type") Integer type, @ApiParam(value = "对应id") @RequestParam(value = "objectId") Integer objectId) {
+    public Response<List<ChatMsg>> getChatMsgList(@ApiParam(value = "关键词") @RequestParam(value = "keyword", defaultValue = "", required = false) String keyword,
+                                                  @ApiParam(value = "类型") @RequestParam(value = "type") String type,
+                                                  @ApiParam(value = "对应id") @RequestParam(value = "objectId") Integer objectId) {
         List<ChatMsg> chatMsgList = chatMsgService.getChatMsgListByObjectId(type, objectId, keyword);
         if (chatMsgList != null) {
             return Response.createSuc(chatMsgList);
+        } else {
+            return Response.createErr("获取失败!");
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/listVo")
+    @ApiOperation(value = "通过关键词查找聊天消息列表")
+    @LoginAuthorize()
+    public Response<List<ChatMsgVO>> getChatMsgVoList(@ApiParam(value = "加密验证参数")
+                                                      @RequestHeader(TOKEN) String token,
+                                                      @ApiParam(value = "关键词") @RequestParam(value = "keyword", defaultValue = "", required = false) String keyword,
+                                                      @ApiParam(value = "类型") @RequestParam(value = "type") String type,
+                                                      @ApiParam(value = "对应id") @RequestParam(value = "objectId") Integer objectId) {
+        Integer userId = redisService.getUserId(token);
+        List<ChatMsgVO> chatMsgVoList = chatMsgService.getChatMsgVoListByObjectId(userId, type, objectId, keyword);
+        if (chatMsgVoList != null) {
+            return Response.createSuc(chatMsgVoList);
         } else {
             return Response.createErr("获取失败!");
         }
