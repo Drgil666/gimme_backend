@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,6 +46,7 @@ public class ChatMsgServiceImpl implements ChatMsgService {
      */
     @Override
     public Boolean createChatMsg(ChatMsg chatMsg) {
+        chatMsg.setTimeStamp(new Date());
         return chatMsgMapper.createChatMsg(chatMsg);
     }
 
