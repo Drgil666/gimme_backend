@@ -23,4 +23,8 @@ public class ChatMsgVO extends ChatMsg {
      * 消息发送者昵称
      */
     private String ownerNick;
+    /**
+     * 频道公告回复个数
+     */
+    private Integer channelNoticeCount;
 }

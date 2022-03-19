@@ -73,7 +73,7 @@ public interface ChatMsgService {
     List<MessageVO> getMessageVoByUserId(Integer userId);
 
     /**
-     * 判断是否合法
+     * 判断操作权限是否合法
      *
      * @param type     类型
      * @param userId   用户id
@@ -81,4 +81,12 @@ public interface ChatMsgService {
      * @return 是否合法
      */
     void checkValidity(String type, Integer userId, Integer objectId);
+
+    /**
+     * 统计频道公告的回复个数
+     *
+     * @param channelNoticeId 频道公告id
+     * @return 回复个数
+     */
+    Integer getChannelNoticeCount(Integer channelNoticeId);
 }

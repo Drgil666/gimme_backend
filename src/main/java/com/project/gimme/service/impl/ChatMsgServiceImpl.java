@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author DrGilbert
@@ -33,6 +34,8 @@ public class ChatMsgServiceImpl implements ChatMsgService {
     private RedisService redisService;
     @Resource
     private UserMapper userMapper;
+    @Resource
+    private ChannelNoticeMapper channelNoticeMapper;
 
     /**
      * 创建聊天信息
@@ -91,23 +94,45 @@ public class ChatMsgServiceImpl implements ChatMsgService {
      */
     @Override
     public List<ChatMsgVO> getChatMsgVoListByObjectId(Integer userId, String type, Integer objectId, String keyword) {
-        List<ChatMsg> chatMsgList = chatMsgMapper.getChatMsgListByObjectId(type, objectId, keyword);
-        List<ChatMsgVO> chatMsgVOList = new ArrayList<>();
-        for (ChatMsg chatMsg : chatMsgList) {
-            ChatMsgVO chatMsgVO = new ChatMsgVO();
-            chatMsgVO.setOwnerId(chatMsg.getOwnerId());
-            chatMsgVO.setId(chatMsg.getId());
-            chatMsgVO.setTimeStamp(chatMsg.getTimeStamp());
-            chatMsgVO.setType(chatMsg.getType());
-            chatMsgVO.setText(chatMsg.getText());
-            chatMsgVO.setObjectId(chatMsg.getObjectId());
-            chatMsgVO.setIsSelf(chatMsg.getOwnerId().equals(userId));
-            User user = userMapper.getUser(chatMsg.getOwnerId());
-            chatMsgVO.setOwnerNick(user.getNick());
-            //TODO:获取昵称的方式需要再修改
-            chatMsgVOList.add(chatMsgVO);
+        if (ChatMsgUtil.Character.TYPE_CHANNEL.getName().equals(type)) {
+            List<ChannelNotice> channelNotices = channelNoticeMapper.getChannelNoticeList(objectId);
+            return channelNotices.stream()
+                    .parallel()
+                    .map(channelNotice -> {
+                        ChatMsgVO chatMsgVO = new ChatMsgVO();
+                        Channel channel = channelMapper.getChannel(objectId);
+                        chatMsgVO.setOwnerId(channel.getOwnerId());
+                        chatMsgVO.setObjectId(channelNotice.getId());
+                        chatMsgVO.setId(channelNotice.getId());
+                        chatMsgVO.setText(channelNotice.getText());
+                        chatMsgVO.setTimeStamp(channelNotice.getCreateTime());
+                        chatMsgVO.setIsSelf(userId.equals(channel.getOwnerId()));
+                        chatMsgVO.setType(ChatMsgUtil.Character.TYPE_CHANNEL_NOTICE.getName());
+                        chatMsgVO.setChannelNoticeCount(getChannelNoticeCount(channelNotice.getId()));
+                        User user = userMapper.getUser(channel.getOwnerId());
+                        chatMsgVO.setOwnerNick(user.getNick());
+                        //TODO:获取昵称的方式需要再修改
+                        return chatMsgVO;
+                    }).collect(Collectors.toList());
+        } else {
+            List<ChatMsg> chatMsgList = chatMsgMapper.getChatMsgListByObjectId(type, objectId, keyword);
+            return chatMsgList.stream()
+                    .parallel()
+                    .map(chatMsg -> {
+                        ChatMsgVO chatMsgVO = new ChatMsgVO();
+                        chatMsgVO.setOwnerId(chatMsg.getOwnerId());
+                        chatMsgVO.setId(chatMsg.getId());
+                        chatMsgVO.setTimeStamp(chatMsg.getTimeStamp());
+                        chatMsgVO.setType(chatMsg.getType());
+                        chatMsgVO.setText(chatMsg.getText());
+                        chatMsgVO.setObjectId(chatMsg.getObjectId());
+                        chatMsgVO.setIsSelf(chatMsg.getOwnerId().equals(userId));
+                        User user = userMapper.getUser(chatMsg.getOwnerId());
+                        chatMsgVO.setOwnerNick(user.getNick());
+                        //TODO:获取昵称的方式需要再修改
+                        return chatMsgVO;
+                    }).collect(Collectors.toList());
         }
-        return chatMsgVOList;
     }
 
     /**
@@ -195,5 +220,16 @@ public class ChatMsgServiceImpl implements ChatMsgService {
             }
         }
         AssertionUtil.notNull(flag, ErrorCode.BIZ_PARAM_ILLEGAL, "操作失败!");
+    }
+
+    /**
+     * 统计频道公告的回复个数
+     *
+     * @param channelNoticeId 频道公告id
+     * @return 回复个数
+     */
+    @Override
+    public Integer getChannelNoticeCount(Integer channelNoticeId) {
+        return chatMsgMapper.getChannelNoticeCount(channelNoticeId);
     }
 }

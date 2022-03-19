@@ -58,7 +58,6 @@ public interface ChatMsgMapper {
     List<ChatMsg> getChatMsgListByObjectId(@Param("type") String type,
                                            @Param("objectId") Integer objectId,
                                            @Param("keyword") String keyword);
-
     /**
      * 获取用户频道信息
      *
@@ -106,6 +105,15 @@ public interface ChatMsgMapper {
             "order by chat_msg.timestamp DESC limit 1")
     MessageVO getFriendMessageVoByObjectId(@Param("userId") Integer userId,
                                            @Param("objectId") Integer objectId);
+
+    /**
+     * 统计频道公告的回复个数
+     *
+     * @param channelNoticeId 频道公告id
+     * @return 回复个数
+     */
+    @Select("select count(*) from chat_msg where type='channel' and object_id=#{channelNoticeId}")
+    Integer getChannelNoticeCount(@Param("channelNoticeId") Integer channelNoticeId);
 
     /**
      * 获取用户频道信息
