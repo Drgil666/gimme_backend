@@ -47,21 +47,24 @@ public class ChatMsgController {
     @PostMapping()
     @ApiOperation(value = "创建/更新/删除聊天信息")
     @LoginAuthorize()
-    public Response<ChatMsg> cudChatMsg(@ApiParam(value = "加密验证参数") @RequestHeader(TOKEN) String token, @ApiParam(value = "包含用户信息，操作信息") @RequestBody CudRequestVO<ChatMsg, Integer> request) {
+    public Response<ChatMsgVO> cudChatMsg(@ApiParam(value = "加密验证参数") @RequestHeader(TOKEN) String token,
+                                          @ApiParam(value = "包含用户信息，操作信息") @RequestBody CudRequestVO<ChatMsg, Integer> request) {
         Integer userId = redisService.getUserId(token);
         request.getData().setOwnerId(userId);
         chatMsgService.checkValidity(request.getData().getType(), userId, request.getData().getObjectId());
         switch (request.getMethod()) {
             case CudRequestVO.CREATE_METHOD: {
                 if (chatMsgService.createChatMsg(request.getData())) {
-                    return Response.createSuc(request.getData());
+                    ChatMsgVO chatMsgVO = chatMsgService.getChatMsgVO(userId, request.getData().getId());
+                    return Response.createSuc(chatMsgVO);
                 } else {
                     return Response.createErr("发送失败!");
                 }
             }
             case CudRequestVO.UPDATE_METHOD: {
                 if (chatMsgService.updateChatMsg(request.getData()) == 1) {
-                    return Response.createSuc(request.getData());
+                    ChatMsgVO chatMsgVO = chatMsgService.getChatMsgVO(userId, request.getData().getId());
+                    return Response.createSuc(chatMsgVO);
                 } else {
                     return Response.createErr(ErrorCode.INNER_PARAM_ILLEGAL.getCode(), "更新失败!");
                 }

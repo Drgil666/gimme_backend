@@ -232,4 +232,27 @@ public class ChatMsgServiceImpl implements ChatMsgService {
     public Integer getChannelNoticeCount(Integer channelNoticeId) {
         return chatMsgMapper.getChannelNoticeCount(channelNoticeId);
     }
+
+    /**
+     * 获取聊天信息中间类
+     *
+     * @param userId    用户id
+     * @param chatMsgId 聊天信息id
+     * @return 聊天信息中间类
+     */
+    @Override
+    public ChatMsgVO getChatMsgVO(Integer userId, Integer chatMsgId) {
+        ChatMsgVO chatMsgVO = new ChatMsgVO();
+        ChatMsg chatMsg = chatMsgMapper.getChatMsg(chatMsgId);
+        chatMsgVO.setText(chatMsg.getText());
+        chatMsgVO.setId(chatMsg.getId());
+        chatMsgVO.setType(chatMsg.getType());
+        chatMsgVO.setTimeStamp(chatMsg.getTimeStamp());
+        chatMsgVO.setObjectId(chatMsg.getObjectId());
+        chatMsgVO.setOwnerId(chatMsg.getOwnerId());
+        chatMsgVO.setIsSelf(chatMsgVO.getOwnerId().equals(userId));
+        User user = userMapper.getUser(chatMsgVO.getOwnerId());
+        chatMsgVO.setOwnerNick(user.getNick());
+        return chatMsgVO;
+    }
 }

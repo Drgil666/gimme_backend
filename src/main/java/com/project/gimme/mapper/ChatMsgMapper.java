@@ -20,7 +20,7 @@ public interface ChatMsgMapper {
      */
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     @Insert("insert into chat_msg (text, owner_id, timestamp, object_id, type)" +
-            " values (#{chatMsg.text},#{chatMsg.ownerId},#{chatMsg.timestamp}," +
+            " values (#{chatMsg.text},#{chatMsg.ownerId},#{chatMsg.timeStamp}," +
             "#{chatMsg.objectId},#{chatMsg.type})")
     Boolean createChatMsg(@Param("chatMsg") ChatMsg chatMsg);
 

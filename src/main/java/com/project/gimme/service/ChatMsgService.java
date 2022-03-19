@@ -89,4 +89,13 @@ public interface ChatMsgService {
      * @return 回复个数
      */
     Integer getChannelNoticeCount(Integer channelNoticeId);
+
+    /**
+     * 获取聊天信息中间类
+     *
+     * @param userId    用户id
+     * @param chatMsgId 聊天信息id
+     * @return 聊天信息中间类
+     */
+    ChatMsgVO getChatMsgVO(Integer userId, Integer chatMsgId);
 }
