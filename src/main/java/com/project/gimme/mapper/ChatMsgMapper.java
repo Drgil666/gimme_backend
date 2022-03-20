@@ -58,6 +58,7 @@ public interface ChatMsgMapper {
     List<ChatMsg> getChatMsgListByObjectId(@Param("type") String type,
                                            @Param("objectId") Integer objectId,
                                            @Param("keyword") String keyword);
+
     /**
      * 获取用户频道信息
      *
@@ -74,7 +75,7 @@ public interface ChatMsgMapper {
             "(select count(*) from channel_notice,channel_user " +
             "where channel_notice.channel_id=#{objectId} " +
             "and channel_user.user_id=#{userId} and channel_user.channel_id=channel_notice.channel_id and " +
-            "channel_notice.create_time >=channel_user.msg_timestamp) as newMessageCount " +
+            "channel_notice.create_time >channel_user.msg_timestamp) as newMessageCount " +
             "from channel,channel_notice,channel_user " +
             "where channel_user.user_id=#{userId} and channel_user.channel_id=#{objectId} " +
             "and channel_user.channel_id=channel.id and channel_notice.channel_id=channel.id " +
@@ -97,7 +98,7 @@ public interface ChatMsgMapper {
             "friend.friend_note as nick," +
             "(select count(*) from chat_msg,friend where owner_id=#{userId} and object_id=#{objectId} " +
             "and type='friend' and friend.user_id=owner_id and friend.friend_id=object_id " +
-            "and chat_msg.timestamp >= friend.msg_timestamp ) as newMessageCount " +
+            "and chat_msg.timestamp > friend.msg_timestamp ) as newMessageCount " +
             "from chat_msg,user,friend " +
             "where chat_msg.type='friend' and chat_msg.owner_id=#{userId} and " +
             "chat_msg.object_id=#{objectId} and friend.user_id=#{userId} " +
@@ -105,6 +106,7 @@ public interface ChatMsgMapper {
             "order by chat_msg.timestamp DESC limit 1")
     MessageVO getFriendMessageVoByObjectId(@Param("userId") Integer userId,
                                            @Param("objectId") Integer objectId);
+    //TODO:此处的逻辑仍然需要修改!
 
     /**
      * 统计频道公告的回复个数
@@ -130,7 +132,7 @@ public interface ChatMsgMapper {
             "`group`.nick as nick," +
             "(select count(*) from chat_msg,group_user where owner_id=#{userId} and object_id=#{objectId} " +
             "and chat_msg.type='group' and group_user.user_id=owner_id and group_user.group_id=object_id and " +
-            "chat_msg.timestamp >= group_user.msg_timestamp) as newMessageCount " +
+            "chat_msg.timestamp > group_user.msg_timestamp) as newMessageCount " +
             "from chat_msg,`group`,group_user " +
             "where chat_msg.type='group' and chat_msg.owner_id=#{userId} and " +
             "chat_msg.object_id=#{objectId} and group_user.user_id=#{userId} " +

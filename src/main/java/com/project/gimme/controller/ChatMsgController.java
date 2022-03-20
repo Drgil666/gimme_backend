@@ -55,6 +55,9 @@ public class ChatMsgController {
         switch (request.getMethod()) {
             case CudRequestVO.CREATE_METHOD: {
                 if (chatMsgService.createChatMsg(request.getData())) {
+                    if (request.getData().getType().equals(ChatMsgUtil.Character.TYPE_FRIEND.getName())) {
+
+                    }
                     ChatMsgVO chatMsgVO = chatMsgService.getChatMsgVO(userId, request.getData().getId());
                     return Response.createSuc(chatMsgVO);
                 } else {

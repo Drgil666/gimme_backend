@@ -197,7 +197,8 @@ public interface UserMapper {
      * @param channelId 群id
      * @return 用户列表
      */
-    @Select("select user.* from user,channel_user where channel_id=#{channelId} and user_id=user.id")
+    @Select("select user.*,channel_user.type as otherType,channel_user.channel_nick as otherNick " +
+            "from user,channel_user where channel_user.channel_id=#{channelId} and channel_user.user_id=user.id")
     List<UserVO> getChannelMemberList(@Param("channelId") Integer channelId);
     //TODO:需要修改
 }

@@ -279,6 +279,19 @@ public class UserServiceImpl implements UserService {
         for (User user : userList) {
             user.setPassword(null);
         }
+        userList.sort((a, b) -> {
+            Integer codeA = UserUtil.getChannelCharacterByName(a.getOtherType());
+            Integer codeB = UserUtil.getChannelCharacterByName(b.getOtherType());
+            String nameA = (StringUtils.isEmpty(a.getOtherNick())) ? a.getNick() : a.getOtherNick();
+            String nameB = (StringUtils.isEmpty(b.getOtherNick())) ? b.getNick() : b.getOtherNick();
+            if (!codeA.equals(codeB)) {
+                return (codeA >= codeB) ? 1 : -1;
+            } else if (!nameA.equals(nameB)) {
+                return (nameA.compareTo(nameB) > 0) ? 1 : -1;
+            } else {
+                return 0;
+            }
+        });
         return userList;
     }
 }

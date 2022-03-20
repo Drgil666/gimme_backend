@@ -7,9 +7,11 @@ import com.project.gimme.pojo.Channel;
 import com.project.gimme.pojo.vo.ChannelVO;
 import com.project.gimme.pojo.vo.CudRequestVO;
 import com.project.gimme.pojo.vo.Response;
+import com.project.gimme.pojo.vo.UserVO;
 import com.project.gimme.service.ChannelService;
 import com.project.gimme.service.ChannelUserService;
 import com.project.gimme.service.RedisService;
+import com.project.gimme.service.UserService;
 import com.project.gimme.utils.AssertionUtil;
 import com.project.gimme.utils.UserUtil;
 import io.swagger.annotations.Api;
@@ -40,6 +42,8 @@ public class ChannelController {
     private ChannelService channelService;
     @Resource
     private ChannelUserService channelUserService;
+    @Resource
+    private UserService userService;
 
     @ResponseBody
     @PostMapping()
@@ -88,9 +92,9 @@ public class ChannelController {
     @ApiOperation(value = "获取频道信息")
     @LoginAuthorize()
     public Response<Channel> getChannel(@ApiParam(value = "加密验证参数")
-                                            @RequestHeader(TOKEN) String token,
+                                        @RequestHeader(TOKEN) String token,
                                         @ApiParam(value = "频道id")
-                                            @RequestParam(value = "channelId") Integer channelId) {
+                                        @RequestParam(value = "channelId") Integer channelId) {
         AssertionUtil.notNull(channelId, ErrorCode.BIZ_PARAM_ILLEGAL, "channelId不可为空!");
         Channel channel = channelService.getChannel(channelId);
         if (channel != null) {
@@ -105,10 +109,10 @@ public class ChannelController {
     @ApiOperation(value = "获取群聊信息")
     @LoginAuthorize()
     public Response<List<Channel>> getChannelList(@ApiParam(value = "加密验证参数")
-                                                      @RequestHeader(TOKEN) String token,
+                                                  @RequestHeader(TOKEN) String token,
                                                   @ApiParam(value = "关键词")
-                                                      @RequestParam(value = "keyword", defaultValue = "", required = false)
-                                                              String keyword) {
+                                                  @RequestParam(value = "keyword", defaultValue = "", required = false)
+                                                          String keyword) {
         Integer userId = redisService.getUserId(token);
         List<Channel> channelList = channelService.getChannelList(keyword, userId);
         if (channelList != null) {
@@ -123,9 +127,9 @@ public class ChannelController {
     @ApiOperation(value = "获取频道信息")
     @LoginAuthorize()
     public Response<ChannelVO> getGroupInfo(@ApiParam(value = "加密验证参数")
-                                                @RequestHeader(TOKEN) String token,
+                                            @RequestHeader(TOKEN) String token,
                                             @ApiParam(value = "频道id")
-                                                @RequestParam(value = "channelId") Integer channelId) {
+                                            @RequestParam(value = "channelId") Integer channelId) {
         AssertionUtil.notNull(channelId, ErrorCode.BIZ_PARAM_ILLEGAL, "channelId不可为空!");
         Integer userId = redisService.getUserId(token);
         String authority = redisService.getGroupAuthorityToken(userId, channelId);
@@ -139,6 +143,28 @@ public class ChannelController {
             return Response.createSuc(channelVO);
         } else {
             return Response.createErr(ErrorCode.INNER_PARAM_ILLEGAL.getCode(), "获取失败!");
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/member/list")
+    @ApiOperation(value = "获取群聊信息")
+    @LoginAuthorize()
+    public Response<List<UserVO>> getGroupMemberList(@ApiParam(value = "加密验证参数")
+                                                     @RequestHeader(TOKEN) String token,
+                                                     @ApiParam(value = "群聊id")
+                                                     @RequestParam(value = "channelId") Integer channelId,
+                                                     @ApiParam(value = "个数限制")
+                                                     @RequestParam(value = "limit", required = false) Integer limit) {
+        AssertionUtil.notNull(channelId, ErrorCode.BIZ_PARAM_ILLEGAL, "groupId不可为空!");
+        List<UserVO> userVOList = userService.getChannelMemberList(channelId, limit);
+        if (userVOList != null) {
+            if (limit != null) {
+                userVOList = userVOList.subList(0, Integer.min(limit, userVOList.size()));
+            }
+            return Response.createSuc(userVOList);
+        } else {
+            return Response.createErr(ErrorCode.BIZ_PARAM_ILLEGAL.getCode(), "获取失败!");
         }
     }
 }
