@@ -2,6 +2,7 @@ package com.project.gimme.service;
 
 import com.project.gimme.pojo.Channel;
 import com.project.gimme.pojo.vo.ChannelVO;
+import com.project.gimme.pojo.vo.SearchVO;
 
 import java.util.List;
 
@@ -75,4 +76,13 @@ public interface ChannelService {
      * @return 影响行数
      */
     Long deleteChannel(Integer id);
+
+    /**
+     * 根据关键字查找
+     *
+     * @param userId  用户id
+     * @param keyword 关键词
+     * @return 查找结果列表
+     */
+    List<SearchVO> getChannelSearchVoList(Integer userId, String keyword);
 }

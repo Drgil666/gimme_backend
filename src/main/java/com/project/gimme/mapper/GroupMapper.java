@@ -2,6 +2,7 @@ package com.project.gimme.mapper;
 
 import com.project.gimme.pojo.Group;
 import com.project.gimme.pojo.vo.GroupVO;
+import com.project.gimme.pojo.vo.SearchVO;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -101,4 +102,14 @@ public interface GroupMapper {
      */
     @Delete("delete from `group` where id=#{groupId}")
     Long deleteGroup(@Param("groupId") Integer groupId);
+
+    /**
+     * 根据关键字查找
+     *
+     * @param userId  用户id
+     * @param keyword 关键词
+     * @return 查找结果列表
+     */
+    List<SearchVO> getGroupSearchVoList(@Param("userId") Integer userId,
+                                        @Param("keyword") String keyword);
 }

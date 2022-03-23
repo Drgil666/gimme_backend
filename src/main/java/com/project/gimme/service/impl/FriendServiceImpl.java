@@ -2,6 +2,7 @@ package com.project.gimme.service.impl;
 
 import com.project.gimme.mapper.FriendMapper;
 import com.project.gimme.pojo.Friend;
+import com.project.gimme.pojo.vo.SearchVO;
 import com.project.gimme.service.FriendService;
 import org.springframework.stereotype.Service;
 
@@ -74,5 +75,17 @@ public class FriendServiceImpl implements FriendService {
     @Override
     public List<Friend> getFriendList(Integer userId) {
         return friendMapper.getFriendList(userId);
+    }
+
+    /**
+     * 根据关键字查找
+     *
+     * @param userId  用户id
+     * @param keyword 关键词
+     * @return 查找结果列表
+     */
+    @Override
+    public List<SearchVO> getFriendSearchVoList(Integer userId, String keyword) {
+        return friendMapper.getFriendSearchVoList(userId, keyword);
     }
 }

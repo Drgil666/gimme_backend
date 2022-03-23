@@ -3,6 +3,7 @@ package com.project.gimme.service.impl;
 import com.project.gimme.mapper.GroupMapper;
 import com.project.gimme.pojo.Group;
 import com.project.gimme.pojo.vo.GroupVO;
+import com.project.gimme.pojo.vo.SearchVO;
 import com.project.gimme.service.GroupService;
 import org.springframework.stereotype.Service;
 
@@ -120,5 +121,17 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public Long deleteGroup(Integer groupId) {
         return groupMapper.deleteGroup(groupId);
+    }
+
+    /**
+     * 根据关键字查找
+     *
+     * @param userId  用户id
+     * @param keyword 关键词
+     * @return 查找结果列表
+     */
+    @Override
+    public List<SearchVO> getGroupSearchVoList(Integer userId, String keyword) {
+        return groupMapper.getGroupSearchVoList(userId, keyword);
     }
 }

@@ -1,6 +1,7 @@
 package com.project.gimme.mapper;
 
 import com.project.gimme.pojo.Friend;
+import com.project.gimme.pojo.vo.SearchVO;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -62,4 +63,14 @@ public interface FriendMapper {
      */
     Long deleteFriend(@Param("userId") Integer userId,
                       @Param("idList") List<Integer> idList);
+
+    /**
+     * 根据关键字查找
+     *
+     * @param userId  用户id
+     * @param keyword 关键词
+     * @return 查找结果列表
+     */
+    List<SearchVO> getFriendSearchVoList(@Param("userId") Integer userId,
+                                         @Param("keyword") String keyword);
 }

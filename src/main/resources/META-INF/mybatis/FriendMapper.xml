@@ -7,4 +7,21 @@
             #{id}
         </foreach>
     </delete>
+    <select id="getFriendSearchVoList" resultType="com.project.gimme.pojo.vo.SearchVO">
+        <choose>
+            <when test="#{userId}==null">
+                select user.avatar as avatar,user.nick as objectNick,'friend' as objectType, user.id as objectId
+                from user
+                where user.nick like CONCAT('%', #{keyword}, '%')
+                or user.id like CONCAT('%', #{keyword}, '%')
+            </when>
+            <otherwise>
+                select user.avatar as avatar, 'friend' as objectType,friend.friend_note as objectNick,
+                user.id as objectId from friend,user where
+                friend.user_id=#{userId} and friend.friend_id=user.id
+                and friend.friend_note like CONCAT('%', #{keyword}, '%')
+                or user.id like CONCAT('%', #{keyword}, '%')
+            </otherwise>
+        </choose>
+    </select>
 </mapper>

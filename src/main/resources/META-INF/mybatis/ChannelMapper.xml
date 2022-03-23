@@ -7,4 +7,20 @@
             #{id}
         </foreach>
     </delete>
+    <select id="getChannelSearchVoList" resultType="com.project.gimme.pojo.vo.SearchVO">
+        <choose>
+            <when test="#{userId}==null">
+                select channel.avatar as avatar,channel.nick as objectNick, 'channel' as objectType, channel.id as
+                objectId from channel where channel.nick like CONCAT('%', #{keyword}, '%')
+                or channel.id like CONCAT('%', #{keyword}, '%')
+            </when>
+            <otherwise>
+                select channel.avatar as avatar,channel.nick as objectNick,'channel' as objectType,
+                channel.id as objectId from channel,channel_user
+                where channel_user.user_id=#{userId} and channel_user.channel_id=channel.id
+                and (channel.nick like CONCAT('%', #{keyword}, '%')
+                or channel.id like CONCAT('%', #{keyword}, '%'))
+            </otherwise>
+        </choose>
+    </select>
 </mapper>
