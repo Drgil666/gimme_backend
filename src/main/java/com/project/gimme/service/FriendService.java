@@ -55,9 +55,10 @@ public interface FriendService {
     /**
      * 根据关键字查找
      *
-     * @param userId  用户id
-     * @param keyword 关键词
+     * @param userId     用户id
+     * @param searchType 搜索类型
+     * @param keyword    关键词
      * @return 查找结果列表
      */
-    List<SearchVO> getFriendSearchVoList(Integer userId, String keyword);
+    List<SearchVO> getFriendSearchVoList(Integer userId, String searchType, String keyword);
 }

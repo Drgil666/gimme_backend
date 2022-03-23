@@ -8,18 +8,17 @@
         </foreach>
     </delete>
     <select id="getGroupSearchVoList" resultType="com.project.gimme.pojo.vo.SearchVO">
-        <choose>
-            <when test="#{userId}==null">
-                select `group`.avatar as avatar,`group`.nick as objectNick, 'group' as objectType, group.id as objectId
-                from `group` where `group`.nick like CONCAT('%', #{keyword}, '%')
-                or `group`.id like CONCAT('%', #{keyword}, '%')
-            </when>
-            <otherwise>
-                select `group`.avatar as avatar, `group`.nick as objectNick,'group' as objectType, group.id as objectId
-                from `group`,group_user where group_user.user_id=#{userId} and group_user.group_id=`group`.id and
-                (`group`.nick like CONCAT('%', #{keyword}, '%')
-                or `group`.id like CONCAT('%', #{keyword}, '%'))
-            </otherwise>
-        </choose>
+        <if test='searchType=="message" '>
+            select `group`.avatar as avatar,`group`.nick as objectNick, 'group'
+            as objectType, group.id as objectId
+            from `group` where `group`.nick like CONCAT('%', #{keyword}, '%')
+            or `group`.id like CONCAT('%', #{keyword}, '%')
+        </if>
+        <if test='searchType=="contacts"'>
+            select `group`.avatar as avatar, `group`.nick as objectNick,'group' as objectType, group.id as objectId
+            from `group`,group_user where group_user.user_id=#{userId} and group_user.group_id=`group`.id and
+            (`group`.nick like CONCAT('%', #{keyword}, '%')
+            or `group`.id like CONCAT('%', #{keyword}, '%'))
+        </if>
     </select>
 </mapper>

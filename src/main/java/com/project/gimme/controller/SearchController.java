@@ -6,7 +6,6 @@ import com.project.gimme.pojo.vo.Response;
 import com.project.gimme.pojo.vo.SearchVO;
 import com.project.gimme.service.*;
 import com.project.gimme.utils.AssertionUtil;
-import com.project.gimme.utils.ContactsUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -46,24 +45,17 @@ public class SearchController {
     @ApiOperation(value = "通过id获取个人消息")
     @LoginAuthorize()
     public Response<List<SearchVO>> getSearchVoList(@ApiParam(value = "加密验证参数")
-                                                    @RequestHeader(TOKEN) String token,
+                                                        @RequestHeader(TOKEN) String token,
                                                     @ApiParam(value = "个人信息id")
-                                                    @RequestParam(value = "keyword") String keyword,
+                                                        @RequestParam(value = "keyword", defaultValue = "") String keyword,
                                                     @ApiParam(value = "查询类型")
-                                                    @RequestParam(value = "searchType") String searchType) {
-        Integer userId = null;
-        if (searchType.equals(ContactsUtil.SearchType.TYPE_FRIEND.getName())) {
-            userId = redisService.getUserId(token);
-        } else if (searchType.equals(ContactsUtil.SearchType.TYPE_MESSAGE.getName())) {
-            userId = null;
-        } else {
-            return Response.createErr("请求方法错误!");
-        }
+                                                        @RequestParam(value = "searchType") String searchType) {
+        Integer userId = redisService.getUserId(token);
         AssertionUtil.notNull(keyword, ErrorCode.BIZ_PARAM_ILLEGAL, "keyword不能为空!");
         List<SearchVO> searchVOList = new ArrayList<>();
-        searchVOList.addAll(friendService.getFriendSearchVoList(userId, keyword));
-        searchVOList.addAll(groupService.getGroupSearchVoList(userId, keyword));
-        searchVOList.addAll(channelService.getChannelSearchVoList(userId, keyword));
+        searchVOList.addAll(friendService.getFriendSearchVoList(userId, searchType, keyword));
+        searchVOList.addAll(groupService.getGroupSearchVoList(userId, searchType, keyword));
+        searchVOList.addAll(channelService.getChannelSearchVoList(userId, searchType, keyword));
         return Response.createSuc(searchVOList);
     }
 }

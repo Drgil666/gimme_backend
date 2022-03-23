@@ -99,10 +99,12 @@ public interface ChannelMapper {
     /**
      * 根据关键字查找
      *
-     * @param userId  用户id
-     * @param keyword 关键词
+     * @param userId     用户id
+     * @param searchType 搜索类型
+     * @param keyword    关键词
      * @return 查找结果列表
      */
     List<SearchVO> getChannelSearchVoList(@Param("userId") Integer userId,
+                                          @Param("searchType") String searchType,
                                           @Param("keyword") String keyword);
 }

@@ -21,10 +21,6 @@ public class SearchVO {
      */
     private String objectNick;
     /**
-     * 会话成员个数
-     */
-    private Integer memberCount;
-    /**
      * 会话id
      */
     private Integer objectId;

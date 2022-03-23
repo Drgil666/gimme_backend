@@ -23,7 +23,7 @@ public class ContactsUtil {
         /**
          * 联系人类型
          */
-        TYPE_FRIEND(1, CONTACTS_ATTRIBUTE);
+        TYPE_CONTACTS(1, CONTACTS_ATTRIBUTE);
         private final Integer code;
         private final String name;
     }
