@@ -4,12 +4,15 @@ package com.project.gimme.controller;
 import com.project.gimme.annotation.LoginAuthorize;
 import com.project.gimme.exception.ErrorCode;
 import com.project.gimme.pojo.ChannelNotice;
+import com.project.gimme.pojo.vo.ChatMsgVO;
 import com.project.gimme.pojo.vo.CudRequestVO;
 import com.project.gimme.pojo.vo.Response;
 import com.project.gimme.service.ChannelNoticeService;
 import com.project.gimme.service.ChannelUserService;
+import com.project.gimme.service.ChatMsgService;
 import com.project.gimme.service.RedisService;
 import com.project.gimme.utils.AssertionUtil;
+import com.project.gimme.utils.ChatMsgUtil;
 import com.project.gimme.utils.UserUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -39,6 +42,8 @@ public class ChannelNoticeController {
     private ChannelUserService channelUserService;
     @Resource
     private RedisService redisService;
+    @Resource
+    private ChatMsgService chatMsgService;
 
     @ResponseBody
     @PostMapping()
@@ -115,6 +120,26 @@ public class ChannelNoticeController {
             return Response.createSuc(channelNoticeList);
         } else {
             return Response.createErr(ErrorCode.BIZ_PARAM_ILLEGAL.getCode(), "获取公告失败!");
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/info")
+    @ApiOperation(value = "获取频道公告列表")
+    @LoginAuthorize()
+    public Response<List<ChatMsgVO>> getChannelNoticeInfo(@ApiParam(value = "加密验证参数")
+                                                          @RequestHeader(TOKEN) String token,
+                                                          @ApiParam(value = "频道公告id")
+                                                          @RequestParam(value = "channelNoticeId") Integer channelNoticeId) {
+        Integer userId = redisService.getUserId(token);
+        AssertionUtil.notNull(channelNoticeId, ErrorCode.BIZ_PARAM_ILLEGAL, "channelId不能为空!");
+        List<ChatMsgVO> chatMsgList = channelNoticeService.getChannelNoticeInfo(userId, channelNoticeId);
+        chatMsgList.addAll(chatMsgService.getChatMsgVoListByObjectId(userId, ChatMsgUtil.Character.TYPE_CHANNEL_NOTICE.getName(), channelNoticeId, ""));
+        //TODO:bug需要修复
+        if (chatMsgList != null) {
+            return Response.createSuc(chatMsgList);
+        } else {
+            return Response.createErr(ErrorCode.BIZ_PARAM_ILLEGAL.getCode(), "获取失败!");
         }
     }
 }

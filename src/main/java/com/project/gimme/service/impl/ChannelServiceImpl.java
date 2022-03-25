@@ -1,10 +1,12 @@
 package com.project.gimme.service.impl;
 
 import com.project.gimme.mapper.ChannelMapper;
+import com.project.gimme.mapper.ChannelUserMapper;
 import com.project.gimme.pojo.Channel;
 import com.project.gimme.pojo.vo.ChannelVO;
 import com.project.gimme.pojo.vo.SearchVO;
 import com.project.gimme.service.ChannelService;
+import com.project.gimme.utils.ContactsUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -18,6 +20,8 @@ import java.util.List;
 public class ChannelServiceImpl implements ChannelService {
     @Resource
     private ChannelMapper channelMapper;
+    @Resource
+    private ChannelUserMapper channelUserMapper;
 
     /**
      * 创建频道
@@ -120,6 +124,15 @@ public class ChannelServiceImpl implements ChannelService {
      */
     @Override
     public List<SearchVO> getChannelSearchVoList(Integer userId, String searchType, String keyword) {
-        return channelMapper.getChannelSearchVoList(userId, searchType, keyword);
+        List<SearchVO> searchVOList = channelMapper.getChannelSearchVoList(userId, searchType, keyword);
+        for (SearchVO searchVO : searchVOList) {
+            if (searchType.equals(ContactsUtil.SearchType.TYPE_CONTACTS.getName())) {
+                searchVO.setIsJoined(true);
+            } else {
+                searchVO.setIsJoined(channelUserMapper.getChannelUser(searchVO.getObjectId(), userId) != null);
+            }
+            searchVO.setMemberCount(channelUserMapper.getChannelMemberCount(searchVO.getObjectId()));
+        }
+        return searchVOList;
     }
 }

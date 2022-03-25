@@ -117,6 +117,9 @@ public class ChatMsgServiceImpl implements ChatMsgService {
                         return chatMsgVO;
                     }).collect(Collectors.toList());
         } else {
+            if (type.equals(ChatMsgUtil.Character.TYPE_CHANNEL_NOTICE.getName())) {
+                type = ChatMsgUtil.Character.TYPE_CHANNEL.getName();
+            }
             List<ChatMsg> chatMsgList = chatMsgMapper.getChatMsgListByObjectId(type, objectId, keyword);
             return chatMsgList.stream()
                     .parallel()

@@ -55,4 +55,13 @@ public interface ChannelUserMapper {
      */
     Long deleteChannelUser(@Param("channelId") Integer channelId,
                            @Param("userId") List<Integer> idList);
+
+    /**
+     * 获取群成员个数
+     *
+     * @param channelId 频道id
+     * @return 频道成员
+     */
+    @Select("select count(*) from channel_user where channel_id=#{channelId}")
+    Integer getChannelMemberCount(@Param("channelId") Integer channelId);
 }

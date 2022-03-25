@@ -1,6 +1,7 @@
 package com.project.gimme.service;
 
 import com.project.gimme.pojo.ChannelNotice;
+import com.project.gimme.pojo.vo.ChatMsgVO;
 
 import java.util.List;
 
@@ -49,4 +50,13 @@ public interface ChannelNoticeService {
      * @return 频道公告列表
      */
     List<ChannelNotice> getChannelNoticeList(Integer channelId);
+
+    /**
+     * 获取频道公告记录
+     *
+     * @param userId          用户id
+     * @param channelNoticeId 频道公告id
+     * @return 记录列表
+     */
+    List<ChatMsgVO> getChannelNoticeInfo(Integer userId, Integer channelNoticeId);
 }

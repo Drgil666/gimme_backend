@@ -1,11 +1,17 @@
 package com.project.gimme.service.impl;
 
+import com.project.gimme.mapper.ChannelMapper;
 import com.project.gimme.mapper.ChannelNoticeMapper;
+import com.project.gimme.mapper.UserMapper;
+import com.project.gimme.pojo.Channel;
 import com.project.gimme.pojo.ChannelNotice;
+import com.project.gimme.pojo.vo.ChatMsgVO;
 import com.project.gimme.service.ChannelNoticeService;
+import com.project.gimme.utils.ChatMsgUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,6 +22,10 @@ import java.util.List;
 public class ChannelNoticeServiceImpl implements ChannelNoticeService {
     @Resource
     private ChannelNoticeMapper channelNoticeMapper;
+    @Resource
+    private ChannelMapper channelMapper;
+    @Resource
+    private UserMapper userMapper;
 
     /**
      * 创建频道公告
@@ -71,5 +81,30 @@ public class ChannelNoticeServiceImpl implements ChannelNoticeService {
     @Override
     public List<ChannelNotice> getChannelNoticeList(Integer channelId) {
         return channelNoticeMapper.getChannelNoticeList(channelId);
+    }
+
+    /**
+     * 获取频道公告记录
+     *
+     * @param userId          用户id
+     * @param channelNoticeId 频道公告id
+     * @return 记录列表
+     */
+    @Override
+    public List<ChatMsgVO> getChannelNoticeInfo(Integer userId, Integer channelNoticeId) {
+        List<ChatMsgVO> chatMsgList = new ArrayList<>();
+        ChatMsgVO chatMsgVO = new ChatMsgVO();
+        ChannelNotice channelNotice = getChannelNotice(channelNoticeId);
+        chatMsgVO.setTimeStamp(channelNotice.getCreateTime());
+        chatMsgVO.setId(channelNoticeId);
+        Channel channel = channelMapper.getChannel(channelNotice.getChannelId());
+        chatMsgVO.setOwnerId(channel.getOwnerId());
+        chatMsgVO.setObjectId(channelNoticeId);
+        chatMsgVO.setType(ChatMsgUtil.Character.TYPE_CHANNEL_NOTICE.getName());
+        chatMsgVO.setText(channelNotice.getText());
+        chatMsgVO.setIsSelf(userId.equals(channel.getOwnerId()));
+        chatMsgVO.setOwnerNick(userMapper.getUser(userId).getNick());
+        chatMsgList.add(chatMsgVO);
+        return chatMsgList;
     }
 }

@@ -4,6 +4,7 @@ import com.project.gimme.mapper.FriendMapper;
 import com.project.gimme.pojo.Friend;
 import com.project.gimme.pojo.vo.SearchVO;
 import com.project.gimme.service.FriendService;
+import com.project.gimme.utils.ContactsUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -87,6 +88,14 @@ public class FriendServiceImpl implements FriendService {
      */
     @Override
     public List<SearchVO> getFriendSearchVoList(Integer userId, String searchType, String keyword) {
-        return friendMapper.getFriendSearchVoList(userId, searchType, keyword);
+        List<SearchVO> searchVOList = friendMapper.getFriendSearchVoList(userId, searchType, keyword);
+        for (SearchVO searchVO : searchVOList) {
+            if (searchType.equals(ContactsUtil.SearchType.TYPE_CONTACTS.getName())) {
+                searchVO.setIsJoined(true);
+            } else {
+                searchVO.setIsJoined(getFriend(userId, searchVO.getObjectId()) != null);
+            }
+        }
+        return searchVOList;
     }
 }

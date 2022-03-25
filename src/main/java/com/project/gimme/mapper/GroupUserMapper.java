@@ -58,8 +58,17 @@ public interface GroupUserMapper {
      *
      * @param groupId 群聊id
      * @param type    权限类型
-     * @return
+     * @return 人员id列表
      */
     @Select("select user_id from group_user where group_id=#{groupId} and type<=#{type}")
-    List<Integer> getGroupAdminList(Integer groupId, Integer type);
+    List<Integer> getGroupAdminList(@Param("groupId") Integer groupId, @Param("type") Integer type);
+
+    /**
+     * 获取群成员个数
+     *
+     * @param groupId 群聊id
+     * @return 群成员
+     */
+    @Select("select count(*) from group_user where group_id=#{groupId}")
+    Integer getGroupMemberCount(@Param("groupId") Integer groupId);
 }

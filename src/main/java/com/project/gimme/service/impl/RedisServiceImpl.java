@@ -1,10 +1,7 @@
 package com.project.gimme.service.impl;
 
 import com.project.gimme.dao.RedisDao;
-import com.project.gimme.pojo.vo.TokenFriendVO;
-import com.project.gimme.pojo.vo.TokenGroupVO;
-import com.project.gimme.pojo.vo.TokenUserTimestampVO;
-import com.project.gimme.pojo.vo.TokenUserVO;
+import com.project.gimme.pojo.vo.*;
 import com.project.gimme.service.RedisService;
 import com.project.gimme.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Value;
@@ -233,13 +230,13 @@ public class RedisServiceImpl implements RedisService {
      */
     @Override
     public void createChannelAuthorityToken(Integer userId, Integer channelId, String typeName) {
-        TokenGroupVO tokenGroupVO = new TokenGroupVO();
-        tokenGroupVO.setType(TOKEN_CHANNEL);
-        tokenGroupVO.setGroupId(channelId);
-        tokenGroupVO.setUserId(userId);
-        tokenGroupVO.setMemberType(typeName);
+        TokenChannelVO tokenChannelVO = new TokenChannelVO();
+        tokenChannelVO.setType(TOKEN_CHANNEL);
+        tokenChannelVO.setChannelId(channelId);
+        tokenChannelVO.setUserId(userId);
+        tokenChannelVO.setMemberType(typeName);
         String key = getChannelUserKey(channelId, userId);
-        String json = RedisUtil.objectToJsonString(tokenGroupVO);
+        String json = RedisUtil.objectToJsonString(tokenChannelVO);
         redisDao.deleteStringValue(key);
         redisDao.createStringValue(key, json);
     }
@@ -257,11 +254,11 @@ public class RedisServiceImpl implements RedisService {
         if (StringUtils.isEmpty(json)) {
             return null;
         }
-        TokenGroupVO tokenGroupVO = (TokenGroupVO) RedisUtil.jsonStringToObject(json, TokenGroupVO.class);
-        if (tokenGroupVO == null) {
+        TokenChannelVO tokenChannelVO = (TokenChannelVO) RedisUtil.jsonStringToObject(json, TokenChannelVO.class);
+        if (tokenChannelVO == null) {
             return null;
         }
-        return tokenGroupVO.getMemberType();
+        return tokenChannelVO.getMemberType();
     }
 
     /**

@@ -1,10 +1,12 @@
 package com.project.gimme.service.impl;
 
 import com.project.gimme.mapper.GroupMapper;
+import com.project.gimme.mapper.GroupUserMapper;
 import com.project.gimme.pojo.Group;
 import com.project.gimme.pojo.vo.GroupVO;
 import com.project.gimme.pojo.vo.SearchVO;
 import com.project.gimme.service.GroupService;
+import com.project.gimme.utils.ContactsUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -19,6 +21,8 @@ import java.util.List;
 public class GroupServiceImpl implements GroupService {
     @Resource
     private GroupMapper groupMapper;
+    @Resource
+    private GroupUserMapper groupUserMapper;
 
     /**
      * 创建群聊
@@ -133,6 +137,15 @@ public class GroupServiceImpl implements GroupService {
      */
     @Override
     public List<SearchVO> getGroupSearchVoList(Integer userId, String searchType, String keyword) {
-        return groupMapper.getGroupSearchVoList(userId, searchType, keyword);
+        List<SearchVO> searchVOList = groupMapper.getGroupSearchVoList(userId, searchType, keyword);
+        for (SearchVO searchVO : searchVOList) {
+            if (searchType.equals(ContactsUtil.SearchType.TYPE_CONTACTS.getName())) {
+                searchVO.setIsJoined(true);
+            } else {
+                searchVO.setIsJoined(groupUserMapper.getGroupUser(searchVO.getObjectId(), userId) != null);
+            }
+            searchVO.setMemberCount(groupUserMapper.getGroupMemberCount(searchVO.getObjectId()));
+        }
+        return searchVOList;
     }
 }
