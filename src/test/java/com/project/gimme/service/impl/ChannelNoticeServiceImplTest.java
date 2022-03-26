@@ -34,14 +34,14 @@ public class ChannelNoticeServiceImplTest {
 
     @Test
     public void updateChannelNotice() {
-        ChannelNotice channelNotice = channelNoticeService.getChannelNotice(null, 2);
+        ChannelNotice channelNotice = channelNoticeService.getChannelNotice(2);
         channelNotice.setText("222");
         System.out.println(channelNoticeService.updateChannelNotice(channelNotice));
     }
 
     @Test
     public void getChannelNotice() {
-        ChannelNotice channelNotice = channelNoticeService.getChannelNotice(null, 2);
+        ChannelNotice channelNotice = channelNoticeService.getChannelNotice(2);
         System.out.println(channelNotice.getText());
     }
 

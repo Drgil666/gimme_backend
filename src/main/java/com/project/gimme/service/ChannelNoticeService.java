@@ -29,11 +29,10 @@ public interface ChannelNoticeService {
     /**
      * 通过id获取频道公告
      *
-     * @param channelId       频道id
-     * @param channelNoticeId 频道公告id
+     * @param id 频道公告id
      * @return 频道公告
      */
-    ChannelNotice getChannelNotice(Integer channelId, Integer channelNoticeId);
+    ChannelNotice getChannelNotice(Integer id);
 
     /**
      * 批量删除频道

@@ -62,13 +62,4 @@ public interface ChannelNoticeMapper {
      */
     @Select("select * from channel_notice where channel_id=#{channelId}")
     List<ChannelNotice> getChannelNoticeList(@Param("channelId") Integer channelId);
-
-    /**
-     * 获取最新频道公告
-     *
-     * @param channelId 频道id
-     * @return 频道公告
-     */
-    @Select("select * from channel_notice where channel_id=#{channelId} order by create_time DESC LIMIT 1")
-    ChannelNotice getNewChannelNotice(@Param("channelId") Integer channelId);
 }

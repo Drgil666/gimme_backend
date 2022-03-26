@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -36,7 +35,6 @@ public class ChannelNoticeServiceImpl implements ChannelNoticeService {
      */
     @Override
     public Boolean createChannelNotice(ChannelNotice channelNotice) {
-        channelNotice.setCreateTime(new Date());
         return channelNoticeMapper.createChannelNotice(channelNotice);
     }
 
@@ -54,17 +52,12 @@ public class ChannelNoticeServiceImpl implements ChannelNoticeService {
     /**
      * 通过id获取频道公告
      *
-     * @param channelId       频道id
-     * @param channelNoticeId 频道公告id
+     * @param id 频道公告id
      * @return 频道公告
      */
     @Override
-    public ChannelNotice getChannelNotice(Integer channelId, Integer channelNoticeId) {
-        if (channelNoticeId != null) {
-            return channelNoticeMapper.getChannelNotice(channelNoticeId);
-        } else {
-            return channelNoticeMapper.getNewChannelNotice(channelId);
-        }
+    public ChannelNotice getChannelNotice(Integer id) {
+        return channelNoticeMapper.getChannelNotice(id);
     }
 
     /**
@@ -101,7 +94,7 @@ public class ChannelNoticeServiceImpl implements ChannelNoticeService {
     public List<ChatMsgVO> getChannelNoticeInfo(Integer userId, Integer channelNoticeId) {
         List<ChatMsgVO> chatMsgList = new ArrayList<>();
         ChatMsgVO chatMsgVO = new ChatMsgVO();
-        ChannelNotice channelNotice = getChannelNotice(null, channelNoticeId);
+        ChannelNotice channelNotice = getChannelNotice(channelNoticeId);
         chatMsgVO.setTimeStamp(channelNotice.getCreateTime());
         chatMsgVO.setId(channelNoticeId);
         Channel channel = channelMapper.getChannel(channelNotice.getChannelId());
