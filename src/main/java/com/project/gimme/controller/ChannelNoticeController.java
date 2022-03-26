@@ -93,10 +93,10 @@ public class ChannelNoticeController {
                                                     @RequestParam(value = "channelId")
                                                             Integer channelId,
                                                     @ApiParam(value = "公告id")
-                                                    @RequestParam(value = "channelNoticeId") Integer groupNoticeId) {
+                                                    @RequestParam(value = "channelNoticeId") Integer channelNoticeId) {
         Integer userId = redisService.getUserId(token);
-        channelUserService.authorityCheck(userId, channelId, UserUtil.GROUP_USER_ATTRIBUTE);
-        ChannelNotice channelNotice = channelNoticeService.getChannelNotice(groupNoticeId);
+        channelUserService.authorityCheck(userId, channelId, UserUtil.CHANNEL_USER_ATTRIBUTE);
+        ChannelNotice channelNotice = channelNoticeService.getChannelNotice(channelId, channelNoticeId);
         if (channelNotice != null) {
             return Response.createSuc(channelNotice);
         } else {
