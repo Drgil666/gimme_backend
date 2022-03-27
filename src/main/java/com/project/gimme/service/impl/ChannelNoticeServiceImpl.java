@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -35,6 +36,7 @@ public class ChannelNoticeServiceImpl implements ChannelNoticeService {
      */
     @Override
     public Boolean createChannelNotice(ChannelNotice channelNotice) {
+        channelNotice.setCreateTime(new Date());
         return channelNoticeMapper.createChannelNotice(channelNotice);
     }
 
