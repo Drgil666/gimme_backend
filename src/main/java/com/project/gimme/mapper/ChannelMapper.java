@@ -55,7 +55,7 @@ public interface ChannelMapper {
     @Select("select channel.* from channel,channel_user where " +
             "channel.nick like CONCAT('%',#{keyword},'%') " +
             "and channel_user.channel_id=channel.id and channel_user.user_id=#{userId}")
-    List<Channel> getChannelList(@Param("keyword") String keyword, @Param("userId") Integer userId);
+    List<Channel> getChannelList(@Param("userId") Integer userId, @Param("keyword") String keyword);
 
     /**
      * 如果已加入频道，获取频道信息

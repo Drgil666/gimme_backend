@@ -135,9 +135,11 @@ public class ChatMsgController {
     @ApiOperation(value = "获取用户好友/群聊/频道信息")
     @LoginAuthorize()
     public Response<List<MessageVO>> getMessageVoList(@ApiParam(value = "加密验证参数")
-                                                      @RequestHeader(TOKEN) String token) {
+                                                      @RequestHeader(TOKEN) String token,
+                                                      @ApiParam(value = "关键词")
+                                                      @RequestHeader(value = "keyword", defaultValue = "") String keyword) {
         Integer userId = redisService.getUserId(token);
-        List<MessageVO> messageVOList = chatMsgService.getMessageVoByUserId(userId);
+        List<MessageVO> messageVOList = chatMsgService.getMessageVoByUserId(userId, keyword);
         if (messageVOList != null) {
             return Response.createSuc(messageVOList);
         } else {

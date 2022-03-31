@@ -67,10 +67,11 @@ public interface ChatMsgService {
     /**
      * 获取用户好友/群聊/频道信息
      *
-     * @param userId 用户id
+     * @param userId  用户id
+     * @param keyword 关键词
      * @return 好友消息
      */
-    List<MessageVO> getMessageVoByUserId(Integer userId);
+    List<MessageVO> getMessageVoByUserId(Integer userId, String keyword);
 
     /**
      * 判断操作权限是否合法

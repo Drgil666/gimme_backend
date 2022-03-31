@@ -70,12 +70,13 @@ public class FriendServiceImpl implements FriendService {
     /**
      * 通过用户id获取朋友列表
      *
-     * @param userId 用户id
+     * @param userId  用户id
+     * @param keyword 关键词
      * @return 朋友列表
      */
     @Override
-    public List<Friend> getFriendList(Integer userId) {
-        return friendMapper.getFriendList(userId);
+    public List<Friend> getFriendList(Integer userId, String keyword) {
+        return friendMapper.getFriendList(userId, keyword);
     }
 
     /**

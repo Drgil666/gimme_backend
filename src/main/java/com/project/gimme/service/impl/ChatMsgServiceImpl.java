@@ -154,14 +154,15 @@ public class ChatMsgServiceImpl implements ChatMsgService {
     /**
      * 获取用户好友/群聊/频道信息
      *
-     * @param userId 用户id
+     * @param userId  用户id
+     * @param keyword 关键词
      * @return 好友消息
      */
     @Override
-    public List<MessageVO> getMessageVoByUserId(Integer userId) {
-        List<Friend> friendList = friendMapper.getFriendList(userId);
-        List<Group> groupList = groupMapper.getGroupList(userId, "");
-        List<Channel> channelList = channelMapper.getChannelList("", userId);
+    public List<MessageVO> getMessageVoByUserId(Integer userId, String keyword) {
+        List<Friend> friendList = friendMapper.getFriendList(userId, keyword);
+        List<Group> groupList = groupMapper.getGroupList(userId, keyword);
+        List<Channel> channelList = channelMapper.getChannelList(userId, keyword);
         List<MessageVO> messageVOList = new ArrayList<>();
         for (ChatMsgUtil.Character character : ChatMsgUtil.CHARACTER_LIST) {
             if (character.equals(ChatMsgUtil.Character.TYPE_FRIEND)) {

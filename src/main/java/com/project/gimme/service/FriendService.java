@@ -47,10 +47,11 @@ public interface FriendService {
     /**
      * 通过用户id获取朋友列表
      *
-     * @param userId 用户id
+     * @param userId  用户id
+     * @param keyword 关键词
      * @return 朋友列表
      */
-    List<Friend> getFriendList(Integer userId);
+    List<Friend> getFriendList(Integer userId, String keyword);
 
     /**
      * 根据关键字查找

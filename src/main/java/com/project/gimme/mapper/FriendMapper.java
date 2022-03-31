@@ -40,19 +40,19 @@ public interface FriendMapper {
      * @param friendId 朋友id
      * @return 朋友关系
      */
-    @Select("select * from friend where user_id=#{userId} " +
-            "and friend_id=#{friendId}")
+    @Select("select * from friend where user_id=#{userId} and friend_id=#{friendId}")
     Friend getFriend(@Param("userId") Integer userId,
                      @Param("friendId") Integer friendId);
 
     /**
      * 通过用户id获取朋友列表
      *
-     * @param userId 用户id
+     * @param userId  用户id
+     * @param keyword 关键词
      * @return 朋友列表
      */
-    @Select("select * from friend where user_id=#{userId}")
-    List<Friend> getFriendList(@Param("userId") Integer userId);
+    @Select("select * from friend where user_id=#{userId} and friend_note like CONCAT('%',#{keyword},'%')")
+    List<Friend> getFriendList(@Param("userId") Integer userId, @Param("keyword") String keyword);
 
     /**
      * 批量删除好友关系

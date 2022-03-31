@@ -50,7 +50,7 @@ public interface ChannelService {
      * @param userId  用户id
      * @return 频道列表
      */
-    List<Channel> getChannelList(String keyword, Integer userId);
+    List<Channel> getChannelList(Integer userId, String keyword);
 
     /**
      * 如果已加入频道，获取频道信息

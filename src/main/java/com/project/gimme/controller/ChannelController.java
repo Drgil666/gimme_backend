@@ -114,7 +114,7 @@ public class ChannelController {
                                                   @RequestParam(value = "keyword", defaultValue = "", required = false)
                                                           String keyword) {
         Integer userId = redisService.getUserId(token);
-        List<Channel> channelList = channelService.getChannelList(keyword, userId);
+        List<Channel> channelList = channelService.getChannelList(userId, keyword);
         if (channelList != null) {
             return Response.createSuc(channelList);
         } else {

@@ -76,8 +76,8 @@ public class ChannelServiceImpl implements ChannelService {
      * @return 频道列表
      */
     @Override
-    public List<Channel> getChannelList(String keyword, Integer userId) {
-        return channelMapper.getChannelList(keyword, userId);
+    public List<Channel> getChannelList(Integer userId, String keyword) {
+        return channelMapper.getChannelList(userId, keyword);
     }
 
     /**
