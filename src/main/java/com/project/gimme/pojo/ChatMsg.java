@@ -24,9 +24,9 @@ public class ChatMsg {
     @ApiModelProperty(value = "聊天内容", name = "text")
     private String text;
     /**
-     * 聊天消息类型
+     * 会话类型
      */
-    @ApiModelProperty(value = "聊天消息类型", name = "type")
+    @ApiModelProperty(value = "会话类型", name = "type")
     private String type;
     /**
      * 接受者id/群聊id/频道公告id
@@ -43,4 +43,9 @@ public class ChatMsg {
      */
     @ApiModelProperty(value = "消息发起者", name = "ownerId")
     private Integer ownerId;
+    /**
+     * 消息类型
+     */
+    @ApiModelProperty(value = "消息类型", name = "msgType")
+    private Integer msgType;
 }

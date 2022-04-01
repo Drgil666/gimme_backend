@@ -19,9 +19,9 @@ public interface ChatMsgMapper {
      * @return 是否成功
      */
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
-    @Insert("insert into chat_msg (text, owner_id, timestamp, object_id, type)" +
+    @Insert("insert into chat_msg (text, owner_id, timestamp, object_id, type,msg_type)" +
             " values (#{chatMsg.text},#{chatMsg.ownerId},#{chatMsg.timeStamp}," +
-            "#{chatMsg.objectId},#{chatMsg.type})")
+            "#{chatMsg.objectId},#{chatMsg.type},#{chatMsg.msgType})")
     Boolean createChatMsg(@Param("chatMsg") ChatMsg chatMsg);
 
     /**
@@ -32,7 +32,7 @@ public interface ChatMsgMapper {
      */
     @Update("update chat_msg set text=#{chatMsg.text}," +
             "owner_id=#{chatMsg.ownerId},timestamp=#{chatMsg.timestamp}," +
-            "object_id=#{chatMsg.objectId},type=#{chatMsg.type}" +
+            "object_id=#{chatMsg.objectId},type=#{chatMsg.type},msg_type=#{chatMsg.msgType}" +
             " where id=#{chatMsg.id}")
     Long updateChatMsg(@Param("chatMsg") ChatMsg chatMsg);
 
