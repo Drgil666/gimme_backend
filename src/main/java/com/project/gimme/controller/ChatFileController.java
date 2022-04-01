@@ -6,7 +6,6 @@ import com.project.gimme.exception.ErrorCode;
 import com.project.gimme.pojo.ChatFile;
 import com.project.gimme.pojo.vo.ChatFileVO;
 import com.project.gimme.pojo.vo.CudRequestVO;
-import com.project.gimme.pojo.vo.FileVO;
 import com.project.gimme.pojo.vo.Response;
 import com.project.gimme.service.ChatFileService;
 import com.project.gimme.service.GridFsService;
@@ -164,17 +163,17 @@ public class ChatFileController {
     @PostMapping("/upload")
     @ApiOperation(value = "上传文件")
     @LoginAuthorize()
-    public Response<FileVO> uploadFile(@ApiParam(value = "加密验证参数")
-                                       @RequestHeader(TOKEN) String token,
-                                       @ApiParam(value = "上传的文件")
-                                       @RequestParam(value = "file")
-                                               MultipartFile file,
-                                       @ApiParam(value = "会话类型")
-                                       @RequestParam(value = "chatType")
-                                               String chatType,
-                                       @ApiParam(value = "会话id")
-                                       @RequestParam(value = "objectId")
-                                               Integer objectId) throws IOException {
+    public Response<ChatFile> uploadFile(@ApiParam(value = "加密验证参数")
+                                         @RequestHeader(TOKEN) String token,
+                                         @ApiParam(value = "上传的文件")
+                                         @RequestParam(value = "file")
+                                                 MultipartFile file,
+                                         @ApiParam(value = "会话类型")
+                                         @RequestParam(value = "chatType")
+                                                 String chatType,
+                                         @ApiParam(value = "会话id")
+                                         @RequestParam(value = "objectId")
+                                                 Integer objectId) throws IOException {
         Integer userId = redisService.getUserId(token);
         String mongoId = gridFsService.createFile(file);
         if (!StringUtils.isEmpty(mongoId)) {
@@ -188,7 +187,7 @@ public class ChatFileController {
             chatFile.setObjectId(objectId);
             chatFile.setFilename(file.getOriginalFilename());
             if (chatFileService.createChatFile(chatFile)) {
-                return Response.createSuc(null);
+                return Response.createSuc(chatFile);
             }
         }
         return Response.createErr(ErrorCode.BIZ_PARAM_ILLEGAL.getCode(), "上传失败!");
@@ -206,6 +205,30 @@ public class ChatFileController {
         ChatFile chatFile = chatFileService.getChatFile(chatFileId);
         try {
             GridFsResource file = gridFsService.getFile(chatFile.getMongoId());
+            InputStream inputStream = file.getInputStream();
+            response.setContentType(file.getContentType());
+            response.setHeader("content-disposition", "attachment;filename=\"" + file.getFilename() + "\"");
+            response.setHeader("file-name", file.getFilename());
+            OutputStream outputStream = response.getOutputStream();
+            byte[] buffer = new byte[1024];
+            int len = inputStream.read(buffer);
+            while (len != -1) {
+                outputStream.write(buffer, 0, len);
+                len = inputStream.read(buffer);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/download/{mongoId}")
+    @ApiOperation(value = "下载文件")
+    public void downloadFile(@ApiParam(value = "文件的mongoId")
+                             @PathVariable(value = "mongoId") String mongoId, HttpServletResponse response) {
+        AssertionUtil.notNull(mongoId, ErrorCode.BIZ_PARAM_ILLEGAL, "mongoId不能为空!");
+        try {
+            GridFsResource file = gridFsService.getFile(mongoId);
             InputStream inputStream = file.getInputStream();
             response.setContentType(file.getContentType());
             response.setHeader("content-disposition", "attachment;filename=\"" + file.getFilename() + "\"");

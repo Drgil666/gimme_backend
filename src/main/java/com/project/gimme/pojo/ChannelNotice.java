@@ -22,7 +22,7 @@ public class ChannelNotice {
      * 频道公告类型
      */
     @ApiModelProperty(value = "频道公告类型", name = "type")
-    private String type;
+    private Integer type;
     /**
      * 频道id
      */

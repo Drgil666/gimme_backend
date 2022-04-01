@@ -27,7 +27,7 @@ public class ChannelNoticeServiceImplTest {
     public void createChannelNotice() {
         ChannelNotice channelNotice = new ChannelNotice();
         channelNotice.setChannelId(3);
-        channelNotice.setType("test");
+        channelNotice.setType(0);
         channelNotice.setCreateTime(new Date());
         System.out.println(channelNoticeService.createChannelNotice(channelNotice));
     }
