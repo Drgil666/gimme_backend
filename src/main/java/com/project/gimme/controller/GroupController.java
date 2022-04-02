@@ -23,6 +23,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 import static com.project.gimme.utils.RedisUtil.TOKEN;
@@ -93,6 +94,43 @@ public class GroupController {
             }
             default:
                 return Response.createUnknownMethodErr();
+        }
+    }
+
+    @ResponseBody
+    @PostMapping("/create/friend")
+    @ApiOperation(value = "创建/更新/删除群聊")
+    @LoginAuthorize()
+    public Response<Group> createGroupWithFriend(@ApiParam(value = "加密验证参数")
+                                                 @RequestHeader(TOKEN) String token,
+                                                 @ApiParam(value = "包含群聊信息，操作信息")
+                                                 @RequestBody List<Integer> request) {
+        Integer userId = redisService.getUserId(token);
+        Group group = new Group();
+        group.setNick("新建群聊");
+        group.setCreateTime(new Date());
+        group.setAvatar(null);
+        group.setDescription("");
+        if (groupService.createGroup(group)) {
+            GroupUser groupUser = new GroupUser();
+            groupUser.setUserId(userId);
+            groupUser.setGroupId(group.getId());
+            groupUser.setMsgTimestamp(new Date());
+            groupUser.setGroupNick(null);
+            groupUser.setType(UserUtil.GroupCharacter.TYPE_GROUP_OWNER.getName());
+            groupUserService.createGroupUser(groupUser);
+            for (Integer id : request) {
+                groupUser = new GroupUser();
+                groupUser.setMsgTimestamp(new Date());
+                groupUser.setType(UserUtil.GroupCharacter.TYPE_GROUP_USER.getName());
+                groupUser.setUserId(id);
+                groupUser.setGroupId(group.getId());
+                groupUser.setGroupNick(null);
+                groupUserService.createGroupUser(groupUser);
+            }
+            return Response.createSuc(group);
+        } else {
+            return Response.createErr("创建失败!");
         }
     }
 

@@ -49,4 +49,9 @@ public class MessageVO {
      */
     @ApiModelProperty(value = "新消息条数", name = "newMessageCount")
     private Integer newMessageCount;
+    /**
+     * 消息类型
+     */
+    @ApiModelProperty(value = "消息类型", name = "msgType")
+    private Integer msgType;
 }

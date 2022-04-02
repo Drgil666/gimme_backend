@@ -91,5 +91,6 @@ public class ChannelUserServiceImpl implements ChannelUserService {
         if (userValue > value) {
             throw new ErrorException(ErrorCode.AUTHORIZE_ILLEGAL);
         }
+        //TODO:redis缓存需要重新处理!
     }
 }

@@ -71,6 +71,7 @@ public interface ChatMsgMapper {
             "channel.id as objectId," +
             "channel.nick as nick," +
             "channel.avatar as avatar," +
+            "channel_notice.type as msgType," +
             "channel_notice.create_time as timestamp," +
             "(select count(*) from channel_notice,channel_user " +
             "where channel_notice.channel_id=#{objectId} " +
@@ -93,6 +94,7 @@ public interface ChatMsgMapper {
     @Select("select chat_msg.text as text," +
             "chat_msg.timestamp as timestamp," +
             "chat_msg.type as type," +
+            "chat_msg.msg_type as msgType," +
             "friend.friend_id as object_id," +
             "user.avatar as avatar," +
             "friend.friend_note as nick," +
@@ -127,6 +129,7 @@ public interface ChatMsgMapper {
     @Select("select chat_msg.text as text," +
             "chat_msg.timestamp as timestamp," +
             "chat_msg.type as type," +
+            "chat_msg.msg_type as msgType," +
             "`group`.id as object_id," +
             "`group`.avatar as avatar," +
             "`group`.nick as nick," +

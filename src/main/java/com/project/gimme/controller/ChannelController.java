@@ -4,6 +4,7 @@ package com.project.gimme.controller;
 import com.project.gimme.annotation.LoginAuthorize;
 import com.project.gimme.exception.ErrorCode;
 import com.project.gimme.pojo.Channel;
+import com.project.gimme.pojo.ChannelUser;
 import com.project.gimme.pojo.vo.ChannelVO;
 import com.project.gimme.pojo.vo.CudRequestVO;
 import com.project.gimme.pojo.vo.Response;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 import static com.project.gimme.utils.RedisUtil.TOKEN;
@@ -84,6 +86,43 @@ public class ChannelController {
             }
             default:
                 return Response.createUnknownMethodErr();
+        }
+    }
+
+    @ResponseBody
+    @PostMapping("/create/friend")
+    @ApiOperation(value = "创建/更新/删除群聊")
+    @LoginAuthorize()
+    public Response<Channel> createChannelWithFriend(@ApiParam(value = "加密验证参数")
+                                                     @RequestHeader(TOKEN) String token,
+                                                     @ApiParam(value = "包含群聊信息，操作信息")
+                                                     @RequestBody List<Integer> request) {
+        Integer userId = redisService.getUserId(token);
+        Channel channel = new Channel();
+        channel.setNick("新建频道");
+        channel.setCreateTime(new Date());
+        channel.setAvatar(null);
+        channel.setDescription("");
+        if (channelService.createChannel(channel)) {
+            ChannelUser channelUser = new ChannelUser();
+            channelUser.setUserId(userId);
+            channelUser.setChannelId(channel.getId());
+            channelUser.setMsgTimestamp(new Date());
+            channelUser.setChannelNick(null);
+            channelUser.setType(UserUtil.GroupCharacter.TYPE_GROUP_OWNER.getName());
+            channelUserService.createChannelUser(channelUser);
+            for (Integer id : request) {
+                channelUser = new ChannelUser();
+                channelUser.setMsgTimestamp(new Date());
+                channelUser.setType(UserUtil.GroupCharacter.TYPE_GROUP_USER.getName());
+                channelUser.setUserId(id);
+                channelUser.setChannelId(channel.getId());
+                channelUser.setChannelNick(null);
+                channelUserService.createChannelUser(channelUser);
+            }
+            return Response.createSuc(channel);
+        } else {
+            return Response.createErr("创建失败!");
         }
     }
 

@@ -1,14 +1,18 @@
 package com.project.gimme.service.impl;
 
+import com.google.gson.reflect.TypeToken;
 import com.project.gimme.exception.ErrorCode;
 import com.project.gimme.mapper.*;
 import com.project.gimme.pojo.*;
+import com.project.gimme.pojo.vo.ChatMsgFileVO;
 import com.project.gimme.pojo.vo.ChatMsgVO;
 import com.project.gimme.pojo.vo.MessageVO;
 import com.project.gimme.service.ChatMsgService;
 import com.project.gimme.service.RedisService;
 import com.project.gimme.utils.AssertionUtil;
 import com.project.gimme.utils.ChatMsgUtil;
+import com.project.gimme.utils.JsonUtil;
+import com.project.gimme.utils.MsgTypeUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -172,6 +176,7 @@ public class ChatMsgServiceImpl implements ChatMsgService {
                     MessageVO messageVO = chatMsgMapper.getFriendMessageVoByObjectId(
                             userId, friend.getFriendId());
                     if (messageVO != null) {
+                        setMsg(messageVO);
                         messageVOList.add(messageVO);
                     }
                 }
@@ -180,6 +185,7 @@ public class ChatMsgServiceImpl implements ChatMsgService {
                     MessageVO messageVO = chatMsgMapper.getGroupMessageVoByObjectId(
                             userId, group.getId());
                     if (messageVO != null) {
+                        setMsg(messageVO);
                         messageVOList.add(messageVO);
                     }
                 }
@@ -188,6 +194,7 @@ public class ChatMsgServiceImpl implements ChatMsgService {
                     MessageVO messageVO = chatMsgMapper.getChannelMessageVoByObjectId(
                             userId, channel.getId());
                     if (messageVO != null) {
+                        setMsg(messageVO);
                         messageVO.setType(character.getName());
                         messageVOList.add(messageVO);
                     }
@@ -263,5 +270,16 @@ public class ChatMsgServiceImpl implements ChatMsgService {
         User user = userMapper.getUser(chatMsgVO.getOwnerId());
         chatMsgVO.setOwnerNick(user.getNick());
         return chatMsgVO;
+    }
+
+    private void setMsg(MessageVO messageVO) {
+        if (messageVO.getMsgType().equals(MsgTypeUtil.MsgType.TYPE_PIC.getCode())) {
+            messageVO.setText("[图片]");
+        } else if (messageVO.getMsgType().equals(MsgTypeUtil.MsgType.TYPE_FILE.getCode())) {
+            ChatMsgFileVO chatMsgFileVO = JsonUtil.fromJson(messageVO.getText(),
+                    new TypeToken<ChatMsgFileVO>() {
+                    }.getType());
+            messageVO.setText("[文件]" + chatMsgFileVO.getFileName());
+        }
     }
 }
