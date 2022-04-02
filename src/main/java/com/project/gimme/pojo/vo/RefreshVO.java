@@ -21,4 +21,9 @@ public class RefreshVO {
      */
     @ApiModelProperty(value = "聊天类型", name = "chatType")
     private String chatType;
+    /**
+     * 聊天记录id
+     */
+    @ApiModelProperty(value = "聊天记录id", name = "chatMsgId")
+    private Integer chatMsgId;
 }

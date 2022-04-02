@@ -85,6 +85,24 @@ public class ChatMsgController {
     }
 
     @ResponseBody
+    @PostMapping("/transmit")
+    @ApiOperation(value = "创建/更新/删除聊天信息")
+    @LoginAuthorize()
+    public Response<ChatMsg> transmitChatMsg(@ApiParam(value = "加密验证参数") @RequestHeader(TOKEN) String token,
+                                             @ApiParam(value = "包含用户信息，操作信息") @RequestBody RefreshVO request) {
+        Integer userId = redisService.getUserId(token);
+        ChatMsg chatMsg = chatMsgService.getChatMsg(request.getChatMsgId());
+        chatMsg.setType(request.getChatType());
+        chatMsg.setObjectId(request.getObjectId());
+        chatMsg.setOwnerId(userId);
+        if (chatMsgService.createChatMsg(chatMsg)) {
+            return Response.createSuc(chatMsg);
+        } else {
+            return Response.createErr("转发失败!");
+        }
+    }
+
+    @ResponseBody
     @GetMapping()
     @ApiOperation(value = "通过id获取聊天信息")
     @LoginAuthorize()
