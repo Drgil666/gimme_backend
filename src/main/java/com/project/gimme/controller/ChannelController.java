@@ -100,6 +100,7 @@ public class ChannelController {
         Integer userId = redisService.getUserId(token);
         Channel channel = new Channel();
         channel.setNick("新建频道");
+        channel.setOwnerId(userId);
         channel.setCreateTime(new Date());
         channel.setAvatar(null);
         channel.setDescription("");
@@ -109,12 +110,12 @@ public class ChannelController {
             channelUser.setChannelId(channel.getId());
             channelUser.setMsgTimestamp(new Date());
             channelUser.setChannelNick(null);
-            channelUser.setType(UserUtil.GroupCharacter.TYPE_GROUP_OWNER.getName());
+            channelUser.setType(UserUtil.ChannelCharacter.TYPE_CHANNEL_OWNER.getName());
             channelUserService.createChannelUser(channelUser);
             for (Integer id : request) {
                 channelUser = new ChannelUser();
                 channelUser.setMsgTimestamp(new Date());
-                channelUser.setType(UserUtil.GroupCharacter.TYPE_GROUP_USER.getName());
+                channelUser.setType(UserUtil.ChannelCharacter.TYPE_CHANNEL_USER.getName());
                 channelUser.setUserId(id);
                 channelUser.setChannelId(channel.getId());
                 channelUser.setChannelNick(null);
