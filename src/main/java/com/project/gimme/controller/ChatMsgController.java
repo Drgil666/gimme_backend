@@ -2,10 +2,7 @@ package com.project.gimme.controller;
 
 import com.project.gimme.annotation.LoginAuthorize;
 import com.project.gimme.exception.ErrorCode;
-import com.project.gimme.pojo.ChannelUser;
-import com.project.gimme.pojo.ChatMsg;
-import com.project.gimme.pojo.Friend;
-import com.project.gimme.pojo.GroupUser;
+import com.project.gimme.pojo.*;
 import com.project.gimme.pojo.vo.*;
 import com.project.gimme.service.*;
 import com.project.gimme.utils.ChatMsgUtil;
@@ -42,6 +39,8 @@ public class ChatMsgController {
     private GroupUserService groupUserService;
     @Resource
     private ChannelUserService channelUserService;
+    @Resource
+    private ChannelNoticeService channelNoticeService;
 
     @ResponseBody
     @PostMapping()
@@ -88,17 +87,32 @@ public class ChatMsgController {
     @PostMapping("/transmit")
     @ApiOperation(value = "创建/更新/删除聊天信息")
     @LoginAuthorize()
-    public Response<ChatMsg> transmitChatMsg(@ApiParam(value = "加密验证参数") @RequestHeader(TOKEN) String token,
-                                             @ApiParam(value = "包含用户信息，操作信息") @RequestBody RefreshVO request) {
+    public Response<String> transmitChatMsg(@ApiParam(value = "加密验证参数") @RequestHeader(TOKEN) String token,
+                                            @ApiParam(value = "包含用户信息，操作信息") @RequestBody RefreshVO request) {
         Integer userId = redisService.getUserId(token);
         ChatMsg chatMsg = chatMsgService.getChatMsg(request.getChatMsgId());
-        chatMsg.setType(request.getChatType());
-        chatMsg.setObjectId(request.getObjectId());
-        chatMsg.setOwnerId(userId);
-        if (chatMsgService.createChatMsg(chatMsg)) {
-            return Response.createSuc(chatMsg);
+        if (request.getChatType().equals(ChatMsgUtil.Character.TYPE_CHANNEL.getName())) {
+            ChannelNotice channelNotice = new ChannelNotice();
+            channelNotice.setCreateTime(new Date());
+            channelNotice.setChannelId(request.getObjectId());
+            channelNotice.setText(chatMsg.getText());
+            channelNotice.setType(chatMsg.getMsgType());
+            //TODO:频道相关要做权限判定！
+            if (channelNoticeService.createChannelNotice(channelNotice)) {
+                return Response.createSuc(null);
+            } else {
+                return Response.createErr("转发失败!");
+            }
         } else {
-            return Response.createErr("转发失败!");
+
+            chatMsg.setType(request.getChatType());
+            chatMsg.setObjectId(request.getObjectId());
+            chatMsg.setOwnerId(userId);
+            if (chatMsgService.createChatMsg(chatMsg)) {
+                return Response.createSuc(null);
+            } else {
+                return Response.createErr("转发失败!");
+            }
         }
     }
 
