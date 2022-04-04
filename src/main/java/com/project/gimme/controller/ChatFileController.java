@@ -229,6 +229,9 @@ public class ChatFileController {
         AssertionUtil.notNull(mongoId, ErrorCode.BIZ_PARAM_ILLEGAL, "mongoId不能为空!");
         try {
             GridFsResource file = gridFsService.getFile(mongoId);
+            if (file == null) {
+                file = gridFsService.getFile("624a901452eea04231b3f855");
+            }
             InputStream inputStream = file.getInputStream();
             response.setContentType(file.getContentType());
             response.setHeader("content-disposition", "attachment;filename=\"" + file.getFilename() + "\"");

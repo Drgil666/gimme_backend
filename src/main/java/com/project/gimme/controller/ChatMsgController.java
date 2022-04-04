@@ -99,16 +99,27 @@ public class ChatMsgController {
             channelNotice.setType(chatMsg.getMsgType());
             //TODO:频道相关要做权限判定！
             if (channelNoticeService.createChannelNotice(channelNotice)) {
+                ChannelUser channelUser = channelUserService.getChannelUser(request.getObjectId(), userId);
+                channelUser.setMsgTimestamp(new Date());
+                channelUserService.updateChannelUser(channelUser);
                 return Response.createSuc(null);
             } else {
                 return Response.createErr("转发失败!");
             }
         } else {
-
             chatMsg.setType(request.getChatType());
             chatMsg.setObjectId(request.getObjectId());
             chatMsg.setOwnerId(userId);
             if (chatMsgService.createChatMsg(chatMsg)) {
+                if (request.getChatType().equals(ChatMsgUtil.Character.TYPE_FRIEND.getName())) {
+                    Friend friend = friendService.getFriend(userId, request.getObjectId());
+                    friend.setMsgTimestamp(new Date());
+                    friendService.updateFriend(friend);
+                } else if (request.getChatType().equals(ChatMsgUtil.Character.TYPE_GROUP.getName())) {
+                    GroupUser groupUser = groupUserService.getGroupUser(request.getObjectId(), userId);
+                    groupUser.setMsgTimestamp(new Date());
+                    groupUserService.updateGroupUser(groupUser);
+                }
                 return Response.createSuc(null);
             } else {
                 return Response.createErr("转发失败!");
