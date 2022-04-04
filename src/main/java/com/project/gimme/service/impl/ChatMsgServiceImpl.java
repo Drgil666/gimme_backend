@@ -112,6 +112,7 @@ public class ChatMsgServiceImpl implements ChatMsgService {
                         chatMsgVO.setId(channelNotice.getId());
                         chatMsgVO.setText(channelNotice.getText());
                         chatMsgVO.setTimeStamp(channelNotice.getCreateTime());
+                        chatMsgVO.setAvatar(userMapper.getUser(channelMapper.getChannel(objectId).getOwnerId()).getAvatar());
                         chatMsgVO.setIsSelf(userId.equals(channel.getOwnerId()));
                         chatMsgVO.setType(ChatMsgUtil.Character.TYPE_CHANNEL_NOTICE.getName());
                         chatMsgVO.setMsgType(channelNotice.getType());
@@ -136,6 +137,7 @@ public class ChatMsgServiceImpl implements ChatMsgService {
                         chatMsgVO.setType(chatMsg.getType());
                         chatMsgVO.setText(chatMsg.getText());
                         chatMsgVO.setMsgType(chatMsg.getMsgType());
+                        chatMsgVO.setAvatar(userMapper.getUser(chatMsg.getOwnerId()).getAvatar());
                         chatMsgVO.setObjectId(chatMsg.getObjectId());
                         chatMsgVO.setIsSelf(chatMsg.getOwnerId().equals(userId));
                         User user = userMapper.getUser(chatMsg.getOwnerId());
@@ -266,6 +268,7 @@ public class ChatMsgServiceImpl implements ChatMsgService {
         chatMsgVO.setTimeStamp(chatMsg.getTimeStamp());
         chatMsgVO.setObjectId(chatMsg.getObjectId());
         chatMsgVO.setOwnerId(chatMsg.getOwnerId());
+        chatMsgVO.setAvatar(userMapper.getUser(chatMsg.getOwnerId()).getAvatar());
         chatMsgVO.setIsSelf(chatMsgVO.getOwnerId().equals(userId));
         User user = userMapper.getUser(chatMsgVO.getOwnerId());
         chatMsgVO.setOwnerNick(user.getNick());
