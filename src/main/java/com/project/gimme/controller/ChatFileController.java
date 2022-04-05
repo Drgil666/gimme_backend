@@ -222,12 +222,11 @@ public class ChatFileController {
     }
 
     @ResponseBody
-    @GetMapping("/download/{mongoId}")
+    @GetMapping(value = {"/image/{mongoId}", "/image"})
     @ApiOperation(value = "下载文件")
-    @LoginAuthorize()
-    public void downloadFile(@ApiParam(value = "文件的mongoId")
-                             @PathVariable(value = "mongoId") String mongoId, HttpServletResponse response) {
-        AssertionUtil.notNull(mongoId, ErrorCode.BIZ_PARAM_ILLEGAL, "mongoId不能为空!");
+    public void downloadImage(@ApiParam(value = "文件的mongoId")
+                              @PathVariable(required = false, value = "mongoId") String mongoId,
+                              HttpServletResponse response) {
         try {
             GridFsResource file = gridFsService.getFile(mongoId);
             InputStream inputStream = file.getInputStream();
