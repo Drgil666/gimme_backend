@@ -28,14 +28,12 @@ public class UserServiceImplTest {
         User user = new User();
         user.setBirthday(new Date());
         user.setAvatar("111");
-        user.setCity(1);
+        user.setCity("1");
         user.setCompany("1");
-        user.setCountry(1);
         user.setMail("111");
         user.setMotto("111");
         user.setNick("test1");
         user.setOccupation(1);
-        user.setProvince(1);
         System.out.println(userService.createUser(user));
     }
 
@@ -44,14 +42,12 @@ public class UserServiceImplTest {
         User user = new User();
         user.setBirthday(new Date());
         user.setAvatar("222");
-        user.setCity(2);
+        user.setCity("2");
         user.setCompany("2");
-        user.setCountry(2);
         user.setMail("222");
         user.setMotto("222");
         user.setNick("test2");
         user.setOccupation(1);
-        user.setProvince(1);
         user.setId(2);
         System.out.println(userService.updateUser(user));
     }

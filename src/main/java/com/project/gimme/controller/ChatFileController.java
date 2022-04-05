@@ -224,6 +224,7 @@ public class ChatFileController {
     @ResponseBody
     @GetMapping("/download/{mongoId}")
     @ApiOperation(value = "下载文件")
+    @LoginAuthorize()
     public void downloadFile(@ApiParam(value = "文件的mongoId")
                              @PathVariable(value = "mongoId") String mongoId, HttpServletResponse response) {
         AssertionUtil.notNull(mongoId, ErrorCode.BIZ_PARAM_ILLEGAL, "mongoId不能为空!");

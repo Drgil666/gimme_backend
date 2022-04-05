@@ -29,20 +29,10 @@ public class User {
     @ApiModelProperty(value = "用户头像的mongoId", name = "avatar")
     private String avatar;
     /**
-     * 用户国家id
+     * 城市
      */
-    @ApiModelProperty(value = "用户国家id", name = "country")
-    private Integer country;
-    /**
-     * 用户城市id
-     */
-    @ApiModelProperty(value = "用户城市id", name = "city")
-    private Integer city;
-    /**
-     * 用户省份id
-     */
-    @ApiModelProperty(value = "用户省份id", name = "province")
-    private Integer province;
+    @ApiModelProperty(value = "城市", name = "city")
+    private String city;
     /**
      * 性别
      */

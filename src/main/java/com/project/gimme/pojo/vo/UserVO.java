@@ -25,26 +25,6 @@ public class UserVO extends User {
     @ApiModelProperty(value = "群/频道昵称", name = "otherNick")
     private String otherNick;
     /**
-     * 国家名
-     */
-    @ApiModelProperty(value = "国家名", name = "countryNick")
-    private String countryNick;
-    /**
-     * 省份名
-     */
-    @ApiModelProperty(value = "身份名", name = "provinceNick")
-    private String provinceNick;
-    /**
-     * 城市名
-     */
-    @ApiModelProperty(value = "城市名", name = "cityNick")
-    private String cityNick;
-    /**
-     * 职业名
-     */
-    @ApiModelProperty(value = "职业名", name = "occupationNick")
-    private String occupationNick;
-    /**
      * 群权限/频道权限
      */
     @ApiModelProperty(value = "群权限/频道权限", name = "otherType")

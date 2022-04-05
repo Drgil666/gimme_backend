@@ -19,11 +19,11 @@ public interface UserMapper {
      * @return 是否成功
      */
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
-    @Insert("insert into user (nick, avatar, city, country, occupation, company, " +
-            "motto, birthday, mail, province,gender,password) values " +
-            "(#{user.nick},#{user.avatar},#{user.city},#{user.country}," +
+    @Insert("insert into user (nick, avatar, city, occupation, company, " +
+            "motto, birthday, mail, gender,password) values " +
+            "(#{user.nick},#{user.avatar},#{user.city}," +
             "#{user.occupation},#{user.company},#{user.motto}," +
-            "#{user.birthday},#{user.mail},#{user.province},#{user.gender},#{user.password})")
+            "#{user.birthday},#{user.mail},#{user.gender},#{user.password})")
     Boolean createUser(@Param("user") User user);
 
     /**
@@ -33,9 +33,8 @@ public interface UserMapper {
      * @return 影响行数
      */
     @Update("update user set nick=#{user.nick},avatar=#{user.avatar},city=#{user.city}," +
-            "country=#{user.country},occupation=#{user.occupation},company=#{user.company}," +
-            "motto=#{user.motto},birthday=#{user.birthday},mail=#{user.mail}," +
-            "province=#{user.province},gender=#{user.gender},password=#{user.password}" +
+            "occupation=#{user.occupation},company=#{user.company},motto=#{user.motto}," +
+            "birthday=#{user.birthday},mail=#{user.mail},gender=#{user.gender},password=#{user.password}" +
             " where id=#{user.id}")
     Long updateUser(@Param("user") User user);
 
@@ -64,12 +63,9 @@ public interface UserMapper {
      * @param userId   用户id
      * @return 对应的用户信息
      */
-    @Select("select user.*,friend_note as note,country.nick as countryNick," +
-            "province.nick as provinceNick,city.nick as cityNick," +
-            "occupation.nick as occupationNick from user,friend,country,province,city,occupation" +
-            " where friend.friend_id=#{friendId} and friend.user_id=#{userId} and user.id=friend.friend_id " +
-            "and user.province=province.id and user.country=country.id and user.city=city.id" +
-            " and user.occupation=occupation.id")
+    @Select("select user.*,friend_note as note " +
+            "from user,friend where friend.friend_id=#{friendId} " +
+            "and friend.user_id=#{userId} and user.id=friend.friend_id")
     UserVO getUserVoByFriendIfFriend(@Param("friendId") Integer friendId,
                                      @Param("userId") Integer userId);
 
@@ -79,12 +75,7 @@ public interface UserMapper {
      * @param userId 用户id
      * @return 对应的用户信息
      */
-    @Select("select user.*,country.nick as countryNick," +
-            "province.nick as provinceNick,city.nick as cityNick," +
-            "occupation.nick as occupationNick from user,country,province,city,occupation" +
-            " where user.id=#{userId} " +
-            "and user.province=province.id and user.country=country.id and user.city=city.id" +
-            " and user.occupation=occupation.id")
+    @Select("select user.* from user where user.id=#{userId}")
     UserVO getUserVoByFriendIfNotFriend(@Param("userId") Integer userId);
 
     /**
@@ -95,12 +86,10 @@ public interface UserMapper {
      * @param userId   用户id
      * @return 对应的用户信息
      */
-    @Select("select user.*,group_user.group_nick as otherNick,friend.friend_note as note," +
-            "country.nick as countryNick,province.nick as provinceNick,city.nick as cityNick," +
-            "occupation.nick as occupationNick from user,group_user,friend,country,province,city,occupation " +
+    @Select("select user.*,group_user.group_nick as otherNick,friend.friend_note as note " +
+            "from user,group_user,friend " +
             "where user.id=#{memberId} and user.id=friend.friend_id and friend.user_id=#{userId} " +
-            "and user.province=province.id and user.country=country.id and user.city=city.id " +
-            "and user.occupation=occupation.id and group_user.group_id=#{groupId} " +
+            "and group_user.group_id=#{groupId} " +
             "and group_user.user_id=user.id")
     UserVO getUserVoByGroupIfFriend(@Param("groupId") Integer groupId,
                                     @Param("memberId") Integer memberId,
@@ -113,13 +102,9 @@ public interface UserMapper {
      * @param groupId  群聊id
      * @return 对应的用户信息
      */
-    @Select("select user.*,group_user.group_nick as otherNick," +
-            "country.nick as countryNick,province.nick as provinceNick,city.nick as cityNick," +
-            "occupation.nick as occupationNick from " +
-            "user,group_user,country,province,city,occupation " +
-            "where user.id=#{memberId} and user.province=province.id and user.country=country.id" +
-            " and user.city=city.id and user.occupation=occupation.id and " +
-            "group_user.group_id=#{groupId} and group_user.user_id=user.id")
+    @Select("select user.*,group_user.group_nick as otherNick " +
+            "from user,group_user where user.id=#{memberId} " +
+            "and group_user.group_id=#{groupId} and group_user.user_id=user.id")
     UserVO getUserVoByGroupIfNotFriend(@Param("groupId") Integer groupId,
                                        @Param("memberId") Integer memberId);
 
@@ -131,12 +116,10 @@ public interface UserMapper {
      * @param userId    用户id
      * @return 对应的用户信息
      */
-    @Select("select user.*,channel_user.channel_nick as otherNick,friend.friend_note as note," +
-            "country.nick as countryNick,province.nick as provinceNick,city.nick as cityNick," +
-            "occupation.nick as occupationNick from user,channel_user,friend,country,province,city,occupation " +
+    @Select("select user.*,channel_user.channel_nick as otherNick,friend.friend_note as note " +
+            "from user,channel_user,friend " +
             "where user.id=#{memberId} and user.id=friend.friend_id and friend.user_id=#{userId} " +
-            "and user.province=province.id and user.country=country.id and user.city=city.id " +
-            "and user.occupation=occupation.id and channel_user.channel_id=#{channelId} " +
+            "and channel_user.channel_id=#{channelId} " +
             "and channel_user.user_id=user.id")
     UserVO getUserVoByChannelIfFriend(@Param("channelId") Integer channelId,
                                       @Param("memberId") Integer memberId,
@@ -149,12 +132,8 @@ public interface UserMapper {
      * @param channelId 频道id
      * @return 对应的用户信息
      */
-    @Select("select user.*,channel_user.channel_nick as otherNick," +
-            "country.nick as countryNick,province.nick as provinceNick,city.nick as cityNick," +
-            "occupation.nick as occupationNick from " +
-            "user,channel_user,country,province,city,occupation " +
-            "where user.id=#{memberId} and user.province=province.id and user.country=country.id " +
-            "and user.city=city.id and user.occupation=occupation.id and " +
+    @Select("select user.*,channel_user.channel_nick as otherNick " +
+            "from user,channel_user where user.id=#{memberId} and " +
             "channel_user.channel_id=#{channelId} and channel_user.user_id=user.id")
     UserVO getUserVoByChannelIfNotFriend(@Param("channelId") Integer channelId,
                                          @Param("memberId") Integer memberId);
@@ -177,8 +156,10 @@ public interface UserMapper {
      * @param keyword 关键词
      * @return 好友列表
      */
-    @Select("select user.*,country.nick as countryNick,friend.friend_note as note,"
-            + "province.nick as provinceNick,city.nick as cityNick," + "occupation.nick as occupationNick from occupation,country,province,city,user,friend where " + "friend.user_id=#{userId} and province.id=user.province and country.id=user.country and city.id=user.city " + "and occupation.id=user.occupation " + "and friend.friend_id=user.id and (user.id like CONCAT('%',#{keyword},'%') " + "or user.nick like CONCAT('%',#{keyword},'%'))")
+    @Select("select user.*,friend.friend_note as note " +
+            "from user,friend where friend.user_id=#{userId} " +
+            "and friend.friend_id=user.id and " +
+            "(user.id like CONCAT('%',#{keyword},'%') or user.nick like CONCAT('%',#{keyword},'%'))")
     List<UserVO> getFriendListInfo(@Param("userId") Integer userId, @Param("keyword") String keyword);
 
     /**
