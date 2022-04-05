@@ -73,8 +73,9 @@ public class UserController {
     @GetMapping()
     @ApiOperation(value = "通过用户id获取用户")
     @LoginAuthorize()
-    public Response<User> getUser(@ApiParam(value = "加密验证参数") @RequestHeader(TOKEN) String token, @ApiParam(value = "用户id") @RequestParam(value = "userId", required = false) Integer userId) {
-        if (userId == null) {
+    public Response<User> getUser(@ApiParam(value = "加密验证参数") @RequestHeader(TOKEN) String token,
+                                  @ApiParam(value = "用户id") @RequestParam(value = "userId", required = false) Integer userId) {
+        if (StringUtils.isEmpty(userId)) {
             userId = redisService.getUserId(token);
         }
         User user = userService.getUser(userId);

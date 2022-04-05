@@ -104,6 +104,7 @@ public class ChannelNoticeServiceImpl implements ChannelNoticeService {
         chatMsgVO.setObjectId(channelNoticeId);
         chatMsgVO.setType(ChatMsgUtil.Character.TYPE_CHANNEL_NOTICE.getName());
         chatMsgVO.setText(channelNotice.getText());
+        chatMsgVO.setAvatar(userMapper.getUser(channel.getOwnerId()).getAvatar());
         chatMsgVO.setMsgType(channelNotice.getType());
         chatMsgVO.setIsSelf(userId.equals(channel.getOwnerId()));
         chatMsgVO.setOwnerNick(userMapper.getUser(userId).getNick());
