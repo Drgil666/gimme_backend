@@ -24,4 +24,9 @@ public class GroupVO extends Group {
      */
     @ApiModelProperty(value = "群昵称", name = "myNote")
     private String myNote;
+    /**
+     * 我的权限
+     */
+    @ApiModelProperty(value = "我的权限", name = "我的权限")
+    private String myPriority;
 }

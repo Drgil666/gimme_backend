@@ -159,7 +159,7 @@ public interface UserMapper {
     @Select("select user.*,friend.friend_note as note " +
             "from user,friend where friend.user_id=#{userId} " +
             "and friend.friend_id=user.id and " +
-            "(user.id like CONCAT('%',#{keyword},'%') or user.nick like CONCAT('%',#{keyword},'%'))")
+            "(user.id like CONCAT('%',#{keyword},'%') or user.nick like CONCAT('%',#{keyword},'%') or friend.friend_note like CONCAT('%',#{keyword},'%'))")
     List<UserVO> getFriendListInfo(@Param("userId") Integer userId, @Param("keyword") String keyword);
 
     /**

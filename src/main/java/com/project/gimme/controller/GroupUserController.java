@@ -18,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 
 import static com.project.gimme.utils.RedisUtil.TOKEN;
 
@@ -45,9 +46,9 @@ public class GroupUserController {
                                             @ApiParam(value = "包含群聊信息，操作信息")
                                             @RequestBody CudRequestVO<GroupUser, Integer> request) {
         Integer userId = redisService.getUserId(token);
-        groupUserService.authorityCheck(userId, request.getData().getGroupId(), UserUtil.GROUP_ADMIN_ATTRIBUTE);
         switch (request.getMethod()) {
             case CudRequestVO.CREATE_METHOD: {
+                groupUserService.authorityCheck(userId, request.getData().getGroupId(), UserUtil.GROUP_ADMIN_ATTRIBUTE);
                 boolean isExist = false;
                 if (redisService.getGroupAuthorityToken(request.getData().getUserId(),
                         request.getData().getGroupId()) != null) {
@@ -75,6 +76,7 @@ public class GroupUserController {
                 }
             }
             case CudRequestVO.UPDATE_METHOD: {
+                groupUserService.authorityCheck(userId, request.getData().getGroupId(), UserUtil.GROUP_ADMIN_ATTRIBUTE);
                 if (groupUserService.updateGroupUser(request.getData()) == 1) {
                     redisService.createGroupAuthorityToken(request.getData().getUserId(),
                             request.getData().getGroupId(), request.getData().getType());
@@ -84,6 +86,11 @@ public class GroupUserController {
                 }
             }
             case CudRequestVO.DELETE_METHOD: {
+                groupUserService.authorityCheck(userId, request.getData().getGroupId(), UserUtil.GROUP_USER_ATTRIBUTE);
+                if (request.getKey().isEmpty()) {
+                    request.setKey(new ArrayList<>());
+                    request.getKey().add(userId);
+                }
                 if (groupUserService.deleteGroupUser(request.getData().getGroupId(), request.getKey()) > 0) {
                     for (Integer memberId : request.getKey()) {
                         redisService.deleteGroupAuthorityToken(memberId, request.getData().getGroupId());

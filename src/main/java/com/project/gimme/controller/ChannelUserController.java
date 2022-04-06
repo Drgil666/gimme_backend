@@ -45,10 +45,10 @@ public class ChannelUserController {
                                                 @ApiParam(value = "包含群聊信息，操作信息")
                                                 @RequestBody CudRequestVO<ChannelUser, Integer> request) {
         Integer userId = redisService.getUserId(token);
-        channelUserService.authorityCheck(userId, request.getData().getChannelId(),
-                UserUtil.GROUP_ADMIN_ATTRIBUTE);
         switch (request.getMethod()) {
             case CudRequestVO.CREATE_METHOD: {
+                channelUserService.authorityCheck(userId, request.getData().getChannelId(),
+                        UserUtil.GROUP_ADMIN_ATTRIBUTE);
                 boolean isExist = false;
                 if (redisService.getChannelAuthorityToken(request.getData().getUserId(),
                         request.getData().getChannelId()) != null) {
@@ -77,6 +77,8 @@ public class ChannelUserController {
                 }
             }
             case CudRequestVO.UPDATE_METHOD: {
+                channelUserService.authorityCheck(userId, request.getData().getChannelId(),
+                        UserUtil.GROUP_ADMIN_ATTRIBUTE);
                 if (channelUserService.updateChannelUser(request.getData()) == 1) {
                     redisService.createChannelAuthorityToken(request.getData().getUserId(),
                             request.getData().getChannelId(), request.getData().getType());
@@ -86,6 +88,11 @@ public class ChannelUserController {
                 }
             }
             case CudRequestVO.DELETE_METHOD: {
+                channelUserService.authorityCheck(userId, request.getData().getChannelId(),
+                        UserUtil.GROUP_USER_ATTRIBUTE);
+                if (request.getKey().isEmpty()) {
+                    request.getKey().add(userId);
+                }
                 if (channelUserService.deleteChannelUser(request.getData().getChannelId(), request.getKey()) > 0) {
                     for (Integer memberId : request.getKey()) {
                         redisService.deleteGroupAuthorityToken(memberId, request.getData().getChannelId());

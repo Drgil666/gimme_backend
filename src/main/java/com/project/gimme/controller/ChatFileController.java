@@ -226,9 +226,9 @@ public class ChatFileController {
     @ApiOperation(value = "下载文件")
     public void downloadImage(@ApiParam(value = "文件的mongoId")
                               @PathVariable(required = false, value = "mongoId") String mongoId,
-                              HttpServletResponse response) {
-        try {
-            GridFsResource file = gridFsService.getFile(mongoId);
+                              HttpServletResponse response) throws IOException {
+        GridFsResource file = gridFsService.getFile(mongoId);
+        if (file != null) {
             InputStream inputStream = file.getInputStream();
             response.setContentType(file.getContentType());
             response.setHeader("content-disposition", "attachment;filename=\"" + file.getFilename() + "\"");
@@ -240,8 +240,6 @@ public class ChatFileController {
                 outputStream.write(buffer, 0, len);
                 len = inputStream.read(buffer);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }

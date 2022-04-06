@@ -66,7 +66,9 @@ public interface ChannelMapper {
      */
     @Select("select channel.*,(select count(*) from channel_user where channel_id=#{channelId})" +
             "as totalCount,(select channel_user.channel_nick from channel_user where " +
-            "channel_user.user_id=#{userId} and channel_id=#{channelId}) as myNote from channel where channel.id=#{channelId}")
+            "channel_user.user_id=#{userId} and channel_id=#{channelId}) as myNote," +
+            "(select type from channel_user where channel_id=#{channelId} and user_id=#{userId}) as myPriority " +
+            "from channel where channel.id=#{channelId}")
     ChannelVO getChannelVoIfJoin(@Param("userId") Integer userId, @Param("channelId") Integer channelId);
 
     /**

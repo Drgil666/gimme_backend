@@ -72,7 +72,8 @@ public interface GroupMapper {
      */
     @Select("select `group`.*,(select count(*) from group_user where group_id=#{groupId})" +
             "as totalCount,(select group_user.group_nick from group_user where " +
-            "group_user.user_id=#{userId} and group_id=#{groupId}) as myNote " +
+            "group_user.user_id=#{userId} and group_id=#{groupId}) as myNote," +
+            "(select type from group_user where group_id=#{groupId} and user_id=#{userId}) as myPriority " +
             "from `group` where `group`.id=#{groupId}")
     GroupVO getGroupVoIfJoin(@Param("userId") Integer userId, @Param("groupId") Integer groupId);
 

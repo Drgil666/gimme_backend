@@ -105,6 +105,8 @@ public class ChannelController {
         channel.setAvatar(null);
         channel.setDescription("");
         if (channelService.createChannel(channel)) {
+            redisService.createChannelAuthorityToken(userId, channel.getId(),
+                    UserUtil.ChannelCharacter.TYPE_CHANNEL_OWNER.getName());
             ChannelUser channelUser = new ChannelUser();
             channelUser.setUserId(userId);
             channelUser.setChannelId(channel.getId());
@@ -120,6 +122,8 @@ public class ChannelController {
                 channelUser.setChannelId(channel.getId());
                 channelUser.setChannelNick(null);
                 channelUserService.createChannelUser(channelUser);
+                redisService.createChannelAuthorityToken(id, channel.getId(),
+                        UserUtil.ChannelCharacter.TYPE_CHANNEL_USER.getName());
             }
             return Response.createSuc(channel);
         } else {

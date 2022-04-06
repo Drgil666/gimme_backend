@@ -5,6 +5,7 @@ import com.project.gimme.annotation.LoginAuthorize;
 import com.project.gimme.exception.ErrorCode;
 import com.project.gimme.pojo.Group;
 import com.project.gimme.pojo.GroupUser;
+import com.project.gimme.pojo.User;
 import com.project.gimme.pojo.vo.CudRequestVO;
 import com.project.gimme.pojo.vo.GroupVO;
 import com.project.gimme.pojo.vo.Response;
@@ -19,10 +20,12 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -106,12 +109,21 @@ public class GroupController {
                                                  @ApiParam(value = "包含群聊信息，操作信息")
                                                  @RequestBody List<Integer> request) {
         Integer userId = redisService.getUserId(token);
+        List<String> userNickList = new ArrayList<>();
+        User user = userService.getUser(userId);
+        userNickList.add(user.getNick());
+        for (Integer id : request) {
+            user = userService.getUser(id);
+            userNickList.add(user.getNick());
+        }
         Group group = new Group();
-        group.setNick("新建群聊");
+        group.setNick(StringUtils.join(userNickList, ","));
         group.setCreateTime(new Date());
         group.setAvatar(null);
         group.setDescription("");
         if (groupService.createGroup(group)) {
+            redisService.createGroupAuthorityToken(userId, group.getId(),
+                    UserUtil.GroupCharacter.TYPE_GROUP_OWNER.getName());
             GroupUser groupUser = new GroupUser();
             groupUser.setUserId(userId);
             groupUser.setGroupId(group.getId());
@@ -127,6 +139,8 @@ public class GroupController {
                 groupUser.setGroupId(group.getId());
                 groupUser.setGroupNick(null);
                 groupUserService.createGroupUser(groupUser);
+                redisService.createGroupAuthorityToken(id, group.getId(),
+                        UserUtil.GroupCharacter.TYPE_GROUP_USER.getName());
             }
             return Response.createSuc(group);
         } else {

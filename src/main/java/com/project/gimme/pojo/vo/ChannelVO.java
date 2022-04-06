@@ -24,4 +24,9 @@ public class ChannelVO extends Channel {
      */
     @ApiModelProperty(value = "频道昵称", name = "myNote")
     private String myNote;
+    /**
+     * 我的权限
+     */
+    @ApiModelProperty(value = "我的权限", name = "我的权限")
+    private String myPriority;
 }
