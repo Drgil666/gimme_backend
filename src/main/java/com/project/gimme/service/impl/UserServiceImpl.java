@@ -1,6 +1,7 @@
 package com.project.gimme.service.impl;
 
 import com.project.gimme.exception.ErrorCode;
+import com.project.gimme.mapper.FriendMapper;
 import com.project.gimme.mapper.UserMapper;
 import com.project.gimme.pojo.User;
 import com.project.gimme.pojo.vo.UserVO;
@@ -26,6 +27,8 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
     @Resource
     private RedisService redisService;
+    @Resource
+    private FriendMapper friendMapper;
 
     /**
      * 手动激活mysql
@@ -241,14 +244,16 @@ public class UserServiceImpl implements UserService {
     /**
      * 获取群成员列表
      *
+     * @param userId  用户id
      * @param groupId 群id
      * @return 用户列表
      */
     @Override
-    public List<UserVO> getGroupMemberList(Integer groupId) {
+    public List<UserVO> getGroupMemberList(Integer userId, Integer groupId) {
         List<UserVO> userList = userMapper.getGroupMemberList(groupId);
-        for (User user : userList) {
-            user.setPassword(null);
+        for (UserVO userVO : userList) {
+            userVO.setPassword(null);
+            userVO.setIsJoined(friendMapper.getFriend(userId, userVO.getId()) != null);
         }
         userList.sort((a, b) -> {
             Integer codeA = UserUtil.getGroupCharacterByName(a.getOtherType());
@@ -269,15 +274,16 @@ public class UserServiceImpl implements UserService {
     /**
      * 获取频道成员列表
      *
+     * @param userId    用户id
      * @param channelId 群id
-     * @param limit     个数限制
      * @return 用户列表
      */
     @Override
-    public List<UserVO> getChannelMemberList(Integer channelId, Integer limit) {
+    public List<UserVO> getChannelMemberList(Integer userId, Integer channelId) {
         List<UserVO> userList = userMapper.getChannelMemberList(channelId);
-        for (User user : userList) {
-            user.setPassword(null);
+        for (UserVO userVO : userList) {
+            userVO.setPassword(null);
+            userVO.setIsJoined(friendMapper.getFriend(userId, userVO.getId()) != null);
         }
         userList.sort((a, b) -> {
             Integer codeA = UserUtil.getChannelCharacterByName(a.getOtherType());

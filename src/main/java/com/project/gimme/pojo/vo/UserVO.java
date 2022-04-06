@@ -29,4 +29,9 @@ public class UserVO extends User {
      */
     @ApiModelProperty(value = "群权限/频道权限", name = "otherType")
     private String otherType;
+    /**
+     * 是否是好友关系
+     */
+    @ApiModelProperty(value = "是否是好友关系", name = "isJoined")
+    private Boolean isJoined;
 }

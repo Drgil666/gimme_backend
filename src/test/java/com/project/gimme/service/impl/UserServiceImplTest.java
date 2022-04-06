@@ -68,7 +68,7 @@ public class UserServiceImplTest {
 
     @Test
     public void getGroupMemberList() {
-        List<UserVO> userVOList = userService.getGroupMemberList(5);
+        List<UserVO> userVOList = userService.getGroupMemberList(2, 5);
         for (UserVO userVO : userVOList) {
             System.out.println(userVO.getId() + " " + userVO.getOtherNick() + " " + userVO.getOtherType());
         }

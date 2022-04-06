@@ -221,7 +221,8 @@ public class GroupController {
                                                      @ApiParam(value = "个数限制")
                                                      @RequestParam(value = "limit", required = false) Integer limit) {
         AssertionUtil.notNull(groupId, ErrorCode.BIZ_PARAM_ILLEGAL, "groupId不可为空!");
-        List<UserVO> userVOList = userService.getGroupMemberList(groupId);
+        Integer userId = redisService.getUserId(token);
+        List<UserVO> userVOList = userService.getGroupMemberList(userId, groupId);
         if (userVOList != null) {
             if (limit != null) {
                 userVOList = userVOList.subList(0, Integer.min(limit, userVOList.size()));

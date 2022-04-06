@@ -63,7 +63,7 @@ public interface UserMapper {
      * @param userId   用户id
      * @return 对应的用户信息
      */
-    @Select("select user.*,friend_note as note " +
+    @Select("select user.*,friend_note as note,true as isJoined " +
             "from user,friend where friend.friend_id=#{friendId} " +
             "and friend.user_id=#{userId} and user.id=friend.friend_id")
     UserVO getUserVoByFriendIfFriend(@Param("friendId") Integer friendId,
@@ -75,7 +75,7 @@ public interface UserMapper {
      * @param userId 用户id
      * @return 对应的用户信息
      */
-    @Select("select user.* from user where user.id=#{userId}")
+    @Select("select user.*,false as isJoined from user where user.id=#{userId}")
     UserVO getUserVoByFriendIfNotFriend(@Param("userId") Integer userId);
 
     /**
@@ -86,7 +86,7 @@ public interface UserMapper {
      * @param userId   用户id
      * @return 对应的用户信息
      */
-    @Select("select user.*,group_user.group_nick as otherNick,friend.friend_note as note " +
+    @Select("select user.*,group_user.group_nick as otherNick,friend.friend_note as note,true as isJoined " +
             "from user,group_user,friend " +
             "where user.id=#{memberId} and user.id=friend.friend_id and friend.user_id=#{userId} " +
             "and group_user.group_id=#{groupId} " +
@@ -102,7 +102,7 @@ public interface UserMapper {
      * @param groupId  群聊id
      * @return 对应的用户信息
      */
-    @Select("select user.*,group_user.group_nick as otherNick " +
+    @Select("select user.*,group_user.group_nick as otherNick,false as isJoined " +
             "from user,group_user where user.id=#{memberId} " +
             "and group_user.group_id=#{groupId} and group_user.user_id=user.id")
     UserVO getUserVoByGroupIfNotFriend(@Param("groupId") Integer groupId,
@@ -116,7 +116,7 @@ public interface UserMapper {
      * @param userId    用户id
      * @return 对应的用户信息
      */
-    @Select("select user.*,channel_user.channel_nick as otherNick,friend.friend_note as note " +
+    @Select("select user.*,channel_user.channel_nick as otherNick,friend.friend_note as note,true as isJoined  " +
             "from user,channel_user,friend " +
             "where user.id=#{memberId} and user.id=friend.friend_id and friend.user_id=#{userId} " +
             "and channel_user.channel_id=#{channelId} " +
@@ -132,7 +132,7 @@ public interface UserMapper {
      * @param channelId 频道id
      * @return 对应的用户信息
      */
-    @Select("select user.*,channel_user.channel_nick as otherNick " +
+    @Select("select user.*,channel_user.channel_nick as otherNick,false as isJoined  " +
             "from user,channel_user where user.id=#{memberId} and " +
             "channel_user.channel_id=#{channelId} and channel_user.user_id=user.id")
     UserVO getUserVoByChannelIfNotFriend(@Param("channelId") Integer channelId,
@@ -156,7 +156,7 @@ public interface UserMapper {
      * @param keyword 关键词
      * @return 好友列表
      */
-    @Select("select user.*,friend.friend_note as note " +
+    @Select("select user.*,friend.friend_note as note,true as isJoined " +
             "from user,friend where friend.user_id=#{userId} " +
             "and friend.friend_id=user.id and " +
             "(user.id like CONCAT('%',#{keyword},'%') or user.nick like CONCAT('%',#{keyword},'%') or friend.friend_note like CONCAT('%',#{keyword},'%'))")

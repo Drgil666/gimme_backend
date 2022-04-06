@@ -227,19 +227,20 @@ public class ChatFileController {
     public void downloadImage(@ApiParam(value = "文件的mongoId")
                               @PathVariable(required = false, value = "mongoId") String mongoId,
                               HttpServletResponse response) throws IOException {
+        if (StringUtils.isEmpty(mongoId)) {
+            mongoId = "624a901452eea04231b3f855";
+        }
         GridFsResource file = gridFsService.getFile(mongoId);
-        if (file != null) {
-            InputStream inputStream = file.getInputStream();
-            response.setContentType(file.getContentType());
-            response.setHeader("content-disposition", "attachment;filename=\"" + file.getFilename() + "\"");
-            response.setHeader("file-name", file.getFilename());
-            OutputStream outputStream = response.getOutputStream();
-            byte[] buffer = new byte[1024];
-            int len = inputStream.read(buffer);
-            while (len != -1) {
-                outputStream.write(buffer, 0, len);
-                len = inputStream.read(buffer);
-            }
+        InputStream inputStream = file.getInputStream();
+        response.setContentType(file.getContentType());
+        response.setHeader("content-disposition", "attachment;filename=\"" + file.getFilename() + "\"");
+        response.setHeader("file-name", file.getFilename());
+        OutputStream outputStream = response.getOutputStream();
+        byte[] buffer = new byte[1024];
+        int len = inputStream.read(buffer);
+        while (len != -1) {
+            outputStream.write(buffer, 0, len);
+            len = inputStream.read(buffer);
         }
     }
 }
