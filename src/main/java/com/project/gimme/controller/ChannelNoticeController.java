@@ -135,7 +135,6 @@ public class ChannelNoticeController {
         AssertionUtil.notNull(channelNoticeId, ErrorCode.BIZ_PARAM_ILLEGAL, "channelId不能为空!");
         List<ChatMsgVO> chatMsgList = channelNoticeService.getChannelNoticeInfo(userId, channelNoticeId);
         chatMsgList.addAll(chatMsgService.getChatMsgVoListByObjectId(userId, ChatMsgUtil.Character.TYPE_CHANNEL_NOTICE.getName(), channelNoticeId, ""));
-        //TODO:bug需要修复
         if (chatMsgList != null) {
             return Response.createSuc(chatMsgList);
         } else {
