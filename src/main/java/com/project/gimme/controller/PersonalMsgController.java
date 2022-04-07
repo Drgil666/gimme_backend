@@ -6,6 +6,7 @@ import com.project.gimme.exception.ErrorCode;
 import com.project.gimme.pojo.PersonalMsg;
 import com.project.gimme.pojo.PersonalMsgUser;
 import com.project.gimme.pojo.vo.CudRequestVO;
+import com.project.gimme.pojo.vo.PersonalMsgVO;
 import com.project.gimme.pojo.vo.Response;
 import com.project.gimme.service.PersonalMsgService;
 import com.project.gimme.service.PersonalMsgUserService;
@@ -50,7 +51,7 @@ public class PersonalMsgController {
         Integer userId = redisService.getUserId(token);
         switch (request.getMethod()) {
             case CudRequestVO.CREATE_METHOD: {
-                personalMsgService.checkValidity(request.getData().getType(),
+                personalMsgService.checkValidity(request.getData().getObjectType(),
                         userId, request.getData().getObjectId(), ADMIN_ATTRIBUTE);
                 if (personalMsgService.createPersonalMsg(request.getData())) {
                     return Response.createSuc(request.getData());
@@ -68,16 +69,16 @@ public class PersonalMsgController {
     @GetMapping()
     @ApiOperation(value = "通过id获取个人消息")
     @LoginAuthorize()
-    public Response<PersonalMsg> getPersonalMsg(@ApiParam(value = "加密验证参数")
-                                                @RequestHeader(TOKEN) String token,
-                                                @ApiParam(value = "个人信息id")
-                                                @RequestParam(value = "personalMsgId") Integer personalMsgId) {
+    public Response<PersonalMsgVO> getPersonalMsgVO(@ApiParam(value = "加密验证参数")
+                                                    @RequestHeader(TOKEN) String token,
+                                                    @ApiParam(value = "个人信息id")
+                                                    @RequestParam(value = "personalMsgId") Integer personalMsgId) {
         Integer userId = redisService.getUserId(token);
         PersonalMsgUser personalMsgUser = personalMsgUserService.getPersonalMsgUser(personalMsgId, userId);
         if (personalMsgUser != null) {
-            PersonalMsg personalMsg = personalMsgService.getPersonalMsg(personalMsgId);
-            if (personalMsg != null) {
-                return Response.createSuc(personalMsg);
+            PersonalMsgVO personalMsgVO = personalMsgService.getPersonalMsgVO(personalMsgId);
+            if (personalMsgVO != null) {
+                return Response.createSuc(personalMsgVO);
             }
         }
         return Response.createErr(ErrorCode.INNER_PARAM_ILLEGAL.getCode(), "获取失败!");
@@ -87,12 +88,12 @@ public class PersonalMsgController {
     @GetMapping("/list")
     @ApiOperation(value = "通过关键词查找用户列表")
     @LoginAuthorize()
-    public Response<List<PersonalMsg>> getPersonalMsgList(@ApiParam(value = "加密验证参数")
-                                                          @RequestHeader(TOKEN) String token) {
+    public Response<List<PersonalMsgVO>> getPersonalMsgList(@ApiParam(value = "加密验证参数")
+                                                            @RequestHeader(TOKEN) String token) {
         Integer userId = redisService.getUserId(token);
-        List<PersonalMsg> personalMsgList = personalMsgService.getPersonalMsgList(userId);
-        if (personalMsgList != null) {
-            return Response.createSuc(personalMsgList);
+        List<PersonalMsgVO> personalMsgVOList = personalMsgService.getPersonalMsgVOList(userId);
+        if (personalMsgVOList != null) {
+            return Response.createSuc(personalMsgVOList);
         } else {
             return Response.createErr("获取失败!");
         }

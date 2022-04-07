@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
-import static com.project.gimme.utils.PersonalMsgUtil.NULL_ATTRIBUTE;
 import static com.project.gimme.utils.RedisUtil.TOKEN;
 
 /**
@@ -81,13 +80,13 @@ public class FriendController {
             case CudRequestVO.DELETE_METHOD: {
                 if (friendService.deleteFriend(userId, request.getKey()) > 0) {
                     for (Integer friendId : request.getKey()) {
-                        redisService.deleteUserLoginToken(userId, friendId);
+                        redisService.deleteFriendToken(userId, friendId);
                         //处理缓存
                         PersonalMsg personalMsg = new PersonalMsg();
                         personalMsg.setOwnerId(userId);
                         personalMsg.setObjectId(friendId);
-                        personalMsg.setStatus(PersonalMsgUtil.getStatusByName(NULL_ATTRIBUTE));
-                        personalMsg.setType(PersonalMsgUtil.FriendMsgType.TYPE_DELETE_FRIEND.getName());
+                        personalMsg.setStatus(PersonalMsgUtil.Status.TYPE_NULL.getCode());
+                        personalMsg.setObjectType(PersonalMsgUtil.FriendPersonalMsg.TYPE_DELETE_FRIEND.getName());
                         personalMsg.setNote(null);
                         personalMsg.setObjectId(null);
                         personalMsgService.createPersonalMsg(personalMsg);

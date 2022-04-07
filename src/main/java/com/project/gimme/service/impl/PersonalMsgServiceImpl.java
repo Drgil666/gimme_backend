@@ -172,14 +172,15 @@ public class PersonalMsgServiceImpl implements PersonalMsgService {
         PersonalMsgVO personalMsgVO = (PersonalMsgVO) personalMsg;
         User user = userService.getUser(personalMsgVO.getOwnerId());
         personalMsgVO.setOwnerNick(user.getNick());
+        personalMsgVO.setAvatar(user.getAvatar());
         user = userService.getUser(personalMsgVO.getOperatorId());
         personalMsgVO.setOperatorNick(user.getNick());
-        if (PersonalMsgUtil.getFriendTypeMsgByName(personalMsg.getType()) != null) {
+        if (PersonalMsgUtil.getFriendPersonalMsgByName(personalMsg.getObjectType()) != null) {
             personalMsgVO.setObjectNick(null);
-        } else if (PersonalMsgUtil.getGroupTypeMsgByName(personalMsg.getType()) != null) {
+        } else if (PersonalMsgUtil.getGroupPersonalMsgByName(personalMsg.getObjectType()) != null) {
             Group group = groupService.getGroup(personalMsg.getObjectId());
             personalMsgVO.setObjectNick(group.getNick());
-        } else if (PersonalMsgUtil.getChannelTypeMsgByName(personalMsg.getType()) != null) {
+        } else if (PersonalMsgUtil.getChannelPersonalMsgByName(personalMsg.getObjectType()) != null) {
             Channel channel = channelService.getChannel(personalMsg.getObjectId());
             personalMsgVO.setObjectNick(channel.getNick());
         }

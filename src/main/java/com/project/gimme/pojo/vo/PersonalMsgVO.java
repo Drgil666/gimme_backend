@@ -29,4 +29,9 @@ public class PersonalMsgVO extends PersonalMsg {
      */
     @ApiModelProperty(value = "操作用户名", name = "ownerNick")
     private String ownerNick;
+    /**
+     * 操作者头像
+     */
+    @ApiModelProperty(value = "操作者头像", name = "avatar")
+    private String avatar;
 }

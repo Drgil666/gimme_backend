@@ -18,10 +18,10 @@ public class PersonalMsg {
     @ApiModelProperty(value = "信息通知id", name = "id", required = true)
     private Integer id;
     /**
-     * 消息通知类型
+     * 群聊/个人/频道类型
      */
     @ApiModelProperty(value = "消息通知类型", name = "type")
-    private String type;
+    private String objectType;
     /**
      * 消息创建者id
      */
@@ -47,4 +47,9 @@ public class PersonalMsg {
      */
     @ApiModelProperty(value = "处理状态", name = "status")
     private Integer status;
+    /**
+     * 消息类型
+     */
+    @ApiModelProperty(value = "消息类型", name = "type")
+    private String type;
 }

@@ -156,7 +156,7 @@ public class RedisServiceImpl implements RedisService {
      * @param friendId 好友id
      */
     @Override
-    public void deleteUserLoginToken(Integer userId, Integer friendId) {
+    public void deleteFriendToken(Integer userId, Integer friendId) {
         redisDao.deleteStringValue(getFriendKey(userId, friendId));
     }
 

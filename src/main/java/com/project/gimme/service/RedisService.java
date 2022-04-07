@@ -52,7 +52,7 @@ public interface RedisService {
      * @param userId   用户id
      * @param friendId 好友id
      */
-    void deleteUserLoginToken(Integer userId, Integer friendId);
+    void deleteFriendToken(Integer userId, Integer friendId);
 
     /**
      * 为群聊创建人员权利token
