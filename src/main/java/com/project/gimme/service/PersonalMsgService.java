@@ -19,6 +19,44 @@ public interface PersonalMsgService {
     Boolean createPersonalMsg(PersonalMsg personalMsg);
 
     /**
+     * 创建添加好友个人信息
+     *
+     * @param userId   用户id
+     * @param friendId 好友id
+     * @param note     备注
+     * @return 个人信息
+     */
+    PersonalMsg createInsertFriendPersonalMsg(Integer userId, Integer friendId, String note);
+
+    /**
+     * 创建删除好友个人信息
+     *
+     * @param userId   用户id
+     * @param friendId 好友id
+     * @param note     备注
+     * @return 个人信息
+     */
+    PersonalMsg createDeleteFriendPersonalMsg(Integer userId, Integer friendId);
+
+    /**
+     * 创建添加群聊个人信息
+     *
+     * @param userId  用户id
+     * @param groupId 群聊id
+     * @return 个人信息
+     */
+    PersonalMsg createInsertGroupPersonalMsg(Integer userId, Integer groupId);
+
+    /**
+     * 创建删除群聊个人信息
+     *
+     * @param userId  用户id
+     * @param groupId 群聊id
+     * @return 个人信息
+     */
+    PersonalMsg createDeleteGroupPersonalMsg(Integer userId, Integer groupId);
+
+    /**
      * 更新信息通知
      *
      * @param personalMsg 要更新的信息通知
@@ -53,18 +91,20 @@ public interface PersonalMsgService {
     /**
      * 通过用户id获取个人信息通知
      *
+     * @param type   类型
      * @param userId 频道id
      * @return 频道
      */
-    List<PersonalMsg> getPersonalMsgList(Integer userId);
+    List<PersonalMsg> getPersonalMsgList(Integer userId, Integer type);
 
     /**
      * 通过用户id获取个人信息通知具体类
      *
      * @param userId 频道id
+     * @param type   类型
      * @return 频道
      */
-    List<PersonalMsgVO> getPersonalMsgVOList(Integer userId);
+    List<PersonalMsgVO> getPersonalMsgVOList(Integer userId, Integer type);
 
     /**
      * 检查合法性

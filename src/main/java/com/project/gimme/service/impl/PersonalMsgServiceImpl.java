@@ -54,6 +54,94 @@ public class PersonalMsgServiceImpl implements PersonalMsgService {
     }
 
     /**
+     * 创建添加好友个人信息
+     *
+     * @param userId   用户id
+     * @param friendId 好友id
+     * @param note     备注
+     * @return
+     */
+    @Override
+    public PersonalMsg createInsertFriendPersonalMsg(Integer userId, Integer friendId, String note) {
+        //添加好友，被添加方有消息
+        PersonalMsg personalMsg = new PersonalMsg();
+        personalMsg.setOperatorId(userId);
+        personalMsg.setOwnerId(friendId);
+        personalMsg.setObjectType(ChatMsgUtil.Character.TYPE_FRIEND.getName());
+        personalMsg.setTimestamp(new Date());
+        personalMsg.setType(PersonalMsgUtil.FriendPersonalMsg.TYPE_INSERT_FRIEND.getName());
+        personalMsg.setStatus(PersonalMsgUtil.Status.TYPE_CHOOSE.getCode());
+        personalMsg.setNote(note);
+        personalMsg.setObjectId(null);
+        return personalMsg;
+    }
+
+    /**
+     * 创建添加好友个人信息
+     *
+     * @param userId   用户id
+     * @param friendId 好友id
+     * @return
+     */
+    @Override
+    public PersonalMsg createDeleteFriendPersonalMsg(Integer userId, Integer friendId) {
+        PersonalMsg personalMsg = new PersonalMsg();
+        personalMsg.setOperatorId(userId);
+        personalMsg.setOwnerId(friendId);
+        personalMsg.setObjectType(ChatMsgUtil.Character.TYPE_FRIEND.getName());
+        personalMsg.setTimestamp(new Date());
+        personalMsg.setType(PersonalMsgUtil.FriendPersonalMsg.TYPE_DELETE_FRIEND.getName());
+        personalMsg.setStatus(PersonalMsgUtil.Status.TYPE_NULL.getCode());
+        personalMsg.setNote(null);
+        personalMsg.setObjectId(null);
+        return personalMsg;
+    }
+
+    /**
+     * 创建添加群聊个人信息
+     *
+     * @param userId  用户id
+     * @param groupId 群聊id
+     * @return 个人信息
+     */
+    @Override
+    public PersonalMsg createInsertGroupPersonalMsg(Integer userId, Integer groupId) {
+        //创建群聊，群主有消息
+        PersonalMsg personalMsg = new PersonalMsg();
+        personalMsg.setOperatorId(null);
+        personalMsg.setOwnerId(userId);
+        personalMsg.setObjectType(ChatMsgUtil.Character.TYPE_GROUP.getName());
+        personalMsg.setTimestamp(new Date());
+        personalMsg.setType(PersonalMsgUtil.GroupPersonalMsg.TYPE_INSERT_GROUP.getName());
+        personalMsg.setStatus(PersonalMsgUtil.Status.TYPE_NULL.getCode());
+        personalMsg.setNote(null);
+        personalMsg.setObjectId(groupId);
+        return personalMsg;
+    }
+
+    /**
+     * 创建删除群聊个人信息
+     *
+     * @param userId  用户id
+     * @param groupId 群聊id
+     * @return 个人信息
+     */
+    @Override
+    public PersonalMsg createDeleteGroupPersonalMsg(Integer userId, Integer groupId) {
+        //删除群聊，所有群成员有消息
+        PersonalMsg personalMsg = new PersonalMsg();
+        personalMsg.setOperatorId(null);
+        personalMsg.setOwnerId(userId);
+        personalMsg.setObjectType(ChatMsgUtil.Character.TYPE_GROUP.getName());
+        personalMsg.setTimestamp(new Date());
+        personalMsg.setType(PersonalMsgUtil.GroupPersonalMsg.TYPE_DELETE_GROUP.getName());
+        personalMsg.setStatus(PersonalMsgUtil.Status.TYPE_NULL.getCode());
+        personalMsg.setNote(null);
+        personalMsg.setObjectId(groupId);
+        return personalMsg;
+    }
+
+    /**
      * 更新信息通知
      *
      * @param personalMsg 要更新的信息通知
@@ -101,22 +189,37 @@ public class PersonalMsgServiceImpl implements PersonalMsgService {
      * 通过用户id获取个人信息通知
      *
      * @param userId 频道id
+     * @param type   类型
      * @return 频道
      */
     @Override
-    public List<PersonalMsg> getPersonalMsgList(Integer userId) {
-        return personalMsgMapper.getPersonalMsgList(userId);
+    public List<PersonalMsg> getPersonalMsgList(Integer userId, Integer type) {
+        List<PersonalMsg> personalMsgList = new ArrayList<>();
+        if (type.equals(PersonalMsgUtil.PersonalMsgType.TYPE_FRIEND_PERSONAL_MSG.getCode())) {
+            for (PersonalMsgUtil.FriendPersonalMsg friendPersonalMsg : PersonalMsgUtil.FRIEND_PERSONAL_MSG_LIST) {
+                personalMsgList.addAll(personalMsgMapper.getPersonalMsgList(userId, friendPersonalMsg.getName()));
+            }
+        } else if (type.equals(PersonalMsgUtil.PersonalMsgType.TYPE_OTHER_PERSONAL_MSG.getCode())) {
+            for (PersonalMsgUtil.GroupPersonalMsg groupPersonalMsg : PersonalMsgUtil.GROUP_PERSONAL_MSG_LIST) {
+                personalMsgList.addAll(personalMsgMapper.getPersonalMsgList(userId, groupPersonalMsg.getName()));
+            }
+            for (PersonalMsgUtil.ChannelPersonalMsg channelPersonalMsg : PersonalMsgUtil.CHANNEL_PERSONAL_MSG_LIST) {
+                personalMsgList.addAll(personalMsgMapper.getPersonalMsgList(userId, channelPersonalMsg.getName()));
+            }
+        }
+        return personalMsgList;
     }
 
     /**
      * 通过用户id获取个人信息通知具体类
      *
      * @param userId 频道id
+     * @param type   类型
      * @return 频道
      */
     @Override
-    public List<PersonalMsgVO> getPersonalMsgVOList(Integer userId) {
-        List<PersonalMsg> personalMsgList = personalMsgMapper.getPersonalMsgList(userId);
+    public List<PersonalMsgVO> getPersonalMsgVOList(Integer userId, Integer type) {
+        List<PersonalMsg> personalMsgList = getPersonalMsgList(userId, type);
         List<PersonalMsgVO> personalMsgVOList = new ArrayList<>();
         for (PersonalMsg personalMsg : personalMsgList) {
             PersonalMsgVO personalMsgVO = getPersonalMsgVO(personalMsg);

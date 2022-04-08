@@ -58,12 +58,13 @@ public interface PersonalMsgMapper {
      * 通过用户id获取个人信息通知
      *
      * @param userId 用户id
-     * @return 频道
+     * @param type   消息类型
+     * @return 个人信息
      */
     @Select("select personal_msg.* from personal_msg,personal_msg_user " +
             "where personal_msg_user.accept_id=#{userId} " +
-            "and personal_msg_user.personal_msg_id=personal_msg.id")
-    List<PersonalMsg> getPersonalMsgList(@Param("userId") Integer userId);
+            "and personal_msg_user.personal_msg_id=personal_msg.id and personal_msg.type=#{type}")
+    List<PersonalMsg> getPersonalMsgList(@Param("userId") Integer userId, @Param("type") String type);
 
     /**
      * 获取新个人信息个数
