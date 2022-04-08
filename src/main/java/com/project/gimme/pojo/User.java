@@ -68,5 +68,9 @@ public class User {
      */
     @ApiModelProperty(value = "密码", name = "password")
     private String password;
-
+    /**
+     * 个人信息时间戳
+     */
+    @ApiModelProperty(value = "个人信息时间戳", name = "personalMsgTimestamp")
+    private Date personalMsgTimestamp;
 }

@@ -16,6 +16,7 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static com.project.gimme.utils.UserUtil.*;
@@ -166,6 +167,34 @@ public class PersonalMsgServiceImpl implements PersonalMsgService {
             }
         }
         AssertionUtil.notNull(flag, ErrorCode.BIZ_PARAM_ILLEGAL, "操作失败!");
+    }
+
+    /**
+     * 获取新个人信息个数
+     *
+     * @param userId 用户id
+     * @param type   消息类型
+     * @return 信息个数
+     */
+    @Override
+    public Long getNewPersonalMsgListCount(Integer userId, Integer type) {
+        User user = userService.getUser(userId);
+        user.setPersonalMsgTimestamp(new Date());
+        userService.updateUser(user);
+        Long cnt = 0L;
+        if (type.equals(PersonalMsgUtil.PersonalMsgType.TYPE_FRIEND_PERSONAL_MSG.getCode())) {
+            for (PersonalMsgUtil.FriendPersonalMsg friendPersonalMsg : PersonalMsgUtil.FRIEND_PERSONAL_MSG_LIST) {
+                cnt += personalMsgMapper.getNewPersonalMsgListCount(userId, friendPersonalMsg.getName());
+            }
+        } else if (type.equals(PersonalMsgUtil.PersonalMsgType.TYPE_OTHER_PERSONAL_MSG.getCode())) {
+            for (PersonalMsgUtil.GroupPersonalMsg groupPersonalMsg : PersonalMsgUtil.GROUP_PERSONAL_MSG_LIST) {
+                cnt += personalMsgMapper.getNewPersonalMsgListCount(userId, groupPersonalMsg.getName());
+            }
+            for (PersonalMsgUtil.ChannelPersonalMsg channelPersonalMsg : PersonalMsgUtil.CHANNEL_PERSONAL_MSG_LIST) {
+                cnt += personalMsgMapper.getNewPersonalMsgListCount(userId, channelPersonalMsg.getName());
+            }
+        }
+        return cnt;
     }
 
     private PersonalMsgVO getPersonalMsgVO(PersonalMsg personalMsg) {

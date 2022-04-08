@@ -76,7 +76,7 @@ public class GroupUserController {
                 }
             }
             case CudRequestVO.UPDATE_METHOD: {
-                groupUserService.authorityCheck(userId, request.getData().getGroupId(), UserUtil.GROUP_ADMIN_ATTRIBUTE);
+                groupUserService.authorityCheck(userId, request.getData().getGroupId(), UserUtil.GROUP_USER_ATTRIBUTE);
                 if (groupUserService.updateGroupUser(request.getData()) == 1) {
                     redisService.createGroupAuthorityToken(request.getData().getUserId(),
                             request.getData().getGroupId(), request.getData().getType());

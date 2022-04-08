@@ -4,6 +4,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * @author DrGilbert
  * @date 2022/1/4 15:47
@@ -52,4 +54,9 @@ public class PersonalMsg {
      */
     @ApiModelProperty(value = "消息类型", name = "type")
     private String type;
+    /**
+     * 时间戳
+     */
+    @ApiModelProperty(value = "时间戳", name = "timestamp")
+    private Date timestamp;
 }

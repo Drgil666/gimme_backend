@@ -78,7 +78,7 @@ public class ChannelUserController {
             }
             case CudRequestVO.UPDATE_METHOD: {
                 channelUserService.authorityCheck(userId, request.getData().getChannelId(),
-                        UserUtil.GROUP_ADMIN_ATTRIBUTE);
+                        UserUtil.CHANNEL_USER_ATTRIBUTE);
                 if (channelUserService.updateChannelUser(request.getData()) == 1) {
                     redisService.createChannelAuthorityToken(request.getData().getUserId(),
                             request.getData().getChannelId(), request.getData().getType());
@@ -89,7 +89,7 @@ public class ChannelUserController {
             }
             case CudRequestVO.DELETE_METHOD: {
                 channelUserService.authorityCheck(userId, request.getData().getChannelId(),
-                        UserUtil.GROUP_USER_ATTRIBUTE);
+                        UserUtil.CHANNEL_USER_ATTRIBUTE);
                 if (request.getKey().isEmpty()) {
                     request.getKey().add(userId);
                 }

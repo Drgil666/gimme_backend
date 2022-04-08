@@ -11,6 +11,7 @@ import com.project.gimme.pojo.vo.UserVO;
 import com.project.gimme.service.FriendService;
 import com.project.gimme.service.RedisService;
 import com.project.gimme.service.UserService;
+import com.project.gimme.utils.BcryptUtil;
 import com.project.gimme.utils.ChatMsgUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -58,6 +59,7 @@ public class UserController {
                 }
             }
             case CudRequestVO.UPDATE_METHOD: {
+                request.getData().setPassword(BcryptUtil.encode(request.getData().getPassword()));
                 if (userService.updateUser(request.getData()) == 1) {
                     return Response.createSuc(request.getData());
                 } else {

@@ -3,6 +3,7 @@ package com.project.gimme.service.impl;
 import com.project.gimme.exception.ErrorCode;
 import com.project.gimme.mapper.FriendMapper;
 import com.project.gimme.mapper.UserMapper;
+import com.project.gimme.pojo.Friend;
 import com.project.gimme.pojo.User;
 import com.project.gimme.pojo.vo.UserVO;
 import com.project.gimme.service.RedisService;
@@ -59,8 +60,6 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public Long updateUser(User user) {
-        //密码加密
-        user.setPassword(BcryptUtil.encode(user.getPassword()));
         return userMapper.updateUser(user);
     }
 
@@ -254,6 +253,10 @@ public class UserServiceImpl implements UserService {
         for (UserVO userVO : userList) {
             userVO.setPassword(null);
             userVO.setIsJoined(friendMapper.getFriend(userId, userVO.getId()) != null);
+            Friend friend = friendMapper.getFriend(userId, userVO.getId());
+            if (friend != null) {
+                userVO.setNote(friend.getFriendNote());
+            }
         }
         userList.sort((a, b) -> {
             Integer codeA = UserUtil.getGroupCharacterByName(a.getOtherType());

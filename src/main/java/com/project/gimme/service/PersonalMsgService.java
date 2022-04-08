@@ -75,4 +75,13 @@ public interface PersonalMsgService {
      * @param typeName 权限类型
      */
     void checkValidity(String type, Integer userId, Integer objectId, String typeName);
+
+    /**
+     * 获取新个人信息个数
+     *
+     * @param userId 用户id
+     * @param type   消息类型
+     * @return 信息个数
+     */
+    Long getNewPersonalMsgListCount(Integer userId, Integer type);
 }

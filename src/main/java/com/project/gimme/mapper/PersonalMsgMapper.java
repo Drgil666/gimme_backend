@@ -18,10 +18,10 @@ public interface PersonalMsgMapper {
      * @return 是否成功
      */
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
-    @Insert("insert into personal_msg (type, owner_id, operator_id, object_id,note,status,object_type) " +
+    @Insert("insert into personal_msg (type, owner_id, operator_id, object_id,note,status,object_type,timestamp) " +
             "values (#{personalMsg.type},#{personalMsg.ownerId}," +
             "#{personalMsg.operatorId},#{personalMsg.objectId}," +
-            "#{personalMsg.note},#{personalMsg.status},#{personalMsg.objectType})")
+            "#{personalMsg.note},#{personalMsg.status},#{personalMsg.objectType},#{personalMsg.timestamp})")
     Boolean createPersonalMsg(@Param("personalMsg") PersonalMsg personalMsg);
 
     /**
@@ -32,7 +32,8 @@ public interface PersonalMsgMapper {
      */
     @Update("update personal_msg set type=#{personalMsg.type},object_type=#{personalMsg.objectType}" +
             "owner_id=#{personalMsg.ownerId},operator_id=#{personalMsg.operatorId}," +
-            "object_id=#{personalMsg.objectId},note=#{personalMsg.note},status=#{personalMsg.status} " +
+            "object_id=#{personalMsg.objectId},note=#{personalMsg.note}," +
+            "status=#{personalMsg.status},timestamp=#{personalMsg.timestamp} " +
             "where id=#{personalMsg.id}")
     Long updatePersonalMsg(@Param("personalMsg") PersonalMsg personalMsg);
 
@@ -56,11 +57,25 @@ public interface PersonalMsgMapper {
     /**
      * 通过用户id获取个人信息通知
      *
-     * @param userId 频道id
+     * @param userId 用户id
      * @return 频道
      */
     @Select("select personal_msg.* from personal_msg,personal_msg_user " +
             "where personal_msg_user.accept_id=#{userId} " +
             "and personal_msg_user.personal_msg_id=personal_msg.id")
     List<PersonalMsg> getPersonalMsgList(@Param("userId") Integer userId);
+
+    /**
+     * 获取新个人信息个数
+     *
+     * @param userId 用户id
+     * @param type   消息类型
+     * @return 信息个数
+     */
+    @Select("select count(personal_msg.id) from personal_msg,user,personal_msg_user where " +
+            "user.id=#{userId} and personal_msg_user.accept_id=user.id " +
+            "and personal_msg.id=personal_msg_user.personal_msg_id " +
+            "and personal_msg.timestamp>=user.personal_msg_timestamp " +
+            "and personal_msg.type=#{type}")
+    Long getNewPersonalMsgListCount(@Param("userId") Integer userId, @Param("type") String type);
 }

@@ -98,4 +98,17 @@ public class PersonalMsgController {
             return Response.createErr("获取失败!");
         }
     }
+
+    @ResponseBody
+    @GetMapping("/count")
+    @ApiOperation(value = "通过关键词查找用户列表")
+    @LoginAuthorize()
+    public Response<Long> getNewPersonalMsgListCount(@ApiParam(value = "加密验证参数")
+                                                     @RequestHeader(TOKEN) String token,
+                                                     @ApiParam(value = "消息类型")
+                                                     @RequestParam(value = "type") Integer type) {
+        Integer userId = redisService.getUserId(token);
+        Long cnt = personalMsgService.getNewPersonalMsgListCount(userId, type);
+        return Response.createSuc(cnt);
+    }
 }
