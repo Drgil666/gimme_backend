@@ -112,7 +112,6 @@ public class GroupServiceImpl implements GroupService {
      */
     @Override
     public Long deleteGroupList(List<Integer> idList) {
-        //TODO:大量notnull判断
         return groupMapper.deleteGroupList(idList);
     }
 

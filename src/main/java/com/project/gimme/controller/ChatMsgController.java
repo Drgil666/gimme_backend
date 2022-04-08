@@ -6,6 +6,7 @@ import com.project.gimme.pojo.*;
 import com.project.gimme.pojo.vo.*;
 import com.project.gimme.service.*;
 import com.project.gimme.utils.ChatMsgUtil;
+import com.project.gimme.utils.UserUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -97,7 +98,7 @@ public class ChatMsgController {
             channelNotice.setChannelId(request.getObjectId());
             channelNotice.setText(chatMsg.getText());
             channelNotice.setType(chatMsg.getMsgType());
-            //TODO:频道相关要做权限判定！
+            channelUserService.authorityCheck(userId, request.getObjectId(), UserUtil.ChannelCharacter.TYPE_CHANNEL_OWNER.getName());
             if (channelNoticeService.createChannelNotice(channelNotice)) {
                 ChannelUser channelUser = channelUserService.getChannelUser(request.getObjectId(), userId);
                 channelUser.setMsgTimestamp(new Date());

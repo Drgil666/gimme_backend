@@ -119,7 +119,6 @@ public class ChatMsgServiceImpl implements ChatMsgService {
                         chatMsgVO.setChannelNoticeCount(getChannelNoticeCount(channelNotice.getId()));
                         User user = userMapper.getUser(channel.getOwnerId());
                         chatMsgVO.setOwnerNick(user.getNick());
-                        //TODO:获取昵称的方式需要再修改
                         return chatMsgVO;
                     }).collect(Collectors.toList());
         } else {
@@ -142,7 +141,6 @@ public class ChatMsgServiceImpl implements ChatMsgService {
                         chatMsgVO.setIsSelf(chatMsg.getOwnerId().equals(userId));
                         User user = userMapper.getUser(chatMsg.getOwnerId());
                         chatMsgVO.setOwnerNick(user.getNick());
-                        //TODO:获取昵称的方式需要再修改
                         return chatMsgVO;
                     }).collect(Collectors.toList());
         }
