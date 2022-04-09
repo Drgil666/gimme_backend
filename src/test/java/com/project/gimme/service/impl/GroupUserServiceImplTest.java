@@ -36,7 +36,7 @@ public class GroupUserServiceImplTest {
 
     @Test
     public void updateGroupUser() {
-        GroupUser groupUser = groupUserService.getGroupUser(3, 1);
+        GroupUser groupUser = groupUserService.getGroupUserByUserId(3, 1);
         groupUser.setType("test");
         groupUser.setGroupNick("nick2");
         System.out.println(groupUserService.updateGroupUser(groupUser));
@@ -44,7 +44,7 @@ public class GroupUserServiceImplTest {
 
     @Test
     public void getGroupUser() {
-        GroupUser groupUser = groupUserService.getGroupUser(1, 1);
+        GroupUser groupUser = groupUserService.getGroupUserByUserId(1, 1);
         System.out.println(groupUser.getType());
     }
 

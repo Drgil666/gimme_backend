@@ -57,6 +57,62 @@ public interface PersonalMsgService {
     PersonalMsg createDeleteGroupPersonalMsg(Integer userId, Integer groupId);
 
     /**
+     * 创建添加群聊成员个人信息
+     *
+     * @param userId  用户id
+     * @param groupId 群聊id
+     * @param note    备注
+     * @return 个人信息
+     */
+    PersonalMsg createInsertGroupMemberPersonalMsg(Integer userId, Integer groupId, String note);
+
+    /**
+     * 创建删除群聊成员个人信息
+     *
+     * @param userId  用户id
+     * @param groupId 群聊id
+     * @return 个人信息
+     */
+    PersonalMsg createDeleteGroupMemberPersonalMsg(Integer userId, Integer groupId);
+
+    /**
+     * 创建添加频道个人信息
+     *
+     * @param userId    用户id
+     * @param channelId 频道id
+     * @return 个人信息
+     */
+    PersonalMsg createInsertChannelPersonalMsg(Integer userId, Integer channelId);
+
+    /**
+     * 创建删除频道个人信息
+     *
+     * @param userId    用户id
+     * @param channelId 频道id
+     * @return 个人信息
+     */
+    PersonalMsg createDeleteChannelPersonalMsg(Integer userId, Integer channelId);
+
+    /**
+     * 创建添加群聊成员个人信息
+     *
+     * @param userId    用户id
+     * @param channelId 频道id
+     * @param note      备注
+     * @return 个人信息
+     */
+    PersonalMsg createInsertChannelMemberPersonalMsg(Integer userId, Integer channelId, String note);
+
+    /**
+     * 创建删除频道成员个人信息
+     *
+     * @param userId    用户id
+     * @param channelId 群聊id
+     * @return 个人信息
+     */
+    PersonalMsg createDeleteChannelMemberPersonalMsg(Integer userId, Integer channelId);
+
+    /**
      * 更新信息通知
      *
      * @param personalMsg 要更新的信息通知

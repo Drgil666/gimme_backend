@@ -117,7 +117,7 @@ public class ChatMsgController {
                     friend.setMsgTimestamp(new Date());
                     friendService.updateFriend(friend);
                 } else if (request.getChatType().equals(ChatMsgUtil.Character.TYPE_GROUP.getName())) {
-                    GroupUser groupUser = groupUserService.getGroupUser(request.getObjectId(), userId);
+                    GroupUser groupUser = groupUserService.getGroupUserByUserId(request.getObjectId(), userId);
                     groupUser.setMsgTimestamp(new Date());
                     groupUserService.updateGroupUser(groupUser);
                 }
@@ -209,7 +209,7 @@ public class ChatMsgController {
                 return Response.createErr("更新失败!");
             }
         } else if (request.getChatType().equals(ChatMsgUtil.Character.TYPE_GROUP.getName())) {
-            GroupUser groupUser = groupUserService.getGroupUser(request.getObjectId(), userId);
+            GroupUser groupUser = groupUserService.getGroupUserByUserId(request.getObjectId(), userId);
             groupUser.setMsgTimestamp(new Date());
             if (groupUserService.updateGroupUser(groupUser) == 1) {
                 return Response.createSuc(null);

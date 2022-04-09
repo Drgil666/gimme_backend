@@ -141,7 +141,7 @@ public class GroupServiceImpl implements GroupService {
             if (searchType.equals(ContactsUtil.SearchType.TYPE_CONTACTS.getName())) {
                 searchVO.setIsJoined(true);
             } else {
-                searchVO.setIsJoined(groupUserMapper.getGroupUser(searchVO.getObjectId(), userId) != null);
+                searchVO.setIsJoined(groupUserMapper.getGroupUserByUserId(searchVO.getObjectId(), userId) != null);
             }
             searchVO.setMemberCount(groupUserMapper.getGroupMemberCount(searchVO.getObjectId()));
         }

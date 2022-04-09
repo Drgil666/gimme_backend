@@ -264,7 +264,7 @@ public class UserServiceImpl implements UserService {
             String nameA = (StringUtils.isEmpty(a.getOtherNick())) ? a.getNick() : a.getOtherNick();
             String nameB = (StringUtils.isEmpty(b.getOtherNick())) ? b.getNick() : b.getOtherNick();
             if (!codeA.equals(codeB)) {
-                return (codeA >= codeB) ? 1 : -1;
+                return (codeA > codeB) ? 1 : -1;
             } else if (!nameA.equals(nameB)) {
                 return (nameA.compareTo(nameB) > 0) ? 1 : -1;
             } else {
@@ -294,7 +294,7 @@ public class UserServiceImpl implements UserService {
             String nameA = (StringUtils.isEmpty(a.getOtherNick())) ? a.getNick() : a.getOtherNick();
             String nameB = (StringUtils.isEmpty(b.getOtherNick())) ? b.getNick() : b.getOtherNick();
             if (!codeA.equals(codeB)) {
-                return (codeA >= codeB) ? 1 : -1;
+                return (codeA > codeB) ? 1 : -1;
             } else if (!nameA.equals(nameB)) {
                 return (nameA.compareTo(nameB) > 0) ? 1 : -1;
             } else {

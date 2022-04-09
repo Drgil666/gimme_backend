@@ -32,7 +32,16 @@ public interface GroupUserService {
      * @param groupId 群聊id
      * @return 用户
      */
-    GroupUser getGroupUser(Integer groupId, Integer userId);
+    GroupUser getGroupUserByUserId(Integer groupId, Integer userId);
+
+    /**
+     * 通过用户类型获取群聊成员
+     *
+     * @param type    用户类型
+     * @param groupId 群聊id
+     * @return 用户
+     */
+    List<GroupUser> getGroupUserByType(Integer groupId, String type);
 
     /**
      * 批量删除群聊成员

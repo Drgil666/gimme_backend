@@ -48,16 +48,16 @@ public class GroupUserController {
         Integer userId = redisService.getUserId(token);
         switch (request.getMethod()) {
             case CudRequestVO.CREATE_METHOD: {
-                groupUserService.authorityCheck(userId, request.getData().getGroupId(), UserUtil.GROUP_ADMIN_ATTRIBUTE);
+                groupUserService.authorityCheck(userId, request.getData().getGroupId(), UserUtil.GROUP_USER_ATTRIBUTE);
                 boolean isExist = false;
                 if (redisService.getGroupAuthorityToken(request.getData().getUserId(),
                         request.getData().getGroupId()) != null) {
                     //token内已存在
                     isExist = true;
                 } else {
-                    if (groupUserService.getGroupUser(request.getData().getGroupId(), request.getData().getUserId()) != null) {
+                    if (groupUserService.getGroupUserByUserId(request.getData().getGroupId(), request.getData().getUserId()) != null) {
                         isExist = true;
-                        GroupUser groupUser = groupUserService.getGroupUser(request.getData().getGroupId(), request.getData().getUserId());
+                        GroupUser groupUser = groupUserService.getGroupUserByUserId(request.getData().getGroupId(), request.getData().getUserId());
                         redisService.createGroupAuthorityToken(groupUser.getUserId(),
                                 groupUser.getGroupId(), groupUser.getType());
                         //新建token
@@ -117,7 +117,7 @@ public class GroupUserController {
         Integer userId = redisService.getUserId(token);
         AssertionUtil.notNull(groupId, ErrorCode.BIZ_PARAM_ILLEGAL, "groupId不可为空!");
         groupUserService.authorityCheck(userId, groupId, UserUtil.GROUP_USER_ATTRIBUTE);
-        GroupUser groupUser = groupUserService.getGroupUser(groupId, userId);
+        GroupUser groupUser = groupUserService.getGroupUserByUserId(groupId, userId);
         if (groupUser != null) {
             return Response.createSuc(groupUser);
         } else {

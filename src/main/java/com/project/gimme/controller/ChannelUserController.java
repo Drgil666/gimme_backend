@@ -48,7 +48,7 @@ public class ChannelUserController {
         switch (request.getMethod()) {
             case CudRequestVO.CREATE_METHOD: {
                 channelUserService.authorityCheck(userId, request.getData().getChannelId(),
-                        UserUtil.GROUP_ADMIN_ATTRIBUTE);
+                        UserUtil.CHANNEL_USER_ATTRIBUTE);
                 boolean isExist = false;
                 if (redisService.getChannelAuthorityToken(request.getData().getUserId(),
                         request.getData().getChannelId()) != null) {

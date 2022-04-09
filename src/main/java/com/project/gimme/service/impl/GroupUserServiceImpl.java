@@ -56,8 +56,20 @@ public class GroupUserServiceImpl implements GroupUserService {
      * @return 用户
      */
     @Override
-    public GroupUser getGroupUser(Integer groupId, Integer userId) {
-        return groupUserMapper.getGroupUser(groupId, userId);
+    public GroupUser getGroupUserByUserId(Integer groupId, Integer userId) {
+        return groupUserMapper.getGroupUserByUserId(groupId, userId);
+    }
+
+    /**
+     * 通过用户类型获取群聊成员
+     *
+     * @param groupId 群聊id
+     * @param type    用户类型
+     * @return 用户
+     */
+    @Override
+    public List<GroupUser> getGroupUserByType(Integer groupId, String type) {
+        return groupUserMapper.getGroupUserByType(groupId, type);
     }
 
     /**

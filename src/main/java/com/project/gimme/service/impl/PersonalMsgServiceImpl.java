@@ -2,10 +2,7 @@ package com.project.gimme.service.impl;
 
 import com.project.gimme.exception.ErrorCode;
 import com.project.gimme.mapper.PersonalMsgMapper;
-import com.project.gimme.pojo.Channel;
-import com.project.gimme.pojo.Group;
-import com.project.gimme.pojo.PersonalMsg;
-import com.project.gimme.pojo.User;
+import com.project.gimme.pojo.*;
 import com.project.gimme.pojo.vo.PersonalMsgVO;
 import com.project.gimme.service.*;
 import com.project.gimme.utils.AssertionUtil;
@@ -72,7 +69,7 @@ public class PersonalMsgServiceImpl implements PersonalMsgService {
         personalMsg.setType(PersonalMsgUtil.FriendPersonalMsg.TYPE_INSERT_FRIEND.getName());
         personalMsg.setStatus(PersonalMsgUtil.Status.TYPE_CHOOSE.getCode());
         personalMsg.setNote(note);
-        personalMsg.setObjectId(null);
+        personalMsg.setObjectId(userId);
         return personalMsg;
     }
 
@@ -138,6 +135,142 @@ public class PersonalMsgServiceImpl implements PersonalMsgService {
         personalMsg.setStatus(PersonalMsgUtil.Status.TYPE_NULL.getCode());
         personalMsg.setNote(null);
         personalMsg.setObjectId(groupId);
+        return personalMsg;
+    }
+
+    /**
+     * 创建新增群聊个人信息
+     *
+     * @param userId  用户id
+     * @param groupId 群聊id
+     * @param note    备注
+     * @return 个人信息
+     */
+    @Override
+    public PersonalMsg createInsertGroupMemberPersonalMsg(Integer userId, Integer groupId, String note) {
+        //新增群聊成员，群主会受到消息
+        GroupUser groupUser = groupUserService.getGroupUserByType(groupId, GroupCharacter.TYPE_GROUP_OWNER.getName()).get(0);
+        PersonalMsg personalMsg = new PersonalMsg();
+        personalMsg.setOperatorId(userId);
+        personalMsg.setOwnerId(groupUser.getUserId());
+        personalMsg.setObjectType(ChatMsgUtil.Character.TYPE_GROUP.getName());
+        personalMsg.setTimestamp(new Date());
+        personalMsg.setType(PersonalMsgUtil.GroupPersonalMsg.TYPE_INSERT_GROUP_MEMBER.getName());
+        personalMsg.setStatus(PersonalMsgUtil.Status.TYPE_CHOOSE.getCode());
+        personalMsg.setNote(note);
+        personalMsg.setObjectId(groupId);
+        return personalMsg;
+    }
+
+    /**
+     * 创建删除群聊成员个人信息
+     *
+     * @param userId  用户id
+     * @param groupId 群聊id
+     * @return 个人信息
+     */
+    @Override
+    public PersonalMsg createDeleteGroupMemberPersonalMsg(Integer userId, Integer groupId) {
+        //删除群成员，被删除的有消息
+        PersonalMsg personalMsg = new PersonalMsg();
+        personalMsg.setOperatorId(null);
+        personalMsg.setOwnerId(userId);
+        personalMsg.setObjectType(ChatMsgUtil.Character.TYPE_GROUP.getName());
+        personalMsg.setTimestamp(new Date());
+        personalMsg.setType(PersonalMsgUtil.GroupPersonalMsg.TYPE_DELETE_GROUP_MEMBER.getName());
+        personalMsg.setStatus(PersonalMsgUtil.Status.TYPE_NULL.getCode());
+        personalMsg.setNote(null);
+        personalMsg.setObjectId(groupId);
+        return personalMsg;
+    }
+
+    /**
+     * 创建添加频道个人信息
+     *
+     * @param userId    用户id
+     * @param channelId 频道
+     * @return 个人信息
+     */
+    @Override
+    public PersonalMsg createInsertChannelPersonalMsg(Integer userId, Integer channelId) {
+        //创建频道，频道主有消息
+        PersonalMsg personalMsg = new PersonalMsg();
+        personalMsg.setOperatorId(null);
+        personalMsg.setOwnerId(userId);
+        personalMsg.setObjectType(ChatMsgUtil.Character.TYPE_CHANNEL.getName());
+        personalMsg.setTimestamp(new Date());
+        personalMsg.setType(PersonalMsgUtil.ChannelPersonalMsg.TYPE_INSERT_CHANNEL.getName());
+        personalMsg.setStatus(PersonalMsgUtil.Status.TYPE_NULL.getCode());
+        personalMsg.setNote(null);
+        personalMsg.setObjectId(channelId);
+        return personalMsg;
+    }
+
+    /**
+     * 创建删除频道个人信息
+     *
+     * @param userId    用户id
+     * @param channelId 频道id
+     * @return 个人信息
+     */
+    @Override
+    public PersonalMsg createDeleteChannelPersonalMsg(Integer userId, Integer channelId) {
+        //删除群聊，所有群成员有消息
+        PersonalMsg personalMsg = new PersonalMsg();
+        personalMsg.setOperatorId(null);
+        personalMsg.setOwnerId(userId);
+        personalMsg.setObjectType(ChatMsgUtil.Character.TYPE_CHANNEL.getName());
+        personalMsg.setTimestamp(new Date());
+        personalMsg.setType(PersonalMsgUtil.ChannelPersonalMsg.TYPE_DELETE_CHANNEL.getName());
+        personalMsg.setStatus(PersonalMsgUtil.Status.TYPE_NULL.getCode());
+        personalMsg.setNote(null);
+        personalMsg.setObjectId(channelId);
+        return personalMsg;
+    }
+
+    /**
+     * 创建添加群聊成员个人信息
+     *
+     * @param userId    用户id
+     * @param channelId 频道id
+     * @param note      备注
+     * @return 个人信息
+     */
+    @Override
+    public PersonalMsg createInsertChannelMemberPersonalMsg(Integer userId, Integer channelId, String note) {
+        //新增群聊成员，群主会受到消息
+        Channel channel = channelService.getChannel(channelId);
+        PersonalMsg personalMsg = new PersonalMsg();
+        personalMsg.setOperatorId(userId);
+        personalMsg.setOwnerId(channel.getOwnerId());
+        personalMsg.setObjectType(ChatMsgUtil.Character.TYPE_CHANNEL.getName());
+        personalMsg.setTimestamp(new Date());
+        personalMsg.setType(PersonalMsgUtil.ChannelPersonalMsg.TYPE_INSERT_CHANNEL_MEMBER.getName());
+        personalMsg.setStatus(PersonalMsgUtil.Status.TYPE_CHOOSE.getCode());
+        personalMsg.setNote(note);
+        personalMsg.setObjectId(channelId);
+        return personalMsg;
+    }
+
+    /**
+     * 创建删除频道成员个人信息
+     *
+     * @param userId    用户id
+     * @param channelId 群聊id
+     * @return 个人信息
+     */
+    @Override
+    public PersonalMsg createDeleteChannelMemberPersonalMsg(Integer userId, Integer channelId) {
+        //删除群成员，被删除的有消息
+        PersonalMsg personalMsg = new PersonalMsg();
+        personalMsg.setOperatorId(null);
+        personalMsg.setOwnerId(userId);
+        personalMsg.setObjectType(ChatMsgUtil.Character.TYPE_CHANNEL.getName());
+        personalMsg.setTimestamp(new Date());
+        personalMsg.setType(PersonalMsgUtil.ChannelPersonalMsg.TYPE_DELETE_CHANNEL_MEMBER.getName());
+        personalMsg.setStatus(PersonalMsgUtil.Status.TYPE_NULL.getCode());
+        personalMsg.setNote(null);
+        personalMsg.setObjectId(channelId);
         return personalMsg;
     }
 

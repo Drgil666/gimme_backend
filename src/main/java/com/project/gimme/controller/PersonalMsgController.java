@@ -8,9 +8,11 @@ import com.project.gimme.pojo.PersonalMsgUser;
 import com.project.gimme.pojo.vo.CudRequestVO;
 import com.project.gimme.pojo.vo.PersonalMsgVO;
 import com.project.gimme.pojo.vo.Response;
+import com.project.gimme.pojo.vo.UserVO;
 import com.project.gimme.service.PersonalMsgService;
 import com.project.gimme.service.PersonalMsgUserService;
 import com.project.gimme.service.RedisService;
+import com.project.gimme.service.UserService;
 import com.project.gimme.utils.PersonalMsgUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -40,6 +42,8 @@ public class PersonalMsgController {
     private PersonalMsgUserService personalMsgUserService;
     @Resource
     private RedisService redisService;
+    @Resource
+    private UserService userService;
 
     @ResponseBody
     @PostMapping()
@@ -48,12 +52,15 @@ public class PersonalMsgController {
     public Response<PersonalMsg> cudPersonalMsg(@ApiParam(value = "加密验证参数")
                                                 @RequestHeader(TOKEN) String token, @ApiParam(value = "包含用户信息，操作信息")
                                                 @RequestBody CudRequestVO<PersonalMsg, Integer> request) {
-        Integer userId = redisService.getUserId(token);
+
         PersonalMsg personalMsg = request.getData();
+        Integer userId = personalMsg.getOwnerId();
+        if (userId == null) {
+            userId = redisService.getUserId(token);
+        }
         String type = personalMsg.getType();
-        String chatType = "";
-        Integer objectId = null;
-        String note = "";
+        Integer objectId = personalMsg.getObjectId();
+        String note = personalMsg.getNote();
         switch (request.getMethod()) {
             case CudRequestVO.CREATE_METHOD: {
                 if (type.equals(PersonalMsgUtil.FriendPersonalMsg.TYPE_INSERT_FRIEND.getName())) {
@@ -69,15 +76,54 @@ public class PersonalMsgController {
                     personalMsgService.createPersonalMsg(personalMsg);
                     return Response.createSuc(null);
                 } else if (type.equals(PersonalMsgUtil.GroupPersonalMsg.TYPE_DELETE_GROUP.getName())) {
-                    //TODO:要对所有群成员发布该消息!
-                    personalMsg = personalMsgService.createInsertGroupPersonalMsg(userId, objectId);
+                    personalMsg = personalMsgService.createDeleteGroupPersonalMsg(userId, objectId);
+                    personalMsgService.createPersonalMsg(personalMsg);
+                    List<UserVO> userVOList = userService.getGroupMemberList(userId, objectId);
+                    for (UserVO userVO : userVOList) {
+                        //所有群成员也会受到该消息!
+                        personalMsg = personalMsgService.createDeleteGroupPersonalMsg(userVO.getId(), objectId);
+                        personalMsgService.createPersonalMsg(personalMsg);
+                    }
+                    return Response.createSuc(null);
+                } else if (type.equals(PersonalMsgUtil.GroupPersonalMsg.TYPE_INSERT_GROUP_MEMBER.getName())) {
+                    personalMsg = personalMsgService.createInsertGroupMemberPersonalMsg(userId, objectId, note);
+                    personalMsgService.createPersonalMsg(personalMsg);
+                    return Response.createSuc(null);
+                } else if (type.equals(PersonalMsgUtil.GroupPersonalMsg.TYPE_DELETE_GROUP_MEMBER.getName())) {
+                    personalMsg = personalMsgService.createDeleteGroupMemberPersonalMsg(userId, objectId);
+                    personalMsgService.createPersonalMsg(personalMsg);
+                    return Response.createSuc(null);
+                } else if (type.equals(PersonalMsgUtil.ChannelPersonalMsg.TYPE_INSERT_CHANNEL.getName())) {
+                    personalMsg = personalMsgService.createInsertChannelPersonalMsg(userId, objectId);
+                    personalMsgService.createPersonalMsg(personalMsg);
+                    return Response.createSuc(null);
+                } else if (type.equals(PersonalMsgUtil.ChannelPersonalMsg.TYPE_DELETE_CHANNEL.getName())) {
+                    personalMsg = personalMsgService.createDeleteChannelPersonalMsg(userId, objectId);
+                    personalMsgService.createPersonalMsg(personalMsg);
+                    List<UserVO> userVOList = userService.getChannelMemberList(userId, objectId);
+                    for (UserVO userVO : userVOList) {
+                        //所有群成员也会受到该消息!
+                        personalMsg = personalMsgService.createDeleteChannelPersonalMsg(userVO.getId(), objectId);
+                        personalMsgService.createPersonalMsg(personalMsg);
+                    }
+                    return Response.createSuc(null);
+                } else if (type.equals(PersonalMsgUtil.ChannelPersonalMsg.TYPE_INSERT_CHANNEL_MEMBER.getName())) {
+                    personalMsg = personalMsgService.createInsertChannelMemberPersonalMsg(userId, objectId, note);
+                    personalMsgService.createPersonalMsg(personalMsg);
+                    return Response.createSuc(null);
+                } else if (type.equals(PersonalMsgUtil.ChannelPersonalMsg.TYPE_DELETE_CHANNEL_MEMBER.getName())) {
+                    personalMsg = personalMsgService.createDeleteChannelMemberPersonalMsg(userId, objectId);
                     personalMsgService.createPersonalMsg(personalMsg);
                     return Response.createSuc(null);
                 }
                 break;
             }
             case CudRequestVO.UPDATE_METHOD: {
-                break;
+                if (personalMsgService.updatePersonalMsg(personalMsg) == 1) {
+                    return Response.createSuc(null);
+                } else {
+                    return Response.createErr("更新失败!");
+                }
             }
             default:
                 return Response.createUnknownMethodErr();

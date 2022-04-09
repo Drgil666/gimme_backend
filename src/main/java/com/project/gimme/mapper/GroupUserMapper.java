@@ -42,7 +42,17 @@ public interface GroupUserMapper {
      * @return 用户
      */
     @Select("select * from group_user where group_id=#{groupId} and user_id=#{userId}")
-    GroupUser getGroupUser(@Param("groupId") Integer groupId, @Param("userId") Integer userId);
+    GroupUser getGroupUserByUserId(@Param("groupId") Integer groupId, @Param("userId") Integer userId);
+
+    /**
+     * 通过用户类型获取群聊成员
+     *
+     * @param type    用户类型
+     * @param groupId 群聊id
+     * @return 用户
+     */
+    @Select("select * from group_user where group_id=#{groupId} and type=#{type}")
+    List<GroupUser> getGroupUserByType(@Param("groupId") Integer groupId, @Param("type") String type);
 
     /**
      * 批量删除群聊成员

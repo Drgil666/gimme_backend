@@ -53,11 +53,18 @@ public class FriendController {
                                       @ApiParam(value = "包含用户信息，操作信息")
                                       @RequestBody CudRequestVO<Friend, Integer> request) {
         Integer userId = redisService.getUserId(token);
+        if (request.getData().getUserId() == null) {
+            request.getData().setUserId(userId);
+        }
         switch (request.getMethod()) {
             case CudRequestVO.CREATE_METHOD: {
                 if (friendService.getFriend(request.getData().getUserId(),
                         request.getData().getFriendId()) == null) {
                     if (friendService.createFriend(request.getData())) {
+                        Friend friend = request.getData();
+                        friend.setUserId(request.getData().getFriendId());
+                        friend.setFriendId(userId);
+                        friendService.createFriend(friend);
                         redisService.createFriendToken(
                                 request.getData().getUserId(),
                                 request.getData().getFriendId());
