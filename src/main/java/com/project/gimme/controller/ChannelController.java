@@ -170,13 +170,13 @@ public class ChannelController {
     @GetMapping("/info")
     @ApiOperation(value = "获取频道信息")
     @LoginAuthorize()
-    public Response<ChannelVO> getGroupInfo(@ApiParam(value = "加密验证参数")
-                                            @RequestHeader(TOKEN) String token,
-                                            @ApiParam(value = "频道id")
-                                            @RequestParam(value = "channelId") Integer channelId) {
+    public Response<ChannelVO> getChannelInfo(@ApiParam(value = "加密验证参数")
+                                              @RequestHeader(TOKEN) String token,
+                                              @ApiParam(value = "频道id")
+                                              @RequestParam(value = "channelId") Integer channelId) {
         AssertionUtil.notNull(channelId, ErrorCode.BIZ_PARAM_ILLEGAL, "channelId不可为空!");
         Integer userId = redisService.getUserId(token);
-        String authority = redisService.getGroupAuthorityToken(userId, channelId);
+        String authority = redisService.getChannelAuthorityToken(userId, channelId);
         ChannelVO channelVO;
         if (authority != null) {
             channelVO = channelService.getChannelVoIfJoin(userId, channelId);

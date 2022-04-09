@@ -45,10 +45,13 @@ public class ChannelUserController {
                                                 @ApiParam(value = "包含群聊信息，操作信息")
                                                 @RequestBody CudRequestVO<ChannelUser, Integer> request) {
         Integer userId = redisService.getUserId(token);
+        if (request.getData().getUserId() == null) {
+            request.getData().setUserId(userId);
+        }
         switch (request.getMethod()) {
             case CudRequestVO.CREATE_METHOD: {
-                channelUserService.authorityCheck(userId, request.getData().getChannelId(),
-                        UserUtil.CHANNEL_USER_ATTRIBUTE);
+//                channelUserService.authorityCheck(userId, request.getData().getChannelId(),
+//                        UserUtil.CHANNEL_USER_ATTRIBUTE);
                 boolean isExist = false;
                 if (redisService.getChannelAuthorityToken(request.getData().getUserId(),
                         request.getData().getChannelId()) != null) {
@@ -118,7 +121,7 @@ public class ChannelUserController {
                                                 @RequestParam(value = "channelId") Integer channelId) {
         Integer userId = redisService.getUserId(token);
         AssertionUtil.notNull(channelId, ErrorCode.BIZ_PARAM_ILLEGAL, "groupId不可为空!");
-        channelUserService.authorityCheck(userId, channelId, UserUtil.GROUP_USER_ATTRIBUTE);
+        channelUserService.authorityCheck(userId, channelId, UserUtil.CHANNEL_USER_ATTRIBUTE);
         ChannelUser channelUser = channelUserService.getChannelUser(channelId, userId);
         if (channelUser != null) {
             return Response.createSuc(channelUser);

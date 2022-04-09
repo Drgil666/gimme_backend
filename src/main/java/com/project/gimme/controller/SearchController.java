@@ -4,7 +4,10 @@ import com.project.gimme.annotation.LoginAuthorize;
 import com.project.gimme.exception.ErrorCode;
 import com.project.gimme.pojo.vo.Response;
 import com.project.gimme.pojo.vo.SearchVO;
-import com.project.gimme.service.*;
+import com.project.gimme.service.ChannelService;
+import com.project.gimme.service.FriendService;
+import com.project.gimme.service.GroupService;
+import com.project.gimme.service.RedisService;
 import com.project.gimme.utils.AssertionUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -35,8 +38,6 @@ public class SearchController {
     private GroupService groupService;
     @Resource
     private ChannelService channelService;
-    @Resource
-    private UserService userService;
     @Resource
     private RedisService redisService;
 

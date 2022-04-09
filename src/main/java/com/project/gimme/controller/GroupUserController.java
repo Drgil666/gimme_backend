@@ -46,9 +46,12 @@ public class GroupUserController {
                                             @ApiParam(value = "包含群聊信息，操作信息")
                                             @RequestBody CudRequestVO<GroupUser, Integer> request) {
         Integer userId = redisService.getUserId(token);
+        if (request.getData().getUserId() == null) {
+            request.getData().setUserId(userId);
+        }
         switch (request.getMethod()) {
             case CudRequestVO.CREATE_METHOD: {
-                groupUserService.authorityCheck(userId, request.getData().getGroupId(), UserUtil.GROUP_USER_ATTRIBUTE);
+//                groupUserService.authorityCheck(userId, request.getData().getGroupId(), UserUtil.GROUP_USER_ATTRIBUTE);
                 boolean isExist = false;
                 if (redisService.getGroupAuthorityToken(request.getData().getUserId(),
                         request.getData().getGroupId()) != null) {
