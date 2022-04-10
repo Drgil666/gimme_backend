@@ -273,6 +273,36 @@ public class ChatMsgServiceImpl implements ChatMsgService {
         return chatMsgVO;
     }
 
+    /**
+     * 获取好友信息
+     *
+     * @param userId   用户id
+     * @param friendId 好友id
+     * @param keyword  关键词
+     * @return 聊天信息
+     */
+    @Override
+    public List<ChatMsgVO> getChatMsgVoListByFriend(Integer userId, Integer friendId, String keyword) {
+        List<ChatMsg> chatMsgList = chatMsgMapper.getChatMsgVoListByFriend(userId, friendId, keyword);
+        List<ChatMsgVO> chatMsgVOList = new ArrayList<>();
+        for (ChatMsg chatMsg : chatMsgList) {
+            ChatMsgVO chatMsgVO = new ChatMsgVO();
+            chatMsgVO.setId(chatMsg.getId());
+            chatMsgVO.setText(chatMsg.getText());
+            chatMsgVO.setType(chatMsg.getType());
+            chatMsgVO.setObjectId(chatMsg.getObjectId());
+            chatMsgVO.setTimeStamp(chatMsg.getTimeStamp());
+            chatMsgVO.setOwnerId(chatMsg.getOwnerId());
+            chatMsgVO.setMsgType(chatMsg.getMsgType());
+            chatMsgVO.setIsSelf(chatMsg.getOwnerId().equals(userId));
+            User user = userMapper.getUser(chatMsg.getOwnerId());
+            chatMsgVO.setOwnerNick(user.getNick());
+            chatMsgVO.setAvatar(user.getAvatar());
+            chatMsgVOList.add(chatMsgVO);
+        }
+        return chatMsgVOList;
+    }
+
     private void setMsg(MessageVO messageVO) {
         if (messageVO.getMsgType().equals(MsgTypeUtil.MsgType.TYPE_PIC.getCode())) {
             messageVO.setText("[图片]");

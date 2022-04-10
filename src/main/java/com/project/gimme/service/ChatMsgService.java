@@ -99,4 +99,14 @@ public interface ChatMsgService {
      * @return 聊天信息中间类
      */
     ChatMsgVO getChatMsgVO(Integer userId, Integer chatMsgId);
+
+    /**
+     * 获取好友信息
+     *
+     * @param userId   用户id
+     * @param friendId 好友id
+     * @param keyword  关键词
+     * @return 聊天信息
+     */
+    List<ChatMsgVO> getChatMsgVoListByFriend(Integer userId, Integer friendId, String keyword);
 }

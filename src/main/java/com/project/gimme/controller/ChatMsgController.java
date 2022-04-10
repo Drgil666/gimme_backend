@@ -166,7 +166,12 @@ public class ChatMsgController {
                                                       @ApiParam(value = "类型") @RequestParam(value = "type") String type,
                                                       @ApiParam(value = "对应id") @RequestParam(value = "objectId") Integer objectId) {
         Integer userId = redisService.getUserId(token);
-        List<ChatMsgVO> chatMsgVoList = chatMsgService.getChatMsgVoListByObjectId(userId, type, objectId, keyword);
+        List<ChatMsgVO> chatMsgVoList = null;
+        if (type.equals(ChatMsgUtil.Character.TYPE_FRIEND.getName())) {
+            chatMsgVoList = chatMsgService.getChatMsgVoListByFriend(userId, objectId, keyword);
+        } else {
+            chatMsgVoList = chatMsgService.getChatMsgVoListByObjectId(userId, type, objectId, keyword);
+        }
         if (chatMsgVoList != null) {
             return Response.createSuc(chatMsgVoList);
         } else {

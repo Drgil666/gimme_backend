@@ -8,10 +8,7 @@ import com.project.gimme.pojo.PersonalMsg;
 import com.project.gimme.pojo.PersonalMsgUser;
 import com.project.gimme.pojo.vo.CudRequestVO;
 import com.project.gimme.pojo.vo.Response;
-import com.project.gimme.service.FriendService;
-import com.project.gimme.service.PersonalMsgService;
-import com.project.gimme.service.PersonalMsgUserService;
-import com.project.gimme.service.RedisService;
+import com.project.gimme.service.*;
 import com.project.gimme.utils.AssertionUtil;
 import com.project.gimme.utils.PersonalMsgUtil;
 import io.swagger.annotations.Api;
@@ -43,6 +40,8 @@ public class FriendController {
     private PersonalMsgService personalMsgService;
     @Resource
     private PersonalMsgUserService personalMsgUserService;
+    @Resource
+    private UserService userService;
 
     @ResponseBody
     @PostMapping()
@@ -58,12 +57,14 @@ public class FriendController {
         }
         switch (request.getMethod()) {
             case CudRequestVO.CREATE_METHOD: {
+                request.getData().setFriendNote(userService.getUser(request.getData().getFriendId()).getNick());
                 if (friendService.getFriend(request.getData().getUserId(),
                         request.getData().getFriendId()) == null) {
                     if (friendService.createFriend(request.getData())) {
                         Friend friend = request.getData();
                         friend.setUserId(request.getData().getFriendId());
                         friend.setFriendId(userId);
+                        request.getData().setFriendNote(userService.getUser(userId).getNick());
                         friendService.createFriend(friend);
                         redisService.createFriendToken(
                                 request.getData().getUserId(),

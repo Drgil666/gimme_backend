@@ -8,6 +8,7 @@ import com.project.gimme.pojo.vo.CudRequestVO;
 import com.project.gimme.pojo.vo.Response;
 import com.project.gimme.service.GroupUserService;
 import com.project.gimme.service.RedisService;
+import com.project.gimme.service.UserService;
 import com.project.gimme.utils.AssertionUtil;
 import com.project.gimme.utils.UserUtil;
 import io.swagger.annotations.Api;
@@ -36,6 +37,8 @@ public class GroupUserController {
     private RedisService redisService;
     @Resource
     private GroupUserService groupUserService;
+    @Resource
+    private UserService userService;
 
     @ResponseBody
     @PostMapping()
@@ -69,6 +72,7 @@ public class GroupUserController {
                 if (isExist) {
                     return Response.createErr("该成员已在群聊中!");
                 } else {
+                    request.getData().setGroupNick(userService.getUser(request.getData().getUserId()).getNick());
                     if (groupUserService.createGroupUser(request.getData())) {
                         redisService.createGroupAuthorityToken(request.getData().getUserId(),
                                 request.getData().getGroupId(), request.getData().getType());

@@ -8,6 +8,7 @@ import com.project.gimme.pojo.vo.CudRequestVO;
 import com.project.gimme.pojo.vo.Response;
 import com.project.gimme.service.ChannelUserService;
 import com.project.gimme.service.RedisService;
+import com.project.gimme.service.UserService;
 import com.project.gimme.utils.AssertionUtil;
 import com.project.gimme.utils.UserUtil;
 import io.swagger.annotations.Api;
@@ -35,6 +36,8 @@ public class ChannelUserController {
     private RedisService redisService;
     @Resource
     private ChannelUserService channelUserService;
+    @Resource
+    private UserService userService;
 
     @ResponseBody
     @PostMapping()
@@ -70,6 +73,7 @@ public class ChannelUserController {
                 if (isExist) {
                     return Response.createErr("该成员已在群聊中!");
                 } else {
+                    request.getData().setChannelNick(userService.getUser(request.getData().getUserId()).getNick());
                     if (channelUserService.createChannelUser(request.getData())) {
                         redisService.createChannelAuthorityToken(request.getData().getUserId(),
                                 request.getData().getChannelId(), request.getData().getType());
