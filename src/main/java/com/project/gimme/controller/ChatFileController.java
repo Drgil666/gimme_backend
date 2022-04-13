@@ -3,13 +3,14 @@ package com.project.gimme.controller;
 
 import com.project.gimme.annotation.LoginAuthorize;
 import com.project.gimme.exception.ErrorCode;
+import com.project.gimme.pojo.Channel;
 import com.project.gimme.pojo.ChatFile;
+import com.project.gimme.pojo.Group;
+import com.project.gimme.pojo.User;
 import com.project.gimme.pojo.vo.ChatFileVO;
 import com.project.gimme.pojo.vo.CudRequestVO;
 import com.project.gimme.pojo.vo.Response;
-import com.project.gimme.service.ChatFileService;
-import com.project.gimme.service.GridFsService;
-import com.project.gimme.service.RedisService;
+import com.project.gimme.service.*;
 import com.project.gimme.utils.AssertionUtil;
 import com.project.gimme.utils.ChatMsgUtil;
 import io.swagger.annotations.Api;
@@ -48,6 +49,12 @@ public class ChatFileController {
     private ChatFileService chatFileService;
     @Resource
     private GridFsService gridFsService;
+    @Resource
+    private UserService userService;
+    @Resource
+    private GroupService groupService;
+    @Resource
+    private ChannelService channelService;
 
     @ResponseBody
     @PostMapping()
@@ -191,6 +198,46 @@ public class ChatFileController {
             }
         }
         return Response.createErr(ErrorCode.BIZ_PARAM_ILLEGAL.getCode(), "上传失败!");
+    }
+
+    @ResponseBody
+    @PostMapping("/upload/avatar")
+    @ApiOperation(value = "上传头像")
+    @LoginAuthorize()
+    public Response<String> uploadAvatar(@ApiParam(value = "加密验证参数")
+                                         @RequestHeader(TOKEN) String token,
+                                         @ApiParam(value = "上传的文件")
+                                         @RequestParam(value = "file")
+                                                 MultipartFile file,
+                                         @ApiParam(value = "会话类型")
+                                         @RequestParam(value = "chatType")
+                                                 String chatType,
+                                         @ApiParam(value = "会话id")
+                                         @RequestParam(value = "objectId")
+                                                 Integer objectId) throws IOException {
+        Integer userId = redisService.getUserId(token);
+        String mongoId = gridFsService.createFile(file);
+        if (StringUtils.isEmpty(mongoId)) {
+            return Response.createErr(ErrorCode.BIZ_PARAM_ILLEGAL.getCode(), "上传失败!");
+        }
+        if (chatType.equals(ChatMsgUtil.Character.TYPE_FRIEND.getName())) {
+            User user = userService.getUser(userId);
+            user.setAvatar(mongoId);
+            userService.updateUser(user);
+            return Response.createSuc(null);
+        } else if (chatType.equals(ChatMsgUtil.Character.TYPE_GROUP.getName())) {
+            Group group = groupService.getGroup(objectId);
+            group.setAvatar(mongoId);
+            groupService.updateGroup(group);
+            return Response.createSuc(null);
+        } else if (chatType.equals(ChatMsgUtil.Character.TYPE_CHANNEL.getName())) {
+            Channel channel = channelService.getChannel(objectId);
+            channel.setAvatar(mongoId);
+            channelService.updateChannel(channel);
+            return Response.createSuc(null);
+        }
+        return Response.createErr("更新失败!");
+
     }
 
     @ResponseBody
