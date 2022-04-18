@@ -69,6 +69,12 @@ public class FriendController {
                         redisService.createFriendToken(
                                 request.getData().getUserId(),
                                 request.getData().getFriendId());
+                        PersonalMsg personalMsg = personalMsgService.createInsertFriendPersonalMsg(userId, friend.getFriendId(), "");
+                        personalMsgService.createPersonalMsg(personalMsg);
+                        PersonalMsgUser personalMsgUser = new PersonalMsgUser();
+                        personalMsgUser.setAcceptId(friend.getFriendId());
+                        personalMsgUser.setPersonalMsgId(personalMsg.getId());
+                        personalMsgUserService.createPersonalMsgUser(personalMsgUser);
                         return Response.createSuc(request.getData());
                     } else {
                         return Response.createErr("添加失败!");

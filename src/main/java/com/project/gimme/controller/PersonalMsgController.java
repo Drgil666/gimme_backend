@@ -66,14 +66,26 @@ public class PersonalMsgController {
                 if (type.equals(PersonalMsgUtil.FriendPersonalMsg.TYPE_INSERT_FRIEND.getName())) {
                     personalMsg = personalMsgService.createInsertFriendPersonalMsg(userId, objectId, note);
                     personalMsgService.createPersonalMsg(personalMsg);
+                    PersonalMsgUser personalMsgUser = new PersonalMsgUser();
+                    personalMsgUser.setAcceptId(objectId);
+                    personalMsgUser.setPersonalMsgId(personalMsg.getId());
+                    personalMsgUserService.createPersonalMsgUser(personalMsgUser);
                     return Response.createSuc(null);
                 } else if (type.equals(PersonalMsgUtil.FriendPersonalMsg.TYPE_DELETE_FRIEND.getName())) {
                     personalMsg = personalMsgService.createDeleteFriendPersonalMsg(userId, objectId);
                     personalMsgService.createPersonalMsg(personalMsg);
+                    PersonalMsgUser personalMsgUser = new PersonalMsgUser();
+                    personalMsgUser.setAcceptId(objectId);
+                    personalMsgUser.setPersonalMsgId(personalMsg.getId());
+                    personalMsgUserService.createPersonalMsgUser(personalMsgUser);
                     return Response.createSuc(null);
                 } else if (type.equals(PersonalMsgUtil.GroupPersonalMsg.TYPE_INSERT_GROUP.getName())) {
                     personalMsg = personalMsgService.createInsertGroupPersonalMsg(userId, objectId);
                     personalMsgService.createPersonalMsg(personalMsg);
+                    PersonalMsgUser personalMsgUser = new PersonalMsgUser();
+                    personalMsgUser.setAcceptId(objectId);
+                    personalMsgUser.setPersonalMsgId(personalMsg.getId());
+                    personalMsgUserService.createPersonalMsgUser(personalMsgUser);
                     return Response.createSuc(null);
                 } else if (type.equals(PersonalMsgUtil.GroupPersonalMsg.TYPE_DELETE_GROUP.getName())) {
                     personalMsg = personalMsgService.createDeleteGroupPersonalMsg(userId, objectId);
@@ -83,6 +95,10 @@ public class PersonalMsgController {
                         //所有群成员也会受到该消息!
                         personalMsg = personalMsgService.createDeleteGroupPersonalMsg(userVO.getId(), objectId);
                         personalMsgService.createPersonalMsg(personalMsg);
+                        PersonalMsgUser personalMsgUser = new PersonalMsgUser();
+                        personalMsgUser.setAcceptId(userVO.getId());
+                        personalMsgUser.setPersonalMsgId(personalMsg.getId());
+                        personalMsgUserService.createPersonalMsgUser(personalMsgUser);
                     }
                     return Response.createSuc(null);
                 } else if (type.equals(PersonalMsgUtil.GroupPersonalMsg.TYPE_INSERT_GROUP_MEMBER.getName())) {
