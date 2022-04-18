@@ -51,7 +51,6 @@ public class ChatMsgController {
                                           @ApiParam(value = "包含用户信息，操作信息") @RequestBody CudRequestVO<ChatMsg, Integer> request) {
         Integer userId = redisService.getUserId(token);
         request.getData().setOwnerId(userId);
-//        request.getData().setText(TEAUtil.decryptByTea(request.getData().getText()));
         chatMsgService.checkValidity(request.getData().getType(), userId, request.getData().getObjectId());
         switch (request.getMethod()) {
             case CudRequestVO.CREATE_METHOD: {
@@ -60,7 +59,6 @@ public class ChatMsgController {
 
                     }
                     ChatMsgVO chatMsgVO = chatMsgService.getChatMsgVO(userId, request.getData().getId());
-//                    chatMsgVO.setText(TEAUtil.encryptByTea(chatMsgVO.getText()));
                     return Response.createSuc(chatMsgVO);
                 } else {
                     return Response.createErr("发送失败!");
@@ -136,7 +134,6 @@ public class ChatMsgController {
     @LoginAuthorize()
     public Response<ChatMsg> getChatMsg(@ApiParam(value = "加密验证参数") @RequestHeader(TOKEN) String token, @ApiParam(value = "聊天信息id") @RequestParam(value = "chatMsgId") Integer chatMsgId) {
         ChatMsg chatMsg = chatMsgService.getChatMsg(chatMsgId);
-//        chatMsg.setText(TEAUtil.encryptByTea(chatMsg.getText()));
         if (chatMsg != null) {
             return Response.createSuc(chatMsg);
         } else {
@@ -153,7 +150,6 @@ public class ChatMsgController {
                                                   @ApiParam(value = "对应id") @RequestParam(value = "objectId") Integer objectId) {
         List<ChatMsg> chatMsgList = chatMsgService.getChatMsgListByObjectId(type, objectId, keyword);
         for (ChatMsg chatMsg : chatMsgList) {
-//            chatMsg.setText(TEAUtil.encryptByTea(chatMsg.getText()));
         }
         if (chatMsgList != null) {
             return Response.createSuc(chatMsgList);
@@ -177,9 +173,6 @@ public class ChatMsgController {
             chatMsgVoList = chatMsgService.getChatMsgVoListByFriend(userId, objectId, keyword);
         } else {
             chatMsgVoList = chatMsgService.getChatMsgVoListByObjectId(userId, type, objectId, keyword);
-        }
-        for (ChatMsgVO chatMsgVO : chatMsgVoList) {
-//            chatMsgVO.setText(TEAUtil.encryptByTea(chatMsgVO.getText()));
         }
         if (chatMsgVoList != null) {
             return Response.createSuc(chatMsgVoList);

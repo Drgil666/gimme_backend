@@ -15,7 +15,6 @@ public class TEAUtilTest {
         String text = "这是一条消息\uD83D\uDE01\uD83D\uDE01";
         byte[] bytes = TEAUtil.encryptByTea(text);
         System.out.println(Arrays.toString(bytes));
-        String test1 = Arrays.toString(bytes);
         String text2 = TEAUtil.decryptByTea(bytes);
         System.out.println(text2);
     }
