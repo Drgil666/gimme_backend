@@ -1,9 +1,11 @@
 package com.project.gimme.pojo;
 
+import com.project.gimme.utils.TEAUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.util.Base64;
 import java.util.Date;
 
 /**
@@ -48,4 +50,14 @@ public class ChatMsg {
      */
     @ApiModelProperty(value = "消息类型", name = "msgType")
     private Integer msgType;
+
+    public void encode() {
+        byte[] bytes = TEAUtil.encryptByTea(text);
+        text = Base64.getEncoder().encodeToString(bytes);
+    }
+
+    public void decode() {
+        byte[] bytes = Base64.getDecoder().decode(text);
+        text = TEAUtil.decryptByTea(bytes);
+    }
 }

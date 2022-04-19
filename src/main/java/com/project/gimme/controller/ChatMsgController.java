@@ -51,6 +51,7 @@ public class ChatMsgController {
                                           @ApiParam(value = "包含用户信息，操作信息") @RequestBody CudRequestVO<ChatMsg, Integer> request) {
         Integer userId = redisService.getUserId(token);
         request.getData().setOwnerId(userId);
+        request.getData().decode();
         chatMsgService.checkValidity(request.getData().getType(), userId, request.getData().getObjectId());
         switch (request.getMethod()) {
             case CudRequestVO.CREATE_METHOD: {
@@ -59,6 +60,7 @@ public class ChatMsgController {
 
                     }
                     ChatMsgVO chatMsgVO = chatMsgService.getChatMsgVO(userId, request.getData().getId());
+                    chatMsgVO.encode();
                     return Response.createSuc(chatMsgVO);
                 } else {
                     return Response.createErr("发送失败!");
@@ -67,6 +69,7 @@ public class ChatMsgController {
             case CudRequestVO.UPDATE_METHOD: {
                 if (chatMsgService.updateChatMsg(request.getData()) == 1) {
                     ChatMsgVO chatMsgVO = chatMsgService.getChatMsgVO(userId, request.getData().getId());
+                    chatMsgVO.encode();
                     return Response.createSuc(chatMsgVO);
                 } else {
                     return Response.createErr(ErrorCode.INNER_PARAM_ILLEGAL.getCode(), "更新失败!");
@@ -132,9 +135,11 @@ public class ChatMsgController {
     @GetMapping()
     @ApiOperation(value = "通过id获取聊天信息")
     @LoginAuthorize()
-    public Response<ChatMsg> getChatMsg(@ApiParam(value = "加密验证参数") @RequestHeader(TOKEN) String token, @ApiParam(value = "聊天信息id") @RequestParam(value = "chatMsgId") Integer chatMsgId) {
+    public Response<ChatMsg> getChatMsg(@ApiParam(value = "加密验证参数") @RequestHeader(TOKEN) String token,
+                                        @ApiParam(value = "聊天信息id") @RequestParam(value = "chatMsgId") Integer chatMsgId) {
         ChatMsg chatMsg = chatMsgService.getChatMsg(chatMsgId);
         if (chatMsg != null) {
+            chatMsg.encode();
             return Response.createSuc(chatMsg);
         } else {
             return Response.createErr(ErrorCode.INNER_PARAM_ILLEGAL.getCode(), "获取失败!");
@@ -149,9 +154,10 @@ public class ChatMsgController {
                                                   @ApiParam(value = "类型") @RequestParam(value = "type") String type,
                                                   @ApiParam(value = "对应id") @RequestParam(value = "objectId") Integer objectId) {
         List<ChatMsg> chatMsgList = chatMsgService.getChatMsgListByObjectId(type, objectId, keyword);
-        for (ChatMsg chatMsg : chatMsgList) {
-        }
         if (chatMsgList != null) {
+            for (ChatMsg chatMsg : chatMsgList) {
+                chatMsg.encode();
+            }
             return Response.createSuc(chatMsgList);
         } else {
             return Response.createErr("获取失败!");
@@ -175,6 +181,9 @@ public class ChatMsgController {
             chatMsgVoList = chatMsgService.getChatMsgVoListByObjectId(userId, type, objectId, keyword);
         }
         if (chatMsgVoList != null) {
+            for (ChatMsgVO chatMsgVO : chatMsgVoList) {
+                chatMsgVO.encode();
+            }
             return Response.createSuc(chatMsgVoList);
         } else {
             return Response.createErr("获取失败!");
