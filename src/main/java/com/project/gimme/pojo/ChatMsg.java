@@ -50,14 +50,19 @@ public class ChatMsg {
      */
     @ApiModelProperty(value = "消息类型", name = "msgType")
     private Integer msgType;
+    private transient Boolean isTea = false;
 
     public void encode() {
-        byte[] bytes = TEAUtil.encryptByTea(text);
-        text = Base64.getEncoder().encodeToString(bytes);
+        if (isTea) {
+            byte[] bytes = TEAUtil.encryptByTea(text);
+            text = Base64.getEncoder().encodeToString(bytes);
+        }
     }
 
     public void decode() {
-        byte[] bytes = Base64.getDecoder().decode(text);
-        text = TEAUtil.decryptByTea(bytes);
+        if (isTea) {
+            byte[] bytes = Base64.getDecoder().decode(text);
+            text = TEAUtil.decryptByTea(bytes);
+        }
     }
 }
